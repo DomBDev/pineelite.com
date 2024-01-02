@@ -1,0 +1,64 @@
+/* static/css/portfolio.css */
+/* Add your styles for portfolio.html here */
+
+.portfolio-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 20px;
+}
+
+.portfolio-item {
+    overflow: hidden;
+}
+
+.portfolio-box {
+    position: relative;
+    cursor: pointer;
+    transition: transform 0.3s ease-in-out;
+}
+
+.portfolio-box:hover {
+    transform: scale(1.05);
+}
+
+.img-fluid {
+    max-width: 100%;
+    height: auto;
+    border: 2px solid #9bd88f; /* Light green border for images */
+    border-radius: 5px;
+}
+
+.caption {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    color: #fff;
+    opacity: 0;
+    transition: opacity 0.3s ease-in-out;
+}
+
+.portfolio-box:hover .caption {
+    opacity: 1;
+}
+
+.expanded-content {
+    display: none;
+    padding: 20px;
+    background-color: #9bd88f;
+    color: #0c441d;
+}
+
+.expanded-content h3 {
+    font-size: 2em;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.expanded-content p {
+    font-size: 1.1em;
+    margin: 0;
+}
+
+/* Add more styles as needed */

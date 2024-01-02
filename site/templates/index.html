@@ -1,21 +1,66 @@
 <!-- templates/index.html -->
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Your Portfolio</title>
-    <!-- Add your CSS link or styles here -->
-</head>
-<body>
-    <!-- Landing Section -->
+{% extends 'base.html' %}
+
+{% block title %}Pine Elite - Home{% endblock %}
+
+{% block content %}
+<script src="{{ url_for('static', filename='scripts/index.js') }}"></script>
+
+    <!-- Landing Section with Wavy Border -->
+    <div class="wave"></div>
     <section class="landing">
-        <!-- Your eye-catching content goes here -->
-        <h1>Welcome to My Portfolio</h1>
-        <!-- Add other elements as needed -->
+        <img src="{{ url_for('static', filename='images/trees.svg') }}" alt="Pine Trees" class="trees">
+        <div class="desc">
+            <h1 class="name">Dom | Pine Elite</h1>
+            <h1 class="role">Student & Full-Stack Developer</h2>
+        </div>
     </section>
 
-    <!-- Add your other sections as you progress -->
+    <section class="divider"></section>
 
-</body>
-</html>
+    <!-- Biographical Information Section -->
+    <section class="bio">
+        <div class="container">
+            <h1>About Me</h1>
+            <div class="row">
+                <div class="col-md-6">
+                    <h2>Schooling</h2>
+                    <p>I am currently in High School, and I've taken multiple CS courses from prestigious institutions, including:</p>
+                    <ul>
+                        <li>Carnegie Mellon University</li>
+                        <li>Massachusetts Institute of Technology</li>
+                        <li>Harvard University</li>
+                    </ul>
+                </div>
+                <div class="col-md-6">
+                    <h2>Development</h2>
+                    <p>I am a freelance software developer with experience in the following languages:</p>
+                    <ul>
+                        <li>Python</li>
+                        <li>Javascript/Node.js</li>
+                        <li>HTML/CSS</li>
+                        <li>Arduino</li>
+                        <li>C++</li>
+                    </ul>
+                    <p>I accept web development and Python project requests.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+    <section class="brand-explanation">
+        <div class="container">
+            <h2>About Pine Elite</h2>
+            <p>Pine Elite is more than just a brand; it's a representation of my commitment to excellence in coding and design. Rooted in the evergreen strength of a pine tree, Pine Elite stands tall in the digital landscape, offering elite solutions and services in the realm of software development.</p>
+            <p>With Pine Elite, you get a unique blend of creativity and technical expertise, ensuring that your projects not only meet but exceed expectations. Join me in exploring the elite world of coding and design, where innovation knows no bounds.</p>
+        </div>
+    </section>
+
+    <!-- Footer Section -->
+    <footer>
+        <p>&copy; 2024 Pine Elite. All rights reserved.</p>
+    </footer>
+{% endblock %}
+
+{% block extra_css %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles/index.css') }}">
+{% endblock %}

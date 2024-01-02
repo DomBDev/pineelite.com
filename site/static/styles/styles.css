@@ -1,0 +1,64 @@
+/* static/css/styles.css */
+/* Add your global styles here */
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #0c441d; /* Dark green background color */
+    color: #5f895a; /* Darker green text color */
+}
+
+.navbar {
+    z-index: 1000; /* Set a high z-index to ensure the navbar stays on top */
+    position: relative;
+}
+
+.navbar-brand {
+    font-weight: bold;
+    color: #287721; /* Darker green text color for the brand */
+    font-size: 1.5em; /* Larger font size for the brand */
+    transition: color 0.3s ease-in-out, transform 0.3s ease-in-out; /* Smooth color and transform transition */
+}
+
+.navbar-brand:hover {
+    color: #3f6b3a; /* Darker green color on hover for the brand */
+    transform: rotate(5deg); /* Rotate on hover */
+}
+
+.menu {
+    max-width: 30px; /* Limit the width of the icon */
+    height: auto; /* Maintain aspect ratio */
+    filter: invert(51%) sepia(21%) saturate(689%) hue-rotate(67deg) brightness(92%) contrast(86%);
+}
+
+/* Make navbar responsive */
+@media (max-width: 768px) {
+    .menu {
+        max-width: 50px; /* Adjust the width of the icon for smaller screens */
+    }
+}
+
+.navbar-nav .nav-item .nav-link {
+    color: #5f895a; /* Darker green text color for links */
+    font-size: 1.2em; /* Larger font size for the links */
+    transition: color 0.3s ease-in-out, transform 0.3s ease-in-out; /* Smooth color and transform transition */
+}
+
+.navbar-nav .nav-item .nav-link:hover {
+    color: #62a75b; /* Darker green color on hover for the links */
+    transform: translateY(-5px); /* Bounce on hover */
+}
+
+/* Make navbar responsive */
+@media (max-width: 768px) {
+    .navbar-brand {
+        font-size: 1.2em; /* Adjust font size for smaller screens */
+    }
+
+    .navbar-nav .nav-item .nav-link {
+        font-size: 1em; /* Adjust font size for smaller screens */
+    }
+}
+
+/* Add more global styles as needed */

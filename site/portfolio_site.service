@@ -1,0 +1,17 @@
+[Unit]
+Description=Pine Elite Portfolio Website
+After=network.target
+
+[Service]
+ExecStart=/home/dom/portfolio/site/start.sh
+WorkingDirectory=/home/dom/portfolio/site
+Restart=always
+User=dom  # Replace with your actual username
+
+[Install]
+WantedBy=multi-user.target
+
+
+
+
+

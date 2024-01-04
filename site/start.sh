@@ -7,4 +7,4 @@ cd /home/dom/ILP/ILP/flask-framework/
 source env/bin/activate
 
 # Start Gunicorn for HTTP (port 80)
-env/bin/gunicorn -b 0.0.0.0:80 main:app &
+sudo /home/dom/portfolio/site/env/bin/gunicorn --bind 0.0.0.0:80 main:app

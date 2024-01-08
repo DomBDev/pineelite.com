@@ -1,64 +1,164 @@
-/* static/css/portfolio.css */
-/* Add your styles for portfolio.html here */
+.container {
+    width: 90%;
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 40px;
+    box-sizing: border-box;
+    background-color: #0c441d; /* Dark green background color */
+}
 
 .portfolio-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-    gap: 20px;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 30px;
+    grid-auto-rows: minmax(200px, auto);
 }
 
 .portfolio-item {
-    overflow: hidden;
+    background-color: #9bd88f; /* Light green background color */
+    padding: 20px;
+    box-sizing: border-box;
+    border-radius: 10px; /* Rounded corners */
+    transition: transform 0.3s ease-in-out; /* Smooth transform transition */
+    box-shadow: 0px 0px 10px rgba(0,0,0,0.1); /* Add a subtle shadow */
 }
 
-.portfolio-box {
-    position: relative;
-    cursor: pointer;
-    transition: transform 0.3s ease-in-out;
-}
-
-.portfolio-box:hover {
-    transform: scale(1.05);
-}
-
-.img-fluid {
-    max-width: 100%;
-    height: auto;
-    border: 2px solid #9bd88f; /* Light green border for images */
-    border-radius: 5px;
+.portfolio-item:hover {
+    transform: scale(1.01); /* Slightly enlarge the item on hover */
+    box-shadow: 0px 0px 20px rgba(0,0,0,0.2); /* Increase shadow on hover */
 }
 
 .caption {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    text-align: center;
-    color: #fff;
-    opacity: 0;
-    transition: opacity 0.3s ease-in-out;
-}
-
-.portfolio-box:hover .caption {
-    opacity: 1;
-}
-
-.expanded-content {
-    display: none;
-    padding: 20px;
-    background-color: #9bd88f;
-    color: #0c441d;
-}
-
-.expanded-content h3 {
-    font-size: 2em;
+    color: #0c441d; /* Dark green text color */
     font-weight: bold;
-    margin-bottom: 10px;
+    margin-top: 10px; /* Space between the image and the caption */
 }
 
-.expanded-content p {
-    font-size: 1.1em;
-    margin: 0;
+.expanded-view {
+    position: fixed;
+    top: 60px; /* Adjust this value to match the height of your navbar */
+    left: 5%;
+    width: 90%;
+    height: calc(90% - 60px); /* Subtract the height of the navbar */
+    overflow: auto;
+    z-index: 999;
+    background-color: #88c299; /* Lighter green background color */
+    border-radius: 15px;
+    box-shadow: 0px 0px 30px rgba(0,0,0,0.2); /* Add a shadow */
 }
 
-/* Add more styles as needed */
+.expanded-view-content {
+    padding: 20px;
+    color: #333;
+    font-family: Arial, sans-serif;
+}
+
+.expanded-view-content .close {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    font-size: 30px;
+    cursor: pointer;
+    color: #333; /* Darker close button */
+}
+
+.expanded-view-content h2 {
+    margin-top: 0;
+    color: #0c441d; /* Dark green color to match the theme */
+}
+
+.expanded-view-content p {
+    margin: 10px 0;
+    line-height: 1.6;
+}
+
+.expanded-view-content a {
+    color: #0c441d; /* Dark green color to match the theme */
+    text-decoration: none;
+}
+
+button {
+    background-color: #0c441d; /* Dark green background color */
+    color: #ffffff; /* White text color */
+    border: none;
+    padding: 10px 20px; /* Padding around the text */
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer;
+    border-radius: 12px; /* Rounded corners */
+    transition: background-color 0.3s ease; /* Smooth transition */
+}
+
+button:hover {
+    background-color: #88c299; /* Lighter green background color on hover */
+}
+
+input[type="text"], input[type="file"] {
+    width: 100%; /* Full width */
+    padding: 12px 20px;
+    margin: 4px 0; /* Reduced margin */
+    display: inline-block;
+    border: 1px solid #0A2B13; /* Dark green border color */
+    border-radius: 4px;
+    box-sizing: border-box;
+    background-color: #A1D991; /* Light green background color */
+}
+
+form {
+    border-radius: 5px;
+    background-color: #287721; /* Medium green background color */
+    padding: 20px;
+}
+
+form.edit {
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+}
+form.delete {
+    margin-top: 0;
+    padding-top: 0;
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+}
+
+
+
+input[type="submit"] {
+    width: 100%; /* Full width */
+    background-color: #0c441d; /* Dark green background color */
+    color: white;
+    padding: 14px 20px;
+    margin: 4px 0; /* Reduced margin */
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+input[type="submit"]:hover {
+    background-color: #88c299; /* Lighter green background color on hover */
+}
+
+input[type="submit"][value="Delete"] {
+    background-color: #f44336; /* Red background color */
+    color: white;
+    transition: background-color 0.3s ease; /* Smooth transition */
+}
+
+input[type="submit"][value="Delete"]:hover {
+    background-color: #ec1d0f; /* Darker red on hover */
+}
+
+@media screen and (max-width: 1024px) {
+    .portfolio-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media screen and (max-width: 600px) {
+    .portfolio-grid {
+        grid-template-columns: 1fr;
+    }
+}

@@ -1,14 +1,83 @@
-<!-- templates/portfolio.html -->
 {% extends 'base.html' %}
 
-{% block title %}Your Portfolio - Portfolio{% endblock %}
+{% block title %}Pine Elite - Portfolio{% endblock %}
 
 {% block content %}
-    <section class="portfolio-intro">
-        <div class="container">
+    <script src="{{ url_for('static', filename='scripts/portfolio.js') }}"></script>
+    <div class="container">
+        <section class="portfolio-intro">
             <h1>Portfolio</h1>
             <p>Work in Progress.</p>
-        </div>
-    </section>
+            <button id="addButton" onclick="showFormAdd()">Add New Portfolio Item</button>
+            <div id="addForm" style="display:none">
+                <form action="{{ url_for('portfolio') }}" method="post" enctype="multipart/form-data">
+                    <label for="title">Title:</label><br>
+                    <input type="text" id="title" name="title"><br>
+                    <label for="image">Image:</label><br>
+                    <input type="file" id="image" name="image"><br>
+                    <label for="description">Description:</label><br>
+                    <input type="text" id="description" name="description"><br>
+                    <label for="full_description">Full Description:</label><br>
+                    <input type="text" id="full_description" name="full_description"><br>
+                    <input type="submit" value="Submit">
+                    <button type="button" onclick="hideFormAdd()">Cancel</button>
+                </form>
+            </div>
+        </section>
+        <section class="portfolio-grid">
+            {% for item in portfolio_items %}
+            <div class="portfolio-item">
+                {% if item.image %}
+                <img src="{{ url_for('static', filename=item.image) }}" style="width:100%">
+                {% endif %}
+                {% if item.title %}
+                <div class="caption">{{ item.title }}</div>
+                {% endif %}
+                <button onclick="event.stopPropagation(); showDetails('{{ item.title }}')">Expand</button>
+                <button class="editButton" id="editButton{{ item.id }}" onclick="showFormEdit('{{ item.id }}')">Edit</button>
+                <div class="editForm" id="editForm{{ item.id }}" style="display:none">
+                    <form class="edit" action="{{ url_for('edit_portfolio_item', id=item.id) }}" method="post" enctype="multipart/form-data">
+                        <label for="title">Title:</label><br>
+                        <input type="text" id="title" name="title" value="{{ item.title }}"><br>
+                        <label for="image">Image:</label><br>
+                        <input type="file" id="image" name="image"><br>
+                        <label for="description">Description:</label><br>
+                        <input type="text" id="description" name="description" value="{{ item.description }}"><br>
+                        <label for="full_description">Full Description:</label><br>
+                        <input type="text" id="full_description" name="full_description" value="{{ item.full_description }}"><br>
+                        <input type="submit" value="Submit">
+                        <button type="button" onclick="hideFormEdit()">Cancel</button>
+                    </form>
+                    <form class="delete" action="{{ url_for('delete_portfolio_item', id=item.id) }}" method="post" enctype="multipart/form-data">
+                        <input type="submit" value="Delete">
+                    </form>
+                </div>
+            </div>
+            <div class="expanded-view" id="{{ item.title }}" style="display:none">
+                <div class="expanded-view-content">
+                    <span class="close" onclick="hideDetails('{{ item.title }}')">&times;</span>
+                    {% if item.title %}
+                    <h2>{{ item.title }}</h2>
+                    {% endif %}
+                    {% if item.image %}
+                    <img src="{{ url_for('static', filename=item.image) }}" style="width:100%">
+                    {% endif %}
+                    {% if item.description %}
+                    <p>{{ item.description }}</p>
+                    {% endif %}
+                    {% if item.full_description %}
+                    <p>{{ item.full_description }}</p>
+                    {% endif %}
+                    {% if item.link %}
+                    <p><a href="{{ item.link }}" target="_blank">View Project</a></p>
+                    {% endif %}
+                </div>
+            </div>
+            {% endfor %}
+        </section>
+    </div>
+{% endblock %}
 
+{% block extra_css %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='/styles/portfolio.css') }}">
 {% endblock %}

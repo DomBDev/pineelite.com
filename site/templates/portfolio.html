@@ -46,7 +46,7 @@
                         <label for="full_description">Full Description:</label><br>
                         <input type="text" id="full_description" name="full_description" value="{{ item.full_description }}"><br>
                         <input type="submit" value="Submit">
-                        <button type="button" onclick="hideFormEdit()">Cancel</button>
+                        <button class="cancel" type="button" onclick="hideFormEdit()">Cancel</button>
                     </form>
                     <form class="delete" action="{{ url_for('delete_portfolio_item', id=item.id) }}" method="post" enctype="multipart/form-data">
                         <input type="submit" value="Delete">

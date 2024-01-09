@@ -1,35 +1,65 @@
 /* static/css/styles.css */
 /* Add your global styles here */
 
+
+:root {
+    --dark-green: #0C451D;
+    --dark-forest-green: #0C4530;
+    --dark-greenish-brown: #0F450C;
+    --dark-teal: #0C4543;
+    --dark-blue: #0C3545;
+    --light-blue: #278eb1;
+    --light-green: #c5dabf;
+    --db-bg-text: #C4A786;
+    --dark-gray: #0D0D0D;
+    --xd-gray: #050505;
+}
+
+/* Custom scrollbar styles */
+::-webkit-scrollbar {
+    width: 10px;
+}
+
+::-webkit-scrollbar-track {
+    background: var(--xd-gray); /* Dark gray scrollbar track */
+    border-radius: 10px; /* Rounded corners for a modern look */
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--light-blue); /* Light blue scrollbar thumb */
+    border-radius: 10px; /* Rounded corners for a modern look */
+}
+
 body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     margin: 0;
     padding: 0;
-    background-color: #0c441d; /* Dark green background color */
+    background-color: #0D0D0D; /* Dark green background color */
     color: #5f895a; /* Darker green text color */
 }
 
 .navbar {
     z-index: 1000; /* Set a high z-index to ensure the navbar stays on top */
     position: relative;
+    background-color: var(--dark-blue);
 }
 
 .navbar-brand {
     font-weight: bold;
-    color: #287721; /* Darker green text color for the brand */
+    color: var(--light-green); /* Darker green text color for the brand */
     font-size: 1.5em; /* Larger font size for the brand */
     transition: color 0.3s ease-in-out, transform 0.3s ease-in-out; /* Smooth color and transform transition */
 }
 
 .navbar-brand:hover {
-    color: #3f6b3a; /* Darker green color on hover for the brand */
+    color: var(--light-blue); /* Darker green color on hover for the brand */
     transform: rotate(5deg); /* Rotate on hover */
 }
 
 .menu {
     max-width: 30px; /* Limit the width of the icon */
     height: auto; /* Maintain aspect ratio */
-    filter: invert(51%) sepia(21%) saturate(689%) hue-rotate(67deg) brightness(92%) contrast(86%);
+    filter: invert(93%) sepia(14%) saturate(305%) hue-rotate(58deg) brightness(89%) contrast(94%);
 }
 
 /* Make navbar responsive */
@@ -40,13 +70,13 @@ body {
 }
 
 .navbar-nav .nav-item .nav-link {
-    color: #5f895a; /* Darker green text color for links */
+    color: var(--light-green); /* Darker green text color for links */
     font-size: 1.2em; /* Larger font size for the links */
     transition: color 0.3s ease-in-out, transform 0.3s ease-in-out; /* Smooth color and transform transition */
 }
 
 .navbar-nav .nav-item .nav-link:hover {
-    color: #62a75b; /* Darker green color on hover for the links */
+    color: #ffffff; /* White color on hover */
     transform: translateY(-5px); /* Bounce on hover */
 }
 

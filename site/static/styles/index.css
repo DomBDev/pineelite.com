@@ -9,8 +9,8 @@ body {
 /* Landing section styles */
 .landing {
     height: 100vh; /* Full viewport height */
-    background-color: #0c441d; /* Dark green background color */
-    color: #9bd88f; /* Light green text color */
+    background-color: #0D0D0D; /* Dark green background color */
+    color: #C1B8AE;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -26,12 +26,12 @@ body {
         radial-gradient(78.49px at 50% -49.5px, #0000 calc(99% - 9px), #000 calc(101% - 9px) 99%, #0000 101%) 50% calc(50% + 32px)/220px 64px;
     -webkit-mask: var(--mask);
             mask: var(--mask);
-    background: linear-gradient(-45deg, #287721, #0c441d, #0c441d, #0a2b13);
+    background: linear-gradient(-45deg, var(--dark-blue), #0D0D0D, #0D0D0D, var(--dark-blue));
     background-size: 400% 400%;
-    animation: gradient 12.5s ease-in-out infinite;
+    animation: gradient 7.5s ease-in-out infinite;
     border: none;
     width: 100%;
-    height: calc(100% + 4vw);
+    height: calc(100% + 10vw);
     top: 0; /* Align wave to the top of the landing container */
     left: 0; /* Align wave to the left of the landing container */
     position: absolute;
@@ -45,7 +45,8 @@ body {
 }
 
 .landing img {
-    filter: invert(10%) sepia(58%) saturate(653%) hue-rotate(84deg) brightness(101%) contrast(95%);
+    /* filter: invert(10%) sepia(58%) saturate(653%) hue-rotate(84deg) brightness(101%) contrast(95%); */
+    filter: invert(0%) sepia(82%) saturate(43%) hue-rotate(136deg) brightness(100%) contrast(94%);
     z-index: 2;
     position: absolute;
     bottom: -60px;
@@ -70,10 +71,12 @@ body {
 }
 
 .name {
+    color: var(--light-green);
     animation: fadeIn 1.5s ease-in-out;
 }
 
 .role {
+    color: var(--light-blue);
     animation: fadeIn 1.5s ease-in-out;
     padding-left: 2vw;
 }
@@ -84,47 +87,227 @@ body {
 }
 
 .desc {
-    z-index: 2;
     padding-left: 2vw;
+}
+
+/* Slogan styles */
+.slogan {
+    position: absolute; /* Position the slogan absolutely within the landing section */
+    top: 82.5%; /* Position it at the middle vertically */
+    left: 70%; /* Position it at the middle horizontally */
+    transform: translate(-50%, -50%); /* Center the slogan */
+    z-index: 3; /* Ensure the slogan is above the trees image */
+    color: var(--light-green); /* White text color for contrast */
+}
+
+.slogan h2 {
+    text-align: center; /* Center the text within the slogan */
+    font-size: 2vw; /* Adjust the font size as needed */
+}
+
+.highlight {
+    color: var(--light-blue);
+}
+
+.blob {
+    position: relative;
+    z-index: 2;
+    border-radius: 50% 50% 40% 60% / 60% 40% 70% 30%;
+    min-height: min-content;
+    min-width: min-content;
+    width: 60vmin;
+    height: 60vmin;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden; /* Hide the overflow from the pseudo-element */
+}
+
+.blob::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    margin: 1vw;
+    padding: 1vw;
+    background-image: linear-gradient(45deg, #006c91 0%, rgb(0, 16, 46) 100%);
+    background-size: 300% 300%;
+    background-position: 0% 0%;
+    animation: morph 25s linear infinite;
+    z-index: -1;
+}
+
+@keyframes morph {
+    0% {
+        border-radius: 50% 50% 40% 60% / 60% 40% 70% 30%;
+        background-position: 0% 0%;
+        rotate: 0deg;
+    }
+    12.5% {
+        border-radius: 60% 40% 50% 50% / 50% 50% 50% 50%;
+        background-position: 100% 0%;
+    }
+    25% {
+        border-radius: 50% 50% 60% 40% / 60% 40% 50% 50%;
+        background-position: 100% 100%;
+    }
+    37.5% {
+        border-radius: 40% 60% 50% 50% / 50% 50% 60% 40%;
+        background-position: 0% 100%;
+    }
+    50% {
+        border-radius: 50% 50% 40% 60% / 60% 40% 50% 50%;
+        background-position: 0% 0%;
+        rotate: 180deg;
+    }
+    62.5% {
+        border-radius: 60% 40% 50% 50% / 50% 50% 50% 50%;
+        background-position: 100% 0%;
+    }
+    75% {
+        border-radius: 50% 50% 60% 40% / 60% 40% 50% 50%;
+        background-position: 100% 100%;
+    }
+    87.5% {
+        border-radius: 40% 60% 50% 50% / 50% 50% 60% 40%;
+        background-position: 0% 100%;
+    }
+    100% {
+        border-radius: 50% 50% 40% 60% / 60% 40% 70% 30%;
+        background-position: 0% 0%;
+        rotate: 360deg;
+    }
 }
 
 .divider {
     opacity: 1;
     width:100%;
     height: 2vw;
-    background-color: rgb(10, 43, 19); /* Light green background color */
+    background-color: var(--xd-gray); /* Light green background color */
     position: relative;
     z-index: 2;
 }
 
-/* Biographical Information section styles */
-.bio {
-    background-color: #9bd88f; /* Light green background color */
-    color: #0c441d; /* Dark green text color */
-    padding: 50px 20px;
-    position: relative; /* Ensure position is relative for z-index to work */
-    z-index: 2; /* Set a higher z-index to make it appear above other elements */
-}
-.bio h1 {
-    margin-top: 2vw;
-}
-
-.brand-explanation {
-    margin-top: 4vw;
-    margin-bottom: 25vw;
-    position: relative;
-    z-index: 2;
-}
-
+/* Footer styles */
 footer {
-    background-color: #0c441d; /* Dark green background color */
-    color: #9bd88f; /* Light green text color */
-    position: relative; /* Ensure position is relative for z-index to work */
-    z-index: 2; /* Set a higher z-index to make it appear above other elements */
-    margin: 0;
+    background-color: var(--dark-teal); /* Dark teal background color */
+    color: var(--light-green); /* Light green text color */
+    position: relative;
+    z-index: 2;
+    padding: 20px;
+    text-align: center; /* Center the text */
 }
 
 footer p {
     margin: 0;
-    padding: 20px;
+    font-size: 1em;
+}
+
+/* Biographical Information section styles */
+.bio {
+    background-color: var(--dark-teal); /* Dark forest green background color */
+    color: var(--light-green); /* Light blue text color */
+    padding: 50px 20px;
+    position: relative;
+    z-index: 2;
+}
+
+.bio h1, .bio h2 {
+    color: var(--light-green); /* Light green text color */
+}
+
+.bio p, .bio ul {
+    font-size: 1.2em;
+}
+
+
+/* Brand Explanation section styles */
+.brand-explanation {
+    overflow-x: hidden;
+    position: relative;
+    z-index: 2;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 30px;
+    min-height: 75vh;
+}
+.brand {
+    grid-column-start: 1;
+    grid-column-end: span 2; /* Updated to span 2 columns */
+    height: min-content;
+    margin: 3vw;
+    margin-right: 0;
+    border-radius: 10px;
+    background-color: var(--dark-blue); /* Dark greenish brown background color */
+    color: var(--light-green);
+    padding: 50px 20px;
+}
+
+.thumbnail {
+    grid-row-start: 1; /* Updated grid-row-start property to place it in the first row */
+    grid-column-start: 3; /* Updated grid-column-start property to place it in the third column */
+    grid-column-end: 4; /* Updated grid-column-end property to place it in the third column */
+    margin: 3vw 2vw;
+    margin-left: 0;
+    max-width: min-content;
+}
+.thumbnail img {
+    width: 100%;
+    height: auto;
+    border-radius: 10px;
+    box-shadow: 0px 0px 10px rgba(0,0,0,0.1);
+}
+
+.brand h2 {
+    color: var(--light-blue); /* Light blue text color */
+}
+
+.brand p {
+    font-size: 1.2em;
+}
+
+@media (max-width: 768px) {
+    .landing img {
+        scale: 2.5;
+        width: 200vw;
+        left: 100vw;
+        bottom: 0;
+        right: -50px;
+    }
+
+    .landing h1 {
+        font-size: 1em;
+    }
+
+    .slogan h2 {
+        font-size: 4vw;
+    }
+
+    .blob {
+        width: 40vmin;
+        height: 40vmin;
+    }
+
+    .divider {
+        height: 1vw;
+    }
+
+    .bio {
+        padding: 25px 10px;
+    }
+
+    .bio h1 {
+        margin-top: 1vw;
+    }
+
+    .brand-explanation {
+        margin-top: 2vw;
+        margin-bottom: 12.5vw;
+    }
+
+    footer p {
+        padding: 10px;
+    }
 }

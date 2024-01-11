@@ -45,8 +45,8 @@ body {
 }
 
 .landing img {
-    /* filter: invert(10%) sepia(58%) saturate(653%) hue-rotate(84deg) brightness(101%) contrast(95%); */
-    filter: invert(0%) sepia(82%) saturate(43%) hue-rotate(136deg) brightness(100%) contrast(94%);
+    filter: invert(10%) sepia(58%) saturate(653%) hue-rotate(84deg) brightness(101%) contrast(95%);
+    
     z-index: 2;
     position: absolute;
     bottom: -60px;
@@ -207,7 +207,7 @@ footer p {
 
 /* Biographical Information section styles */
 .bio {
-    background-color: var(--dark-teal); /* Dark forest green background color */
+    background-color: var(--dark-blue); /* Dark forest green background color */
     color: var(--light-green); /* Light blue text color */
     padding: 50px 20px;
     position: relative;
@@ -240,7 +240,6 @@ footer p {
     margin: 3vw;
     margin-right: 0;
     border-radius: 10px;
-    background-color: var(--dark-blue); /* Dark greenish brown background color */
     color: var(--light-green);
     padding: 50px 20px;
 }

@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+
+{% block title %}Pine Elite - Login{% endblock %}
+
+{% block content %}
+<div class="login-section">
+    <h1>Login</h1>
+    <form method="POST" action="/login">
+        <input type="text" name="username" placeholder="Username" required>
+        <input type="password" name="password" placeholder="Password" required>
+        <input type="submit" value="Login">
+    </form>
+    <div class="register">
+        <p>Don't have an account? <a href="/register">Create one here.</a></p>
+    </div>
+</div>
+{% endblock %}
+{% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='styles/login.css') }}">
+{% endblock %}

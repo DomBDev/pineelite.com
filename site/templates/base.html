@@ -17,7 +17,7 @@
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js" integrity="sha384-B0qVSlMAq8sh+I/6aBEyjPU7UAd9J6eVa1Pz3HXP8Eh3K99T0E21aC2JL0i6drO" crossorigin="anonymous"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
     <!-- Add any additional CSS or head content here -->
-    <link rel="stylesheet" href="{{ url_for('static', filename='styles/styles.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles/base.css') }}">
     {% block extra_css %}{% endblock %}
 </head>
 <body>
@@ -26,7 +26,7 @@
     <nav class="navbar navbar-expand-lg">
         <a class="navbar-brand" href="/">Pine Elite</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-            <img src="{{ url_for('static', filename='/images/menu.ico') }}" alt="Menu" class="menu">
+            <img src="{{ url_for('static', filename='images/menu.ico') }}" alt="Menu" class="menu">
         </button>
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav ml-auto">
@@ -36,11 +36,32 @@
                 <li class="nav-item">
                     <a class="nav-link" href="/portfolio">Portfolio</a>
                 </li>
+                {% if current_user.is_active %}
+                <li class="nav-item">
+                    <a class="nav-link" href="/logout">Logout</a>
+                </li>
+                {% endif %}
                 <!-- Add more navbar links as needed -->
             </ul>
         </div>
     </nav>
+    {% with messages = get_flashed_messages(with_categories=True) %}
+        {% if messages %}
+            <div class="flashes">
+                {% for category, message in messages %}
+                    <div class="alert alert-{{ category }}">
+                        {{ message }}
+                        <span class="close" onclick="this.parentElement.style.display='none'">&times;</span>
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+    {% endwith %}
 
     {% block content %}{% endblock %}
+        <!-- Footer Section -->
+    <footer>
+        <p>&copy; 2024 Pine Elite. All rights reserved.</p>
+    </footer>
 </body>
 </html>

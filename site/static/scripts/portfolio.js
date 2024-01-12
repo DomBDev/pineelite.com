@@ -32,6 +32,9 @@ function hideFormEdit(id) {
 }
 
 function showFormEdit(id) {
+    hideDetails(id)
+    console.log('editButton' + id);
+    console.log('editForm' + id);
     document.getElementById('editButton' + id).style.display = 'none';
     document.getElementById('editForm' + id).style.display = 'block'
     hideFormAdd();

@@ -3,9 +3,20 @@ import os
 from flask import Flask, render_template, request, redirect, url_for, flash
 from flask_sqlalchemy import SQLAlchemy
 from werkzeug.utils import secure_filename
+from flask_login import LoginManager, login_user, login_required, current_user, logout_user
+from werkzeug.security import check_password_hash, generate_password_hash
+import json
 
 app = Flask(__name__)
 app.secret_key = 'some_secret'
+
+with open('config.json') as json_file:
+    config_data = json.load(json_file)
+    admin_password = config_data['Credentials']['admin_password']
+    app.config['ADMIN_PASSWORD'] = admin_password
+
+login_manager = LoginManager()
+login_manager.init_app(app)
 
 # Check if data directory exists, if not create it
 data_directory = os.path.join(app.root_path, 'data')
@@ -30,6 +41,80 @@ class PortfolioItem(db.Model):
     image = db.Column(db.String(120), nullable=False)
     description = db.Column(db.String(120), nullable=False)
     full_description = db.Column(db.String(120), nullable=False)
+    link = db.Column(db.String(120), nullable=False)
+
+@login_manager.user_loader
+def load_user(user_id):
+    return User.query.get(int(user_id))
+
+class User(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    username = db.Column(db.String(120), nullable=False)
+    password_hash = db.Column(db.String(120), nullable=False)
+    is_admin = db.Column(db.Boolean, nullable=False)
+    is_active = db.Column(db.Boolean, default=True)  # Add this line
+
+    @property
+    def is_authenticated(self):
+        return self.is_active
+
+    def __repr__(self):
+        return '<User %r>' % self.username
+
+    def get_id(self):
+        return str(self.id)
+
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    if request.method == 'POST':
+        user = User.query.filter_by(username=request.form['username']).first()
+        if user and check_password_hash(user.password_hash, request.form['password']):
+            login_user(user)
+            flash('Logged in successfully.', 'success')
+            return redirect(url_for('index'))
+        else:
+            flash('Invalid username or password.', 'error')
+            return redirect(url_for('login'))
+    else:
+        return render_template('login.html')
+
+@app.route('/logout')
+@login_required
+def logout():
+    logout_user()
+    flash('Logged out successfully.', 'success')
+    return redirect(url_for('index'))
+
+@app.route('/register', methods=['GET', 'POST'])
+def register():
+    if request.method == 'POST':
+        # Check if admin password is correct
+        admin_pass = app.config.get('ADMIN_PASSWORD')
+        print(admin_pass)
+        print(type(request.form['admin_pass']))
+        print(type(admin_pass))
+        if str(request.form['admin_pass']) != str(admin_pass):
+            flash('Incorrect admin password.', 'error')
+            return redirect(url_for('register'))
+
+        # Check if username already exists
+        existing_user = User.query.filter_by(username=request.form['username']).first()
+        if existing_user:
+            flash('A user with the same username already exists.', 'error')
+            return redirect(url_for('register'))
+
+        user = User(
+            username=request.form['username'],
+            password_hash=generate_password_hash(request.form['password']),
+            is_admin=request.form.get('is_admin') == 'on',
+            is_active=True  # Add this line
+        )
+        db.session.add(user)
+        db.session.commit()
+        flash('User successfully registered.', 'success')
+        return redirect(url_for('login'))
+    else:
+        return render_template('register.html')
 
 @app.route('/')
 def index():
@@ -51,19 +136,34 @@ def portfolio():
                     file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
                     
                     filename = app.config['UPLOAD_FOLDER'].replace('static/', '') + '/' + filename
+                    with open('log.txt', 'a') as log:
+                        log.write(filename + '\n')
+                        if filename == '':
+                            log.write('filename is empty\n')
+
+            else:
+                filename = ''
+
+        # Check if title already exists
+        existing_item = PortfolioItem.query.filter_by(title=request.form['title']).first()
+        if existing_item and (edit_item is None or existing_item.id != edit_item.id):
+            flash('A portfolio item with the same title already exists.', 'error')
+            return redirect(url_for('portfolio'))
 
         item = PortfolioItem(
             title=request.form['title'],
             image=filename,
             description=request.form['description'],
-            full_description=request.form['full_description']
+            full_description=request.form['full_description'],
+            link=request.form['link']
         )
         db.session.add(item)
         db.session.commit()
+        flash('Portfolio item successfully added.', 'success')
         return redirect(url_for('portfolio'))
     else:
         portfolio_items = PortfolioItem.query.all()
-        return render_template('portfolio.html', portfolio_items=portfolio_items, edit_item=edit_item)
+        return render_template('portfolio.html', portfolio_items=portfolio_items, edit_item=edit_item, current_user=current_user)
 
 def allowed_file(filename):
     ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif', 'svg'}
@@ -96,7 +196,10 @@ def edit_portfolio_item(id):
             item.description = request.form['description']
         if 'full_description' in request.form:
             item.full_description = request.form['full_description']
+        if 'link' in request.form:
+            item.link = request.form['link']
         db.session.commit()
+        flash('Portfolio item successfully edited.', 'success')
         return redirect(url_for('portfolio'))
     else:
         return redirect(url_for('portfolio', edit_id=id))
@@ -106,6 +209,7 @@ def delete_portfolio_item(id):
     item = db.session.get(PortfolioItem, id)
     db.session.delete(item)
     db.session.commit()
+    flash('Portfolio item successfully deleted.', 'success')
     return redirect(url_for('portfolio'))
 
 if __name__ == '__main__':

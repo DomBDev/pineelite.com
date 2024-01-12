@@ -1,0 +1,63 @@
+body {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+footer {
+    margin-top: auto;
+}
+
+.register-section {
+    width: 100%;
+    max-width: 400px;
+    margin: 0 auto;
+    padding: 20px;
+    text-align: center;
+}
+
+.register-section h1 {
+    font-size: 2.5em;
+    margin-bottom: 20px;
+}
+
+.register-section form {
+    display: flex;
+    flex-direction: column;
+}
+
+.register-section form input[type="text"],
+.register-section form input[type="password"] {
+    padding: 10px;
+    margin-bottom: 10px;
+    border: none;
+    border-radius: 5px;
+}
+
+.register-section form input[type="submit"] {
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    background-color: var(--light-green);
+    color: var(--dark-blue);
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.register-section form input[type="submit"]:hover {
+    background-color: var(--light-blue);
+}
+
+.login {
+    margin-top: 20px;
+    font-size: 1.2em;
+}
+
+.login a {
+    color: var(--light-blue);
+    text-decoration: none;
+}
+
+.login a:hover {
+    text-decoration: underline;
+}

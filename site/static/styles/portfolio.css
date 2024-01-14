@@ -333,11 +333,16 @@ input[type="submit"][value="Delete"]:hover {
     }
 
     .portfolio-item {
-        padding: 10px;
+        padding: 3vw;
+        margin: 4vw;
     }
 
     .title h1 {
         font-size: 1.2em;
+    }
+
+    .description {
+        padding: 2vw;
     }
 
     .expanded-view {

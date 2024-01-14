@@ -64,12 +64,13 @@ footer {
 @media (max-width: 768px) {
     .landing img {
         scale: 2.5;
-        width: 200vw;
-        left: 100vw;
-        bottom: 0;
-        right: -50px;
+        width: 100%;
+        left: 50%;
+        right: auto;
+        transform: translateX(-50%) translateY(-15%);
     }
 }
+    
 
 .landing h1 {
     font-size: 2.5em;
@@ -193,6 +194,15 @@ footer {
     }
 }
 
+@media (max-width: 768px) {
+    .blob {
+        position: absolute;
+        top: 17.5%;
+        left: 50%;
+        transform: translate(-50%, -50%) scale(1.5);
+    }
+}
+
 .divider {
     opacity: 1;
     width:100%;
@@ -283,8 +293,14 @@ footer {
         font-size: 1em;
     }
 
+    .slogan {
+        top: 80%; /* Position it near the bottom */
+        left: 50%; /* Position it at the middle horizontally */
+        transform: translate(-50%, -50%); /* Center the slogan */
+    }
+
     .slogan h2 {
-        font-size: 4vw;
+        font-size: 4vw; /* Increase the font size for better readability on small screens */
     }
 
     .blob {

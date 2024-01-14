@@ -264,10 +264,11 @@ footer {
 
 @media (max-width: 768px) {
     .landing img {
-        bottom: 0;
-        right: 50%;
-        width: 100vw;
-        transform: translateX(-50%);
+        position: absolute;
+        bottom: -10%; /* Move the image slightly below the bottom of the .landing div */
+        left: 50%; /* Center the image horizontally */
+        transform: translateX(-50%) translateY(-90%) scale(3.5); /* Center and scale the image */
+        height: auto;
     }
 
     .landing h1 {

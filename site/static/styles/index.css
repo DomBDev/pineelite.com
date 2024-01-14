@@ -319,6 +319,11 @@ footer {
     .brand-explanation {
         margin-top: 2vw;
         margin-bottom: 12.5vw;
+        grid-template-columns: 1fr;
     }
 
+    .brand, .thumbnail {
+        grid-column-start: 1;
+        grid-column-end: 2;
+    }
 }

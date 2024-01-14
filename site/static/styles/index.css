@@ -322,6 +322,10 @@ footer {
         grid-template-columns: 1fr;
     }
 
+    .brand p {
+        padding-right: 4vw;
+    }
+
     .brand, .thumbnail {
         grid-column-start: 1;
         grid-column-end: 2;

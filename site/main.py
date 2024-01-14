@@ -1,6 +1,6 @@
 # main.py
 import os
-from flask import Flask, render_template, request, redirect, url_for, flash
+from flask import Flask, render_template, request, redirect, url_for, flash, make_response
 from flask_sqlalchemy import SQLAlchemy
 from werkzeug.utils import secure_filename
 from flask_login import LoginManager, login_user, login_required, current_user, logout_user
@@ -34,6 +34,11 @@ if not os.path.exists(upload_folder):
     os.makedirs(upload_folder)
 
 db = SQLAlchemy(app)
+
+def response_template(template, **kwargs):
+    response = make_response(render_template(template, **kwargs))
+    response.headers['Cache-Control'] = 'public, max-age=3600'
+    return response
 
 class PortfolioItem(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -76,7 +81,7 @@ def login():
             flash('Invalid username or password.', 'error')
             return redirect(url_for('login'))
     else:
-        return render_template('login.html')
+        return response_template('login.html')
 
 @app.route('/logout')
 @login_required
@@ -114,11 +119,11 @@ def register():
         flash('User successfully registered.', 'success')
         return redirect(url_for('login'))
     else:
-        return render_template('register.html')
+        return response_template('register.html')
 
 @app.route('/')
 def index():
-    return render_template('index.html')
+    return response_template('index.html')
 
 @app.route('/portfolio', methods=['GET', 'POST'])
 def portfolio():
@@ -163,7 +168,7 @@ def portfolio():
         return redirect(url_for('portfolio'))
     else:
         portfolio_items = PortfolioItem.query.all()
-        return render_template('portfolio.html', portfolio_items=portfolio_items, edit_item=edit_item, current_user=current_user)
+        return response_template('portfolio.html', portfolio_items=portfolio_items, edit_item=edit_item, current_user=current_user)
 
 def allowed_file(filename):
     ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif', 'svg'}

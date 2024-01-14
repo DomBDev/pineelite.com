@@ -272,7 +272,17 @@ footer {
     }
 
     .landing h1 {
-        font-size: 1em;
+        font-size: 0.8em;
+    }
+
+    .landing, .blob {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+    
+    .landing .desc {
+        text-align: left;
     }
 
     .slogan {

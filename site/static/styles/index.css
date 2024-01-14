@@ -63,8 +63,11 @@ footer {
 
 @media (max-width: 768px) {
     .landing img {
-        width: 100vw;
-        left: 0;
+        scale: 2.5;
+        width: 200vw;
+        left: 100vw;
+        bottom: 0;
+        right: -50px;
     }
 }
 

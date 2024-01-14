@@ -6,6 +6,7 @@ from werkzeug.utils import secure_filename
 from flask_login import LoginManager, login_user, login_required, current_user, logout_user
 from werkzeug.security import check_password_hash, generate_password_hash
 import json
+import hashlib
 
 app = Flask(__name__)
 app.secret_key = 'some_secret'
@@ -35,9 +36,18 @@ if not os.path.exists(upload_folder):
 
 db = SQLAlchemy(app)
 
+def generate_etag(data):
+    return hashlib.md5(data).hexdigest()
+
+def add_etag(response):
+    response.headers['ETag'] = generate_etag(response.get_data())
+    return response
+
 def response_template(template, **kwargs):
     response = make_response(render_template(template, **kwargs))
     response.headers['Cache-Control'] = 'public, max-age=3600'
+    response = add_etag(response)
+    
     return response
 
 class PortfolioItem(db.Model):

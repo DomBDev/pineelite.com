@@ -2,7 +2,7 @@ body {
     display: flex;
     flex-direction: column;
     min-height: 100vh;
-    background-color: var(--dark-teal);
+    background-color: var(--dark-gray);
 }
 
 footer {
@@ -57,9 +57,14 @@ footer {
     text-align: left;
 }
 
+#addForm button {
+    width: 100%;
+    border-radius: 5px;
+}
+
 .portfolio-grid {
     padding: 2vw;
-    background-color: var(--dark-teal);
+    background-color: var(--dark-gray);
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     gap: 30px;
@@ -104,7 +109,7 @@ footer {
     padding: 0.5vw;
     padding-bottom: 0.5vh;
     text-align: left;
-    background-color: var(--dark-teal);
+    background-color: var(--dark-gray);
     color: var(--light-green);
 }
 
@@ -201,7 +206,7 @@ footer {
 }
 
 button {
-    background-color: var(--dark-teal);
+    background-color: var(--dark-gray);
     color: var(--light-green);
     border: none;
     padding: 10px 20px;
@@ -233,7 +238,7 @@ input[type="text"], input[type="file"] {
 
 button.cancel {
     width: 100%;
-    background-color: var(--dark-teal);
+    background-color: var(--dark-gray);
     color: var(--light-green);
     padding: 14px 20px;
     margin: 4px 0;
@@ -253,6 +258,13 @@ form {
     padding: 20px;
 }
 
+form label {
+    color: var(--light-green);
+    font-size: 1.2em;
+    margin-bottom: 0.25rem;
+    margin-top: 0.5rem;
+}
+
 form.edit {
     border-bottom-left-radius: 0;
     border-bottom-right-radius: 0;
@@ -266,7 +278,7 @@ form.delete {
 
 input[type="submit"] {
     width: 100%;
-    background-color: var(--dark-teal);
+    background-color: var(--dark-gray);
     color: var(--light-green);
     padding: 14px 20px;
     margin: 4px 0;
@@ -281,7 +293,7 @@ input[type="submit"]:hover {
 }
 
 input[type="submit"][value="Delete"] {
-    background-color: var(--dark-gray);
+    background-color: #c53b3b;
     color: var(--light-green);
     transition: background-color 0.3s ease;
 }

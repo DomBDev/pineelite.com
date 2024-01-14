@@ -41,6 +41,10 @@ body {
     min-height: 100vh;
 }
 
+.flashes {
+    background-color: var(--dark-blue);
+}
+
 .navbar {
     z-index: 998; /* Set a high z-index to ensure the navbar stays on top */
     position: relative;

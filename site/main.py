@@ -1,12 +1,15 @@
 # main.py
 import os
-from flask import Flask, render_template, request, redirect, url_for, flash, make_response
+from flask import Flask, render_template, request, redirect, url_for, flash, make_response, session
 from flask_sqlalchemy import SQLAlchemy
 from werkzeug.utils import secure_filename
 from flask_login import LoginManager, login_user, login_required, current_user, logout_user
 from werkzeug.security import check_password_hash, generate_password_hash
 import json
 import hashlib
+from openai import OpenAI
+
+
 
 app = Flask(__name__)
 app.secret_key = 'some_secret'
@@ -15,6 +18,7 @@ with open('config.json') as json_file:
     config_data = json.load(json_file)
     admin_password = config_data['Credentials']['admin_password']
     app.config['ADMIN_PASSWORD'] = admin_password
+    openai = OpenAI(api_key=config_data['Credentials']['openai_key'])
 
 login_manager = LoginManager()
 login_manager.init_app(app)
@@ -78,6 +82,35 @@ class User(db.Model):
 
     def get_id(self):
         return str(self.id)
+
+@app.route('/chat')
+def chat():
+    if 'chat_history' not in session:
+        session['chat_history'] = [{'role': 'system', 'content': 'You are PineBot, a helpful chat ai used for anything.'}]
+
+    return render_template('chat.html', chat_history=session['chat_history'])
+
+@app.route('/get_response', methods=['POST'])
+def get_response():
+    message = request.form['message']
+    session['chat_history'].append({'role': 'user', 'content': message})
+    session.modified = True  # Add this line
+
+    # Pass the entire chat history to the model for context
+    response = openai.chat.completions.create(
+        model="gpt-3.5-turbo",
+        messages=session['chat_history']
+    )
+
+    assistant_message = response.choices[0].message.content
+    session['chat_history'].append({'role': 'assistant', 'content': assistant_message})
+    return assistant_message
+
+@app.route('/clear_chat', methods=['POST'])
+def clear_chat():
+    session['chat_history'] = [{'role': 'system', 'content': 'You are PineBot, a helpful chat ai used for anything.'}]
+    session.modified = True
+    return redirect(url_for('chat'))
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():

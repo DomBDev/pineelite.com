@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+
+{% block title %}Pine Elite - Chat{% endblock %}
+
+{% block content %}
+<section class="chat">
+    <div id="chat-window">
+        <form id="clear" action="/clear_chat" method="post">
+            <button type="submit" id="clear-chat-button">Clear Chat</button>
+        </form>
+        <div id="messages">
+            {% for message in chat_history %}
+            <div><strong>{{ "Bot" if message.role == 'assistant' else "You" if message.role == 'user' else "System"}}:</strong> {{ message.content }}</div>
+            {% if message.role == 'assistant' or message.role == 'system' %}
+            <br>
+            {% endif %}
+            {% endfor %}
+        </div>
+        <form id="send-message">
+            <input type="text" id="message-input" autocomplete="off">
+            <button type="submit">Send</button>
+        </form>
+    </div>
+</section>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script>
+$(document).ready(function() {
+    $('#send-message').on('submit', function(e) {
+        e.preventDefault();
+        var message = $('#message-input').val();
+        $('#message-input').val('');
+        $('#messages').append('<div><strong>You:</strong> ' + message + '</div>');
+        $.post('{{ url_for("get_response") }}', { 'message': message })
+            .done(function(response) {
+                $('#messages').append('<div><strong>Bot:</strong> ' + response + '</div>');
+            });
+    });
+});
+</script>
+{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='styles/chat.css') }}">
+{% endblock %}

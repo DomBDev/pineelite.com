@@ -1,23 +1,10 @@
 <!-- templates/index.html -->
 {% extends 'base.html' %}
 
-{% block title %}Pine Elite - Home{% endblock %}
+{% block title %}Title - Home{% endblock %}
 
 {% block content %}
 <script src="{{ url_for('static', filename='scripts/index.js') }}"></script>
-
-    <!-- Landing Section with Wavy Border -->
-    <div class="wave"></div>
-    <section class="landing">
-        <img src="{{ url_for('static', filename='images/trees.svg') }}" alt="Pine Trees" class="trees">
-        <div class="slogan"><h2>Engineering the <span class='highlight'>Future</span>,</h2><h2><span class='highlight'>Elite</span> by Design.</h2></div>
-        <div class="blob">
-            <div class="desc">
-                <h1 class="name">Dom | Pine Elite</h1>
-                <h1 class="role">Student & Full-Stack Developer</h2>
-            </div>
-        </div> 
-    </section>
 
     <!-- Biographical Information Section -->
     <section class="bio">
@@ -25,23 +12,23 @@
             <h1>About Me</h1>
             <div class="row">
                 <div class="col-md-6">
-                    <h2>Schooling</h2>
-                    <p>I am currently in High School, and I've taken multiple CS courses from prestigious institutions, including:</p>
+                    <h2>Header 2</h2>
+                    <p>Paragraph</p>
                     <ul>
-                        <li>Carnegie Mellon University</li>
-                        <li>Massachusetts Institute of Technology</li>
-                        <li>Harvard University</li>
+                        <li>List Item</li>
+                        <li>List Item</li>
+                        <li>List Item</li>
                     </ul>
                 </div>
                 <div class="col-md-6">
-                    <h2>Development</h2>
-                    <p>I am a freelance software developer with experience in the following languages:</p>
+                    <h2>Heading 2</h2>
+                    <p>Paragraph</p>
                     <ul>
-                        <li>Python</li>
-                        <li>Javascript/Node.js</li>
-                        <li>HTML/CSS</li>
-                        <li>Arduino</li>
-                        <li>C++</li>
+                        <li>List Item</li>
+                        <li>List Item</li>
+                        <li>List Item</li>
+                        <li>List Item</li>
+                        <li>List Item</li>
                     </ul>
                 </div>
             </div>
@@ -49,12 +36,12 @@
     </section>
     <section class="brand-explanation">
         <div class="brand container">
-            <h2>About Pine Elite</h2>
-            <p>Pine Elite is more than just a brand; it's a representation of my commitment to excellence in coding and design. Rooted in the evergreen strength of a pine tree, Pine Elite stands tall in the digital landscape, offering elite solutions and services in the realm of software development.</p>
-            <p>With Pine Elite, you get a unique blend of creativity and technical expertise, ensuring that your projects not only meet but exceed expectations. Join me in exploring the elite world of coding and design, where innovation knows no bounds.</p>
+            <h2>About Title</h2>
+            <p>Paragraph</p>
+            <p>Paragraph</p>
         </div>
         <div class="thumbnail container">
-            <img src="{{ url_for('static', filename='images/logo.jpg') }}" alt="Pine Elite Thumbnail">
+            <img src="{{ url_for('static', filename='images/logo.jpg') }}" alt="Thumbnail">
         </div>
     </section>
 

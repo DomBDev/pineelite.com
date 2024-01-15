@@ -20,8 +20,8 @@ footer {
 
 .portfolio-intro {
     padding: 1vw;
-    background-color: var(--dark-blue);
-    color: var(--light-green);
+    background-color: var(--base-bg);
+    color: var(--light-fg);
     text-align: center;
     display: flex;
     flex-direction: column;
@@ -72,7 +72,7 @@ footer {
 }
 
 .portfolio-item {
-    background-color: var(--dark-blue);
+    background-color: var(--base-bg);
     padding: 20px;
     box-sizing: border-box;
     border-radius: 10px;
@@ -100,7 +100,7 @@ footer {
     margin-top: 10px;
 }
 .title h1 {
-    color: var(--light-green);
+    color: var(--light-fg);
     font-weight: bold;
     font-size: 1.5em;
 }
@@ -110,7 +110,7 @@ footer {
     padding-bottom: 0.5vh;
     text-align: left;
     background-color: var(--dark-gray);
-    color: var(--light-green);
+    color: var(--light-fg);
 }
 
 .expanded-view {
@@ -121,11 +121,11 @@ footer {
     max-height: calc(90% - 60px);
     overflow: auto;
     z-index: 999;
-    background-color: var(--dark-blue);
+    background-color: var(--base-bg);
     border-radius: 15px;
     box-shadow: 0px 0px 30px rgba(0,0,0,0.2);
     text-align: center;
-    border: 1px solid var(--light-green);
+    border: 1px solid var(--light-fg);
 }
 
 .expanded-view-header {
@@ -147,7 +147,7 @@ footer {
 .expanded-view-header p {
     margin: 0;
     padding: 10px;
-    color: var(--light-green);
+    color: var(--light-fg);
     font-family: Arial, sans-serif;
     font-size: 1.2em;
     text-align: left;
@@ -158,17 +158,17 @@ footer {
 }
 
 .expanded-view::-webkit-scrollbar-thumb {
-    background-color: var(--light-blue);
+    background-color: var(--light-bg);
     border-radius: 4px;
 }
 
 .expanded-view::-webkit-scrollbar-thumb:hover {
-    background-color: var(--dark-teal);
+    background-color: var(--secondary-bg);
 }
 
 .expanded-view-content {
     padding: 20px;
-    color: var(--light-green);
+    color: var(--light-fg);
     font-family: Arial, sans-serif;
     padding-bottom: 0;
     margin-bottom: 0;
@@ -188,7 +188,7 @@ footer {
 
 .expanded-view-content h2 {
     margin-top: 0;
-    color: var(--light-green);
+    color: var(--light-fg);
     text-align: center;
 }
 
@@ -207,7 +207,7 @@ footer {
 
 button {
     background-color: var(--dark-gray);
-    color: var(--light-green);
+    color: var(--light-fg);
     border: none;
     padding: 10px 20px;
     text-align: center;
@@ -221,7 +221,7 @@ button {
 }
 
 button:hover {
-    background-color: var(--light-blue);
+    background-color: var(--light-bg);
 }
 
 input[type="text"], input[type="file"] {
@@ -229,17 +229,17 @@ input[type="text"], input[type="file"] {
     padding: 12px 20px;
     margin: 4px 0;
     display: inline-block;
-    border: 1px solid var(--light-green);
-    color: var(--light-green);
+    border: 1px solid var(--light-fg);
+    color: var(--light-fg);
     border-radius: 4px;
     box-sizing: border-box;
-    background-color: var(--dark-teal);
+    background-color: var(--secondary-bg);
 }
 
 button.cancel {
     width: 100%;
     background-color: var(--dark-gray);
-    color: var(--light-green);
+    color: var(--light-fg);
     padding: 14px 20px;
     margin: 4px 0;
     border: none;
@@ -249,17 +249,17 @@ button.cancel {
 }
 
 button.cancel:hover {
-    background-color: var(--light-blue);
+    background-color: var(--light-bg);
 }
 
 form {
     border-radius: 5px;
-    background-color: var(--dark-blue);
+    background-color: var(--base-bg);
     padding: 20px;
 }
 
 form label {
-    color: var(--light-green);
+    color: var(--light-fg);
     font-size: 1.2em;
     margin-bottom: 0.25rem;
     margin-top: 0.5rem;
@@ -279,7 +279,7 @@ form.delete {
 input[type="submit"] {
     width: 100%;
     background-color: var(--dark-gray);
-    color: var(--light-green);
+    color: var(--light-fg);
     padding: 14px 20px;
     margin: 4px 0;
     border: none;
@@ -289,12 +289,12 @@ input[type="submit"] {
 }
 
 input[type="submit"]:hover {
-    background-color: var(--light-blue);
+    background-color: var(--light-bg);
 }
 
 input[type="submit"][value="Delete"] {
     background-color: #c53b3b;
-    color: var(--light-green);
+    color: var(--light-fg);
     transition: background-color 0.3s ease;
 }
 

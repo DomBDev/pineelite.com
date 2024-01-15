@@ -12,20 +12,59 @@ footer {
     margin-top: auto;
 }
 
+.hero-content {
+    text-align: center;
+    padding: 100px 0;
+    color: var(--light-fg);
+}
 
+.hero-content h1 {
+    font-size: 2.5em;
+    margin-bottom: 1em;
+}
+
+.hero-content p {
+    font-size: 1.2em;
+    margin-bottom: 2em;
+}
+
+.hero-content a {
+    display: inline-block;
+    padding: 10px 20px;
+    color: var(--light-fg);
+    background-color: var(--secondary-bg);
+    text-decoration: none;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+}
+
+
+.cta-button {
+    display: inline-block;
+    padding: 10px 20px;
+    color: var(--light-fg);
+    background-color: var(--secondary-bg);
+    text-decoration: none;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+}
+
+.cta-button:hover {
+    background-color: var(--base-bg);
+}
 
 /* Biographical Information section styles */
 .bio {
-    background-color: var(--dark-blue); /* Dark forest green background color */
-    color: var(--light-green); /* Light blue text color */
+    background-color: var(--base-bg); /* Dark forest green background color */
+    color: var(--light-fg); /* Light blue text color */
     padding: 50px 20px;
-    padding-top: 10px;
+    padding-top: 3vw;
     position: relative;
     z-index: 2;
 }
 
 .bio h1, .bio h2 {
-    color: var(--light-green); /* Light green text color */
+    color: var(--light-fg); /* Light green text color */
 }
 .bio h1 {
     text-align: center;
@@ -45,7 +84,7 @@ footer {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     gap: 30px;
-    min-height: 75vh;
+    background-color: var(--secondary-bg);
 }
 .brand {
     grid-column-start: 1;
@@ -54,7 +93,7 @@ footer {
     margin: 3vw;
     margin-right: 0;
     border-radius: 10px;
-    color: var(--light-green);
+    color: var(--light-fg);
     padding: 50px 20px;
 }
 
@@ -74,7 +113,7 @@ footer {
 }
 
 .brand h2 {
-    color: var(--light-blue); /* Light blue text color */
+    color: var(--light-bg); /* Light blue text color */
 }
 
 .brand p {

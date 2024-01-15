@@ -3,16 +3,12 @@
 
 
 :root {
-    --dark-green: #0C451D;
-    --dark-forest-green: #0C4530;
-    --dark-greenish-brown: #0F450C;
-    --dark-teal: #0C4543;
-    --dark-blue: #0C3545;
-    --light-blue: #278eb1;
-    --light-green: #c5dabf;
-    --db-bg-text: #C4A786;
-    --dark-gray: #0D0D0D;
-    --xd-gray: #050505;
+    --secondary-bg: #2E3A59; /* Dark Blue for the footer */
+    --base-bg: #3C5068; /* Medium Blue for navbar and info sections */
+    --light-bg: #BAC1B8; /* Light Gray for hovering */
+    --light-fg: #F4F4F2; /* Off White for text */
+    --dark-gray: #232931; /* Dark Gray */
+    --xd-gray: #393E46; /* Extra Dark Gray */
 }
 
 /* Custom scrollbar styles */
@@ -26,7 +22,7 @@
 }
 
 ::-webkit-scrollbar-thumb {
-    background: var(--light-blue); /* Light blue scrollbar thumb */
+    background: var(--light-bg); /* Light blue scrollbar thumb */
     border-radius: 10px; /* Rounded corners for a modern look */
 }
 
@@ -42,24 +38,24 @@ body {
 }
 
 .flashes {
-    background-color: var(--dark-blue);
+    background-color: var(--base-bg);
 }
 
 .navbar {
     z-index: 998; /* Set a high z-index to ensure the navbar stays on top */
     position: relative;
-    background-color: var(--dark-blue);
+    background-color: var(--base-bg);
 }
 
 .navbar-brand {
     font-weight: bold;
-    color: var(--light-green); /* Darker green text color for the brand */
+    color: var(--light-fg); /* Darker green text color for the brand */
     font-size: 1.5em; /* Larger font size for the brand */
     transition: color 0.3s ease-in-out, transform 0.3s ease-in-out; /* Smooth color and transform transition */
 }
 
 .navbar-brand:hover {
-    color: var(--light-blue); /* Darker green color on hover for the brand */
+    color: var(--light-bg); /* Darker green color on hover for the brand */
     transform: rotate(5deg); /* Rotate on hover */
 }
 
@@ -77,7 +73,7 @@ body {
 }
 
 .navbar-nav .nav-item .nav-link {
-    color: var(--light-green); /* Darker green text color for links */
+    color: var(--light-fg); /* Darker green text color for links */
     font-size: 1.2em; /* Larger font size for the links */
     transition: color 0.3s ease-in-out, transform 0.3s ease-in-out; /* Smooth color and transform transition */
 }
@@ -90,8 +86,8 @@ body {
 
 /* Footer styles */
 footer {
-    background-color: var(--dark-teal); /* Dark teal background color */
-    color: var(--light-green); /* Light green text color */
+    background-color: var(--secondary-bg); /* Dark teal background color */
+    color: var(--light-fg); /* Light green text color */
     position: relative;
     z-index: 2;
     padding: 20px;

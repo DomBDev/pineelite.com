@@ -7,6 +7,7 @@ from flask_login import LoginManager, login_user, login_required, current_user, 
 from werkzeug.security import check_password_hash, generate_password_hash
 import json
 import hashlib
+from flask_mail import Mail, Message
 
 app = Flask(__name__)
 app.secret_key = 'some_secret'
@@ -18,6 +19,12 @@ with open('config.json') as json_file:
 
 login_manager = LoginManager()
 login_manager.init_app(app)
+
+app.config['MAIL_SERVER'] = 'smtp.googlemail.com'
+app.config['MAIL_PORT'] = 587
+app.config['MAIL_USE_TLS'] = True
+app.config['MAIL_USERNAME'] = 'your-email@gmail.com'  # enter your email
+app.config['MAIL_PASSWORD'] = 'your-password'  # enter your password
 
 # Check if data directory exists, if not create it
 data_directory = os.path.join(app.root_path, 'data')
@@ -78,6 +85,26 @@ class User(db.Model):
 
     def get_id(self):
         return str(self.id)
+
+mail = Mail(app)
+
+@app.route('/contact', methods=['GET', 'POST'])
+def contact():
+    if request.method == 'POST':
+        name = request.form['name']
+        email = request.form['email']
+        message = request.form['message']
+
+        msg = Message('New Message from {} <{}>'.format(name, email),
+                      sender='your-email@gmail.com',
+                      recipients=['admin@example.com'])
+        msg.body = message
+        mail.send(msg)
+
+        flash('Message sent successfully.', 'success')
+        return redirect(url_for('contact'))
+    else:
+        return response_template('contact.html')
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():

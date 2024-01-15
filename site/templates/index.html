@@ -6,45 +6,57 @@
 {% block content %}
 <script src="{{ url_for('static', filename='scripts/index.js') }}"></script>
 
+<!-- Hero Section -->
+<section class="hero" style="background: url('path/to/your/background/image.jpg') no-repeat center center; background-size: cover;">
+    <div class="container">
+        <div class="hero-content">
+            <h1>Unleash Your Creativity with ImageFX Inc.</h1>
+            <p>Your premier commercial printer in Grove City, Pennsylvania. Specializing in graphic design, printing, and vehicle wraps.</p>
+            <a href="#services" class="cta-button">Explore Our Services</a>
+            <a href="/contact" class="cta-button">Contact Us</a>
+        </div>
+    </div>
+</section>
+
     <!-- Biographical Information Section -->
+   
+    <section class="brand-explanation">
+        <div class="brand container">
+            <h2>About ImageFX Inc.</h2>
+            <p>ImageFX Inc. is a leading commercial printer based in Grove City, Pennsylvania. We specialize in a wide range of services including graphic design, printing, and vehicle wraps. With over 20 years of experience in the industry, we are committed to delivering high-quality products and exceptional customer service.</p>
+            <p>Our team of skilled designers and print specialists are dedicated to bringing your vision to life. Whether you need a new logo, business cards, or a custom vehicle wrap, we have the expertise and equipment to meet your needs. At ImageFX Inc., we believe in the power of visual communication and strive to create designs that make a lasting impression.</p>
+        </div>
+        <div class="thumbnail container">
+            <img src="{{ url_for('static', filename='images/logo.jpg') }}" alt="ImageFX Inc. Logo">
+        </div>
+    </section>
     <section class="bio">
         <div class="container">
-            <h1>About Me</h1>
+            <h1 id="services">Our Services</h1>
             <div class="row">
                 <div class="col-md-6">
-                    <h2>Header 2</h2>
+                    <h2>Printing Solutions</h2>
                     <p>Paragraph</p>
                     <ul>
-                        <li>List Item</li>
-                        <li>List Item</li>
-                        <li>List Item</li>
+                        <li>Vehicle Wraps</li>
+                        <li>Commercial Signs</li>
+                        <li>Business Cards</li>
+                        <li>Brochures</li>
                     </ul>
                 </div>
                 <div class="col-md-6">
-                    <h2>Heading 2</h2>
+                    <h2>Design Solutions</h2>
                     <p>Paragraph</p>
                     <ul>
-                        <li>List Item</li>
-                        <li>List Item</li>
-                        <li>List Item</li>
-                        <li>List Item</li>
-                        <li>List Item</li>
+                        <li>Logo Design</li>
+                        <li>Sign Design</li>
+                        <li>Wrap Design</li>
+                        <li>Business Card Design</li>
                     </ul>
                 </div>
             </div>
         </div>
     </section>
-    <section class="brand-explanation">
-        <div class="brand container">
-            <h2>About Title</h2>
-            <p>Paragraph</p>
-            <p>Paragraph</p>
-        </div>
-        <div class="thumbnail container">
-            <img src="{{ url_for('static', filename='images/logo.jpg') }}" alt="Thumbnail">
-        </div>
-    </section>
-
 
 {% endblock %}
 

@@ -7,7 +7,8 @@ from flask_login import LoginManager, login_user, login_required, current_user, 
 from werkzeug.security import check_password_hash, generate_password_hash
 import json
 import hashlib
-from flask_mail import Mail, Message
+from sendgrid import SendGridAPIClient
+from sendgrid.helpers.mail import Mail
 
 app = Flask(__name__)
 app.secret_key = 'some_secret'
@@ -19,12 +20,6 @@ with open('config.json') as json_file:
 
 login_manager = LoginManager()
 login_manager.init_app(app)
-
-app.config['MAIL_SERVER'] = 'smtp.googlemail.com'
-app.config['MAIL_PORT'] = 587
-app.config['MAIL_USE_TLS'] = True
-app.config['MAIL_USERNAME'] = 'your-email@gmail.com'  # enter your email
-app.config['MAIL_PASSWORD'] = 'your-password'  # enter your password
 
 # Check if data directory exists, if not create it
 data_directory = os.path.join(app.root_path, 'data')
@@ -93,13 +88,31 @@ def contact():
     if request.method == 'POST':
         name = request.form['name']
         email = request.form['email']
-        message = request.form['message']
+        company = request.form['company']
+        subject = request.form['subject']
+        message_body = request.form['message']
+        
+        message_body = f"""
+        <p><strong>Name:</strong> {name}</p>
+        <p><strong>Email:</strong> {email}</p>
+        <p><strong>Company:</strong> {company}</p>
+        <p><strong>Subject:</strong> {subject}</p>
+        <p><strong>Message:</strong> {message_body}</p>
+        """
 
-        msg = Message('New Message from {} <{}>'.format(name, email),
-                      sender='your-email@gmail.com',
-                      recipients=['admin@example.com'])
-        msg.body = message
-        mail.send(msg)
+        message = Mail(
+            from_email='imagefxcontact@gmail.com',
+            to_emails='bonannidominic@gmail.com',
+            subject=f'From {name} ({email}) about {subject}.',
+            html_content=message_body)
+
+        try:
+            sg = SendGridAPIClient('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')
+            response = sg.send(message)
+        except Exception as e:
+            print(e)
+            flash('An error occurred while sending the message. Please try again.', 'error')
+            return redirect(url_for('contact'))
 
         flash('Message sent successfully.', 'success')
         return redirect(url_for('contact'))

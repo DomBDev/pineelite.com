@@ -8,7 +8,7 @@
     --light-bg: #BAC1B8; /* Light Gray for hovering */
     --light-fg: #F4F4F2; /* Off White for text */
     --dark-gray: #232931; /* Dark Gray */
-    --xd-gray: #393E46; /* Extra Dark Gray */
+    --xd-gray: #0D0D0D; /* Extra Dark Gray */
 }
 
 /* Custom scrollbar styles */
@@ -30,8 +30,8 @@ body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     margin: 0;
     padding: 0;
-    background-color: #0D0D0D; /* Dark green background color */
-    color: #5f895a; /* Darker green text color */
+    background-color: var(--xd-gray); /* Dark green background color */
+    color: #ffffff; /* Darker green text color */
     display: flex;
     flex-direction: column;
     min-height: 100vh;
@@ -92,6 +92,7 @@ footer {
     z-index: 2;
     padding: 20px;
     text-align: center; /* Center the text */
+    margin-top: auto; /* Push the footer to the bottom of the page */
 }
 
 footer p {

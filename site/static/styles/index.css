@@ -1,191 +1,354 @@
 /* static/css/index.css */
 /* Add your styles for index.html here */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
 
-body {
-    display: flex;
-    flex-direction: column;
-    min-height: 100vh;
+:root {
+    --transition-speed: 300ms;
+}
+
+main {
+    max-width: 100% !important;
+    padding: 0 !important;
+    overflow-x: hidden;
+}
+
+h1, h2, h3 {
+    font-family: var(--font-primary);
+}
+
+.container {
+    max-width: 50%;
     padding: 0;
 }
 
-footer {
-    margin-top: auto;
+.schedule-display {
+    margin-left: 0;
+}
+
+.hero-content,
+.services,
+.bio,
+.schedule,
+.portfolio {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 25px;
+    padding: 50px;
+}
+
+
+.carousel-inner {
+    height: 500px; /* Adjust this value as needed */
+}
+
+.carousel-item {
+    position: relative;
+    transition: opacity 1s ease-in-out;
+}
+
+.carousel-item img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    min-width: 100%;
+    height: 500px; /* Same height as .carousel-inner */
+    object-fit: cover;
+}
+
+.testimonials {
+    background-color: var(--bs-gray-dark);
+    color: var(--bs-light);
+    padding: 50px;
+    text-align: justify;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 25px;
+}
+
+.testimonial {
+    width: 100%;
+    max-width: 800px;
+    margin-bottom: 20px;
+}
+
+.testimonial p {
+    margin-bottom: 10px;
 }
 
 .hero-content {
+    background-color: var(--bs-dark);
+    color: var(--bs-light);
     text-align: center;
-    padding: 100px 0;
-    color: var(--light-fg);
+    padding: 100px 50px;
 }
 
-.hero-content h1 {
-    font-size: 2.5em;
-    margin-bottom: 1em;
-}
-
-.hero-content p {
-    font-size: 1.2em;
-    margin-bottom: 2em;
-}
-
+/* Button Styling */
 .hero-content a {
     display: inline-block;
     padding: 10px 20px;
-    color: var(--light-fg);
-    background-color: var(--secondary-bg);
+    font-weight: 700;
+    color: var(--bs-light);
+    background-color: var(--bs-primary);
+    border: none;
+    transition: all var(--transition-speed) ease-in-out;
     text-decoration: none;
-    border-radius: 5px;
-    transition: background-color 0.3s ease;
-}
-
-
-.cta-button {
-    display: inline-block;
-    padding: 10px 20px;
-    color: var(--light-fg);
-    background-color: var(--secondary-bg);
-    text-decoration: none;
-    border-radius: 5px;
-    transition: background-color 0.3s ease;
-}
-
-.cta-button:hover {
-    background-color: var(--base-bg);
-}
-
-/* Biographical Information section styles */
-.bio {
-    background-color: var(--base-bg); /* Dark forest green background color */
-    color: var(--light-fg); /* Light blue text color */
-    padding: 50px 20px;
-    padding-top: 3vw;
     position: relative;
-    z-index: 2;
+    overflow: hidden;
 }
 
-.bio h1, .bio h2 {
-    color: var(--light-fg); /* Light green text color */
-}
-.bio h1 {
-    text-align: center;
-    padding-bottom: 20px;
-}
-
-.bio p, .bio ul {
-    font-size: 1.2em;
-}
-
-
-/* Brand Explanation section styles */
-.brand-explanation {
-    overflow-x: hidden;
+/* Adding an inner span to create a hover effect */
+.hero-content a span {
     position: relative;
-    z-index: 2;
+    z-index: 1;
+}
+
+.hero-content a::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    background-color: rgba(255, 255, 255, 0.5);
+    border-radius: 100%;
+    transform: translate(-50%, -50%);
+    transition: all var(--transition-speed) ease-in-out;
+    z-index: 0;
+}
+
+.hero-content a:hover {
+    color: var(--bs-primary);
+    background-color: var(--bs-light);
+}
+
+.hero-content a:hover:before {
+    width: 120%;
+    padding-top: 120%;
+}
+
+.hero-content h1,
+.services h2,
+.schedule h2,
+.portfolio h2 {
+    font-weight: 700;
+    font-size: 2.5em;
+    color: var(--bs-primary);
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    animation: slideLeft 1s ease-in;
+}
+
+.portfolio h2 {
+    font-size: 3em;
+}
+.testimonials h2 span {
+    font-weight: 700;
+    font-size: 1.75em;
+    color: var(--bs-info);
+    text-transform: uppercase;
+    letter-spacing: 2px;
+}
+
+.bio h2 span{
+    font-weight: 700;
+    font-size: 1.75em;
+    color: var(--bs-info);
+    text-transform: uppercase;
+    letter-spacing: 2px;
+}
+
+.portfolio h2,
+.bio h2,
+.testimonials h2 {
+    animation: slideRight 1s ease-in;
+    color: var(--bs-info);
+}
+
+.services {
+    background-color: var(--bs-light);
+    color: var(--bs-dark);
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 30px;
-    background-color: var(--secondary-bg);
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 25px;
+    transition: all var(--transition-speed) ease-in-out;
 }
-.brand {
-    grid-column-start: 1;
-    grid-column-end: span 2; /* Updated to span 2 columns */
-    height: min-content;
-    margin: 3vw;
-    margin-right: 0;
+
+.schedule {
+    background-color: var(--bs-light);
+    color: var(--bs-dark);
+    transition: all var(--transition-speed) ease-in-out;
+}
+
+.service-item {
     border-radius: 10px;
-    color: var(--light-fg);
-    padding: 50px 20px;
+    padding: 20px;
+    margin: 10px 0;
+    box-shadow: 0 1rem 3rem rgba(0,0,0, .1);
+    transition: all var(--transition-speed) ease-in-out;
+    animation: slideLeft 1s ease-in;
 }
 
-.thumbnail {
-    grid-row-start: 1; /* Updated grid-row-start property to place it in the first row */
-    grid-column-start: 3; /* Updated grid-column-start property to place it in the third column */
-    grid-column-end: 4; /* Updated grid-column-end property to place it in the third column */
-    margin: 3vw 2vw;
-    margin-left: 0;
-    max-width: min-content;
-}
-.thumbnail img {
-    width: 100%;
-    height: auto;
+.schedule-member {
     border-radius: 10px;
-    box-shadow: 0px 0px 10px rgba(0,0,0,0.1);
+    padding: 10px;
+    box-shadow: 0 1rem 3rem rgba(0,0,0, .1);
+    transition: all var(--transition-speed) ease-in-out;
+    animation: slideLeft 1s ease-in;
 }
 
-.brand h2 {
-    color: var(--light-bg); /* Light blue text color */
+.schedule-member h3 {
+    font-weight: 700;
+    text-transform: uppercase;
+    color: var(--bs-secondary);
 }
 
-.brand p {
-    font-size: 1.2em;
+.schedule-member p {
+    margin: 0;
 }
 
+.service-item h3 {
+    font-weight: 700;
+    text-transform: uppercase;
+    color: var(--bs-secondary);
+}
+
+.service-item h3 {
+    margin-bottom: 10px;
+}
+
+.service-item:hover,
+.schedule-member:hover {
+    transform: scale(1.03);
+    background-color: var(--bs-gray-dark);
+    color: var(--bs-light);
+}
+
+.bio,
+.testimonials {
+    background-color: var(--bs-gray-dark);
+    color: var(--bs-light);
+    padding: 50px;
+    text-align: justify;
+}
+
+.portfolio {
+    background-color: var(--bs-gray-dark);
+    color: var(--bs-dark);
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 25px;
+    transition: all var(--transition-speed) ease-in-out;
+}
+
+.portfolio-item {
+    border-radius: 10px;
+    overflow: hidden;
+    transition: all var(--transition-speed) ease-in-out;
+}
+
+.portfolio-item:hover {
+    transform: scale(1.03);
+}
+
+@keyframes fadeIn {
+    0% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
+}
+
+@keyframes slideRight {
+    0% {
+        transform: translateX(-50px);
+        opacity: 0;
+    }
+    100% {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+@keyframes slideUp {
+    0% {
+        transform: translateY(50px);
+        opacity: 0;
+    }
+    100% {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+@keyframes slideDown {
+    0% {
+        transform: translateY(-50px);
+        opacity: 0;
+    }
+    100% {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+@keyframes slideLeft {
+    0% {
+        transform: translateX(50px);
+        opacity: 0;
+    }
+    100% {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+/* Tablet styles */
+@media (min-width: 769px) and (max-width: 1024px) {
+    .container {
+        max-width: 90%;
+        padding: 0 30px;
+    }
+
+    .hero-content,
+    .services,
+    .bio,
+    .schedule,
+    .portfolio {
+        padding: 40px;
+    }
+
+    .carousel-inner {
+        height: 400px;
+    }
+
+    .carousel-item img {
+        height: 400px;
+    }
+}
+
+/* Mobile styles */
 @media (max-width: 768px) {
-    .landing img {
-        position: absolute;
-        bottom: -10%; /* Move the image slightly below the bottom of the .landing div */
-        left: 50%; /* Center the image horizontally */
-        transform: translateX(-50%) translateY(-90%) scale(3.5); /* Center and scale the image */
-        height: auto;
+    .container {
+        max-width: 100%;
+        padding: 0 15px;
     }
 
-    .landing h1 {
-        font-size: 0.8em;
+    .hero-content,
+    .services,
+    .bio,
+    .schedule,
+    .portfolio {
+        padding: 25px;
     }
 
-    .landing, .blob {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-    }
-    
-    .landing .desc {
-        text-align: left;
+    .carousel-inner {
+        height: 300px;
     }
 
-    .slogan {
-        top: 80%; /* Position it near the bottom */
-        left: 50%; /* Position it at the middle horizontally */
-        transform: translate(-50%, -50%); /* Center the slogan */
-    }
-
-    .slogan h2 {
-        font-size: 4vw; /* Increase the font size for better readability on small screens */
-    }
-
-    .blob {
-        width: 40vmin;
-        height: 40vmin;
-        position: absolute;
-        top: 17.5%;
-        left: 50%;
-        transform: translate(-50%, -50%) scale(1.5);
-    }
-
-    .divider {
-        height: 1vw;
-    }
-
-    .bio {
-        padding: 25px 10px;
-    }
-
-    .bio h1 {
-        margin-top: 1vw;
-    }
-
-    .brand-explanation {
-        margin-top: 2vw;
-        margin-bottom: 12.5vw;
-        grid-template-columns: 1fr;
-    }
-
-    .brand p {
-        padding-right: 4vw;
-    }
-
-    .brand, .thumbnail {
-        grid-column-start: 1;
-        grid-column-end: 2;
+    .carousel-item img {
+        height: 300px;
     }
 }

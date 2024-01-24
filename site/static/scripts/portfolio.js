@@ -17,7 +17,7 @@ function showFormAdd() {
 
 function hideFormAdd() {
     document.getElementById('addForm').style.display='none';
-    document.getElementById('addButton').style.display='block';
+    document.getElementById('addButton').style.display='inline-block';
 }
 
 function hideFormEdit(id) {

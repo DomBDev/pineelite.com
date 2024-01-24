@@ -1,136 +1,141 @@
 /* static/css/styles.css */
-/* Add your global styles here */
-
+/* Primary style enhancements targeting a modern, flat design */
 
 :root {
-    --secondary-bg: #2E3A59; /* Dark Blue for the footer */
-    --base-bg: #3C5068; /* Medium Blue for navbar and info sections */
-    --light-bg: #BAC1B8; /* Light Gray for hovering */
-    --light-fg: #F4F4F2; /* Off White for text */
-    --dark-gray: #232931; /* Dark Gray */
-    --xd-gray: #0D0D0D; /* Extra Dark Gray */
+    --bs-gray-dark: #343a40;
+    --bs-primary: #0d6efd;
+    --bs-secondary: #6c757d;
+    --bs-light: #dddddd;
+    --bs-dark: #212529;
+    --bs-info: #0dcaf0;
+    --font-primary: 'Poppins', sans-serif;
+    --bs-body-font-family: 'Rubik', sans-serif;
+    --hover-color: var(--bs-primary);  /* Color of the hover animation */
+    --animation-duration: 0.3s;        /* Animation duration */
 }
 
-/* Custom scrollbar styles */
-::-webkit-scrollbar {
-    width: 10px;
-}
-
-::-webkit-scrollbar-track {
-    background: var(--xd-gray); /* Dark gray scrollbar track */
-    border-radius: 10px; /* Rounded corners for a modern look */
-}
-
-::-webkit-scrollbar-thumb {
-    background: var(--light-bg); /* Light blue scrollbar thumb */
-    border-radius: 10px; /* Rounded corners for a modern look */
+html {
+    scroll-behavior: smooth;
 }
 
 body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     margin: 0;
-    padding: 0;
-    background-color: var(--xd-gray); /* Dark green background color */
-    color: #ffffff; /* Darker green text color */
+    min-height: 100vh; /* This will ensure the body takes up at least the height of the viewport */
     display: flex;
-    flex-direction: column;
-    min-height: 100vh;
-}
-
-.flashes {
-    background-color: var(--base-bg);
+    flex-direction: column; /* This will stack the children of body vertically */
+    font-family: var(--bs-body-font-family);
+    font-size: var(--bs-body-font-size);
+    font-weight: var(--bs-body-font-weight);
+    line-height: var(--bs-body-line-height);
+    color: var(--bs-body-color);
+    text-align: var(--bs-body-text-align);
+    background-color: var(--bs-light);
+    -webkit-text-size-adjust: 100%;
+    -webkit-tap-highlight-color: transparent;
 }
 
 .navbar {
-    z-index: 998; /* Set a high z-index to ensure the navbar stays on top */
+    background-color: var(--bs-dark);
+}
+
+
+.navbar-toggler {
+    max-width: fit-content;
+}
+
+.navbar-brand img {
+    height: 60px;
+    border-radius: 50%;
+    margin-right: 10px;
+    transition: transform 0.3s ease-in-out; /* increased transformation duration for smooth animation */
+}
+
+.navbar-brand img:hover {
+    transform: translateY(-5px);
+}
+
+.navbar-nav .nav-link {
+    /* The magic happens here */
+    overflow: hidden;
+    transition: color var(--animation-duration), transform 0.3s ease-in-out;
+}
+
+.navbar-nav .nav-link span {
+    /* We animate this span */
     position: relative;
-    background-color: var(--base-bg);
+    transition: transform var(--animation-duration);
 }
 
-.navbar-brand {
-    font-weight: bold;
-    color: var(--light-fg); /* Darker green text color for the brand */
-    font-size: 1.5em; /* Larger font size for the brand */
-    transition: color 0.3s ease-in-out, transform 0.3s ease-in-out; /* Smooth color and transform transition */
+.navbar-nav .nav-link span::before {
+    /* This is the animated underline */
+    content: "";
+    position: absolute;
+    bottom: -2px;                          /* Position of the underline */
+    left: 50%;                             /* We want the underline to start from the center */
+    transform: translateX(-50%);           /* This centers the element */
+    width: 0;                              /* Initial state is "not visible" */
+    height: 2px;                           /* Thickness of the underline */
+    background-color: var(--hover-color);  /* Color of the underline */
+    transition: width var(--animation-duration);
 }
 
-.navbar-brand:hover {
-    color: var(--light-bg); /* Darker green color on hover for the brand */
-    transform: rotate(5deg); /* Rotate on hover */
+.navbar-nav .nav-link:hover {
+    color: var(--hover-color);  /* You can remove this line if you don't want to animate the color of the link */
+    transform: translateY(-2px);  /* Move the text a little bit up when hovering over the link (this creates a 3D effect) */
 }
 
-.menu {
-    max-width: 30px; /* Limit the width of the icon */
-    height: auto; /* Maintain aspect ratio */
-    filter: invert(93%) sepia(14%) saturate(305%) hue-rotate(58deg) brightness(89%) contrast(94%);
+.navbar-nav .nav-link:hover span {
+    /* When hovering over the link, we animate the span */
+    transform: translateY(2px);  /* Move the text a little bit down when hovering over the link (this creates a 3D effect) */
 }
 
-/* Make navbar responsive */
-@media (max-width: 768px) {
-    .menu {
-        max-width: 50px; /* Adjust the width of the icon for smaller screens */
-    }
-}
-
-.navbar-nav .nav-item .nav-link {
-    color: var(--light-fg); /* Darker green text color for links */
-    font-size: 1.2em; /* Larger font size for the links */
-    transition: color 0.3s ease-in-out, transform 0.3s ease-in-out; /* Smooth color and transform transition */
-}
-
-.navbar-nav .nav-item .nav-link:hover {
-    color: #ffffff; /* White color on hover */
-    transform: translateY(-5px); /* Bounce on hover */
-    
-}
-
-/* Footer styles */
-footer {
-    background-color: var(--secondary-bg); /* Dark teal background color */
-    color: var(--light-fg); /* Light green text color */
-    position: relative;
-    z-index: 2;
-    padding: 20px;
-    text-align: center; /* Center the text */
-    margin-top: auto; /* Push the footer to the bottom of the page */
-}
-
-footer p {
-    margin: 0;
-    margin-top: auto;
-    font-size: 1em;
+.navbar-nav .nav-link:hover span::before {
+    /* When hovering over the link, we animate the underline */
+    width: calc(100% + 10px);  /* Length of the underline (this can be bigger than 100% if you want the underline to extend beyond the text) */
 }
 
 .alert {
-    padding: 10px;
-    border-radius: 10px;
-    margin: 10px;
-    position: relative;
-    z-index: 5;
+    transition: opacity 0.15s linear;
+    margin: 0;
+    border-radius: 0;
 }
 
 .alert-error {
-    background-color: #ffcccc; /* Mellow red background color */
-    color: #663333; /* Mellow brown text color */
+    background-color: #d47a7a;
+    color: var(--bs-light);
 }
 
-.alert-success {
-    background-color: #ccffcc; /* Mellow green background color */
-    color: #336633; /* Mellow dark green text color */
+main {
+    flex: 1 0 auto;
 }
 
-/* Make navbar responsive */
+footer {
+    background-color: var(--bs-gray-dark);
+    color: var(--bs-light);
+    margin-top: auto; /* This will push the footer to the bottom */
+}
+
 @media (max-width: 768px) {
-    .navbar-brand {
-        font-size: 1.2em; /* Adjust font size for smaller screens */
+    body {
+        font-size: 0.875rem; /* Reduce font-size for mobile */
     }
 
-    .navbar-nav .nav-item .nav-link {
-        font-size: 1em; /* Adjust font size for smaller screens */
+    .navbar-brand {
+        font-size: 1em;
+        transform: none; /* Disable rotation animation for mobile */
     }
-    footer p {
-        padding: 10px;
+
+    .navbar-nav .nav-link {
+        font-size: 0.9em;
+        transform: none; /* Disable scaling animation for mobile */
+    }
+
+    /* Responsive layout for smaller screens */
+    main {
+        width: 100%;
+    }
+
+    footer {
+        padding: 1em;
     }
 }
-
-/* Add more global styles as needed */

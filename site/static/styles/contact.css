@@ -1,112 +1,197 @@
-.contact-info {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    background-color: var(--base-bg);
-    width: 100%;
-    color: var(--light-fg);
-    padding: 2em;
-    margin-bottom: 2em;
+:root {
+    --transition-speed: 300ms;
+}
+
+main {
+    max-width: 100% !important;
+    padding: 0 !important;
+}
+
+main .container {
+    max-width: 100%;
+    padding: 0;
+}
+
+.label {
+    background-color: var(--bs-dark);
+    animation: fadeIn 1s ease-in;
+}
+
+h1 {
     text-align: center;
-    width: 100%;
-    box-shadow: 0px 0px 30px rgba(0,0,0,0.1);
+    font-weight: 700;
+    font-size: 2.5em;
+    color: var(--bs-primary);
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    animation: slideRight 1s ease-in;
+    margin: 0;
+}
+
+/* Contact Page Content */
+.contact-info {
+    background-color: var(--bs-dark);
+    color: var(--bs-light);
+    text-align: center;
+    padding: 50px;
+    padding-top: 20px;
+    animation: fadeIn 1s ease-in;
 }
 
 .contact-info h2 {
+    font-weight: 675;
     font-size: 2em;
-    margin-bottom: 1em;
+    color: var(--bs-primary);
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    animation: slideRight 1s ease-in;
 }
 
 .contact-info p {
-    font-size: 1.2em;
-    line-height: 1.5;
-}
-
-@media (max-width: 600px) {
-    .contact-info {
-        width: 100%;
-    }
-
-    .contact-info h2 {
-        font-size: 1.5em;
-    }
-
-    .contact-info p {
-        font-size: 1em;
-    }
-}
-
-.contact {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    background-color: var(--xd-gray);
+    margin-bottom: 20px;
 }
 
 .contact-form {
-    background-color: var(--base-bg);
-    padding: 2em;
-    border-radius: 5px;
-    max-width: 600px;
-    margin: 5vw;
-    box-shadow: 0px 0px 30px rgba(0,0,0,0.5);
-    transition: box-shadow 0.3s ease-in-out;
-}
-
-.contact-form h2 {
-    text-align: center;
-    color: var(--light-fg);
-    margin-bottom: 1em;
-}
-
-.contact-form input,
-.contact-form textarea {
-    width: 100%;
-    padding: 1em;
-    margin-bottom: 1em;
-    border: none;
-    background-color: var(--light-bg);
-    color: var(--light-fg);
-    border-radius: 5px;
-    transition: box-shadow 0.3s ease;
-}
-
-.contact-form input:focus,
-.contact-form textarea:focus {
-    outline: none;
-    box-shadow: 0 0 10px var(--secondary-bg);
-}
-
-.contact-form button {
-    padding: 1em 2em;
-    border: none;
-    background-color: var(--secondary-bg);
-    color: var(--light-fg);
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-    border-radius: 5px;
-    display: block;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    max-width: 50%;
     margin: 0 auto;
+    gap: 25px;
+    padding: 50px;
+    background-color: var(--bs-light);
+    color: var(--bs-dark);
+    animation: slideLeft 1s ease-in;
 }
 
-.contact-form button:hover {
-    background-color: var(--base-bg);
+.contact-form input[type="text"],
+.contact-form input[type="email"],
+.contact-form textarea {
+    border: none;
+    width: 100%;
+    margin: 0;
+    margin-top: 10px;
+    padding: 10px;
+    border-radius: 0; /* Make it blocky */
+    color: var(--bs-dark); /* Make sure the text color is correct */
+    background-color: var(--bs-light); /* Make sure the background color is correct */
+    background: transparent;
+    transition: border-bottom-color 0.3s ease;
+    border-bottom: 2px solid var(--bs-dark);
 }
 
-/* Responsive styles */
-@media (max-width: 600px) {
-    .contact-form {
-        padding: 1em;
-    }
+.contact-form input[type="text"]:focus,
+.contact-form input[type="email"]:focus,
+.contact-form textarea:focus {
+    border-bottom-color: var(--bs-primary);
+    outline: none;
+}
 
-    .contact-form input,
-    .contact-form textarea {
-        padding: 0.5em;
-    }
+.contact-form textarea {
+    resize: vertical; /* Allow vertical resizing */
+}
 
-    .contact-form button {
-        padding: 0.5em 1em;
+.contact-form button[type="submit"] {
+    background-color: var(--bs-primary);
+    border: none;
+    color: var(--bs-light);
+    padding: 10px 20px;
+    margin: 10px 0;
+    transition: all var(--transition-speed) ease-in-out;
+    cursor: pointer;
+    text-transform: uppercase;
+    font-weight: 700;
+    text-align: center;
+}
+
+.contact-form button[type="submit"]:hover {
+    background-color: var(--bs-dark);
+    color: var(--bs-primary);
+}
+
+.hours-display {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    margin-bottom: 2em;
+    animation: fadeIn 1s ease-in;
+    background-color: var(--bs-gray-dark);
+    align-items: center;
+    padding: 10px 10vw 10vh 10vw;
+}
+
+.hours-content {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-evenly;
+    width:100%;
+}
+
+.hours-display h2 {
+    width: 100%;
+    text-align: center;
+    margin-bottom: 1em;
+    color: var(--bs-primary);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    animation: slideRight 1s ease-in;
+}
+
+.hours-member {
+    box-sizing: border-box;
+    margin: 0.5em; /* Decrease the margin to reduce the gap between boxes */
+    padding: 1em;
+    flex: 0 1 calc(14% - 1em); /* Increase the basis to make the boxes wider */
+    border-radius: 0; /* Make it boxy */
+    text-align: center;
+    background-color: var(--bs-dark);
+    color: var(--bs-light);
+    transition: all var(--transition-speed) ease-in-out;
+}
+
+.hours-member:hover {
+    transform: scale(1.05);
+    box-shadow: 0px 0px 10px var(--bs-primary);
+}
+
+.hours-member h3 {
+    margin-top: 0;
+    font-size: 1.2em;
+}
+
+.hours-member p {
+    margin-bottom: 0;
+    font-size: 0.9em;
+}
+
+@keyframes fadeIn {
+    0% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
+}
+
+@keyframes slideRight {
+    0% {
+        transform: translateX(-50px);
+        opacity: 0;
+    }
+    100% {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+@keyframes slideLeft {
+    0% {
+        transform: translateX(50px);
+        opacity: 0;
+    }
+    100% {
+        transform: translateX(0);
+        opacity: 1;
     }
 }

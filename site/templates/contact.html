@@ -1,22 +1,68 @@
-{% extends "base.html" %}
+{% extends 'base.html' %}
 
 {% block content %}
-<div class="contact">
-    <div class="contact-info">
-        <h2>Contact Us</h2>
-        <p>Email: admin@example.com</p>
-        <p>Address: 123 Main St, Grove City, PA</p>
-        <p>Phone: (123) 456-7890</p>
+<div class="container">
+    <div class="label">
+        <h1>Contact Us</h1>
     </div>
 
+    <!-- Contact Information -->
+    <div class="contact-info">
+        <h2>Our Address</h2>
+        <p>118 S Broad Street, Grove City PA, 16127/p>
+
+        <h2>Email</h2>
+        <p>info@imagefxinc.com</p>
+
+        <h2>Phone</h2>
+        <p>(724) 992-3204</p>
+    </div>
+    <div class="hours-display">
+        <div class="hours-title">
+        <h2>Business Hours</h2>
+        </div>
+        <div class="hours-content">
+        <div class="hours-member">
+            <h3>Sunday</h3>
+            <p><strong>Closed</strong></p>
+        </div>
+        <div class="hours-member">
+            <h3>Monday</h3>
+            <p>9AM - 5PM</p>
+        </div>
+        <div class="hours-member">
+            <h3>Tuesday</h3>
+            <p>9AM - 5PM</p>
+        </div>
+        <div class="hours-member">
+            <h3>Wednesday</h3>
+            <p>9AM - 5PM</p>
+        </div>
+        <div class="hours-member">
+            <h3>Thursday</h3>
+            <p>9AM - 5PM</p>
+        </div>
+        <div class="hours-member">
+            <h3>Friday</h3>
+            <p>9AM - 5PM</p>
+        </div>
+        <div class="hours-member">
+            <h3>Saturday</h3>
+            <p><strong>Closed</strong></p>
+        </div>
+        </div>
+    </div>
+    </div>
+
+    <!-- Contact Form -->
     <div class="contact-form">
-        <h2>Send a Message</h2>
-        <form method="POST">
-            <input type="text" name="name" placeholder="Your Name" required>
-            <input type="email" name="email" placeholder="Your Email" required>
-            <input type="text" name="company" placeholder="Your Company">
-            <input type="text" name="subject" placeholder="Subject" required>
-            <textarea name="message" placeholder="Your Message" required></textarea>
+        <h2>Send us a message</h2>
+        <form id="contact-form" action="/contact" method="post">
+            <input type="text" id="name" name="name" placeholder="Your Name" required>
+            <input type="email" id="email" name="email" placeholder="Your Email" required>
+            <input type="text" id="subject" name="subject" placeholder="Message Subject" required>
+            <textarea rows="1" id="message" name="message" placeholder="Your Message" required></textarea>
+            <input type="text" id="company" name="company" placeholder="Your Company">
             <button type="submit">Send Message</button>
         </form>
     </div>

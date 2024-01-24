@@ -62,7 +62,7 @@ class PortfolioItem(db.Model):
 
 @login_manager.user_loader
 def load_user(user_id):
-    return User.query.get(int(user_id))
+    return db.session.get(User, int(user_id))
 
 class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -107,7 +107,7 @@ def contact():
             html_content=message_body)
 
         try:
-            sg = SendGridAPIClient('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')
+            sg = SendGridAPIClient('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')
             response = sg.send(message)
         except Exception as e:
             print(e)
@@ -173,7 +173,21 @@ def register():
 
 @app.route('/')
 def index():
-    return response_template('index.html')
+    portfolio_items = [
+        {
+            'description': 'Item 1',
+            'image_url': 'images/logo.jpg'
+        },
+        {
+            'description': 'Item 2',
+            'image_url': 'images/Capture.PNG'
+        },
+        {
+            'description': 'Item 3',
+            'image_url': 'images/menu.ico'
+        }
+    ]
+    return render_template('index.html', portfolio_items=portfolio_items)
 
 @app.route('/portfolio', methods=['GET', 'POST'])
 def portfolio():

@@ -1,375 +1,407 @@
-body {
+:root {
+    --transition-speed: 300ms;
+}
+
+main {
+    max-width: 100% !important;
+    padding: 0 !important;
+}
+
+/* Secondary Page Content */
+.portfolio-intro {
+    background-color: var(--bs-dark);
+    color: var(--bs-light);
+    text-align: center;
+    padding: 50px;
+    animation: fadeIn 1s ease-in;
+}
+
+.portfolio-intro h1 {
+    font-weight: 700;
+    font-size: 2.5em;
+    color: var(--bs-primary);
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    animation: slideRight 1s ease-in;
+}
+
+.portfolio-intro p {
+    margin-bottom: 20px;
+}
+
+.portfolio-grid {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    max-width: 80%;
+    margin: 0 auto;
+    gap: 25px;
+    padding: 50px;
+    background-color: var(--bs-light);
+    color: var(--bs-dark);
+    flex-grow: 1; /* Add this line */
+}
+
+.portfolio-item {
     display: flex;
     flex-direction: column;
-    min-height: 100vh;
-    background-color: var(--dark-gray);
+    justify-content: space-between;
+    width: 23vw;
+    border-radius: 3px 3px 10px 10px;
+    overflow: hidden;
+    transition: all var(--transition-speed) ease-in-out;
+    animation: slideUp 1s ease-in;
+    box-shadow: 0 1rem 3rem rgba(0,0,0, .1);
 }
 
-footer {
-    margin-top: auto;
+.portfolio-item:hover {
+    transform: scale(1.01);
 }
 
-.portfolio {
-    margin: 0 auto;
-    align-self: center;
-    width: 100%;
-    box-sizing: border-box;
-    background-color: var(--dark-gray);
-    min-height: 100%;
-}
-
-.portfolio-intro {
-    padding: 1vw;
-    background-color: var(--base-bg);
-    color: var(--light-fg);
-    text-align: center;
+.portfolio-item .container {
     display: flex;
     flex-direction: column;
     align-items: center;
 }
 
-.portfolio-intro h1 {
-    font-size: 2.5em;
-    margin-bottom: 20px;
+.portfolio-item:hover button.initial {
+    transform: scale(1.01);
+}
+.portfolio-item:hover input.initial {
+    transform: scale(1.01);
 }
 
-.portfolio-intro p {
-    font-size: 1.2em;
-    max-width: 800px;
-    margin: 0 auto;
+.viewProjectButton {
+    white-space: nowrap; /* Prevents the text from wrapping */
+    overflow: hidden; /* Hides any text that overflows the button */
+    text-overflow: scale-down; /* Shrink the text to fit within the button */
 }
 
-#addForm {
-    max-width: 30vw;
-    width: 100%;
+.portfolio-item .portfolio-image {
+    width: 80%;
+    overflow: hidden;
+    position: relative;
+}
+
+.portfolio-item img {
+    width: 70%;
+    object-fit: cover;
+    transition: all var(--transition-speed) ease-in-out;
+}
+
+.portfolio-item .description {
+    padding: 10px;
+}
+
+.portfolio-item .description p{
+    margin-bottom: 0;
+}
+
+.portfolio-item .buttons {
+    margin-top: auto;
     display: flex;
-    flex-direction: column;
-    align-items: flex-start;
+    justify-content: space-evenly;
+    align-items: center;
+    height: 40px; /* Set a specific height */
+}
+
+button {
+    background-color: var(--bs-primary);
+    border: none;
+    color: var(--bs-light);
+    padding: 10px 20px;
+    margin: 10px 0;
+    transition: all var(--transition-speed) ease-in-out;
+    cursor: pointer;
+    text-transform: uppercase;
+    font-weight: 700;
+    flex-grow: 1;
+    text-align: center;
+}
+
+button:hover {
+    background-color: var(--bs-dark);
+    color: var(--bs-primary);
+}
+
+.editForm {
+    margin: 1em auto;
+    background-color: var(--bs-light);
+    padding: 20px;
+    border-radius: 0; /* Make it blocky */
+    box-shadow: 0 1rem 3rem rgba(0,0,0, .1);
+}
+
+form.edit label[for="title"] {
+    margin-top: 0;
+}
+
+.editForm label {
+    text-align: left;
+    display: block;
+    margin-top: 10px;
+    color: var(--bs-dark); /* Make sure the text color is correct */
+}
+
+.editForm input[type="file"] {
+    overflow-x: wrap;
+    border: none;
+    width: 100%;
+    margin: 0;
+    padding: 10px;
+    border-radius: 0; /* Make it blocky */
+    color: var(--bs-dark); /* Make sure the text color is correct */
+    background-color: var(--bs-light); /* Make sure the background color is correct */
+    background: transparent;
+    transition: border-bottom-color 0.3s ease;
+}
+
+.editForm textarea {
+    overflow-x: wrap;
+    border: none;
+    width: 100%;
+    margin: 0;
+    padding: 10px;
+    border-radius: 0; /* Make it blocky */
+    color: var(--bs-dark); /* Make sure the text color is correct */
+    background-color: var(--bs-light); /* Make sure the background color is correct */
+    background: transparent;
+    transition: border-bottom-color 0.3s ease;
+    border-bottom: 2px solid var(--bs-dark);
+    resize: vertical; /* Allow vertical resizing */
+}
+
+.editForm textarea:focus {
+    border-bottom-color: var(--bs-primary);
+    outline: none;
+}
+
+.editForm input[type="file"] {
+    padding-left: 0;
+}
+
+.edit .buttons {
+    gap: 10px;
+}
+
+input[type="submit"] {
+    background-color: var(--bs-primary);
+    border: none;
+    color: var(--bs-light);
+    padding: 10px 20px;
+    margin: 10px 0;
+    transition: all var(--transition-speed) ease-in-out;
+    cursor: pointer;
+    text-transform: uppercase;
+    font-weight: 700;
+    flex-grow: 1;
+    text-align: center;
+}
+
+input[type="submit"]:hover {
+    background-color: var(--bs-dark);
+    color: var(--bs-primary);
+}
+
+/* Edit button styling */
+
+/* Form styling */
+/* Form styling */
+#addForm {
+    margin: 1em auto;
+    background-color: var(--bs-light);
+    padding: 20px;
+    border-radius: 0; /* Make it blocky */
+    box-shadow: 0 1rem 3rem rgba(0,0,0, .1);
+    max-width: 30%;
 }
 
 #addForm label {
-    align-self: flex-start;
-    margin-bottom: 0.25rem;
-    margin-top: 0.5rem;
-}
-
-#addForm form {
     text-align: left;
-}
-
-#addForm button {
-    width: 100%;
-    border-radius: 5px;
-}
-
-.portfolio-grid {
-    padding: 2vw;
-    background-color: var(--dark-gray);
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 30px;
-    grid-auto-rows: minmax(200px, auto);
-}
-
-.portfolio-item {
-    background-color: var(--base-bg);
-    padding: 20px;
-    box-sizing: border-box;
-    border-radius: 10px;
-    transition: transform 0.3s ease-in-out;
-    box-shadow: 0px 0px 30px rgba(0,0,0,0.5);
-    transition: box-shadow 0.3s ease-in-out;
-    transform-origin: center center;
-    display: flex;
-    flex-direction: column;
-}
-
-.portfolio-image {
-    border-radius: 10px;
-    overflow: hidden;
-}
-
-.portfolio-item:hover {
-    transform: scale(1.01);
-    box-shadow: 0px 0px 30px rgba(0,0,0,0.4);
-    transition: box-shadow 0.3s ease-in-out;
-}
-
-.title {
-    text-align: center;
+    display: block;
     margin-top: 10px;
-}
-.title h1 {
-    color: var(--light-fg);
-    font-weight: bold;
-    font-size: 1.5em;
+    color: var(--bs-dark); /* Make sure the text color is correct */
 }
 
-.description {
-    padding: 0.5vw;
-    padding-bottom: 0.5vh;
-    text-align: left;
-    background-color: var(--dark-gray);
-    color: var(--light-fg);
+#addForm input[type="text"],
+#addForm input[type="file"],
+#addForm textarea {
+    border: none;
+    width: 100%;
+    margin: 0;
+    padding: 10px;
+    border-radius: 0; /* Make it blocky */
+    color: var(--bs-dark); /* Make sure the text color is correct */
+    background-color: var(--bs-light); /* Make sure the background color is correct */
+    background: transparent;
+    transition: border-bottom-color 0.3s ease;
+    border-bottom: 2px solid var(--bs-dark);
+}
+
+#addForm input[type="text"]:focus,
+#addForm input[type="file"]:focus,
+#addForm textarea:focus {
+    border-bottom-color: var(--bs-primary);
+    outline: none;
+}
+
+#addForm textarea {
+    resize: vertical; /* Allow vertical resizing */
+}
+
+#addForm .buttons {
+    gap: 10px;
+}
+
+#addForm input[type="submit"] {
+    background-color: var(--bs-primary);
+    border: none;
+    color: var(--bs-light);
+    padding: 10px 20px;
+    margin: 10px 0;
+    transition: all var(--transition-speed) ease-in-out;
+    cursor: pointer;
+    text-transform: uppercase;
+    font-weight: 700;
+    flex-grow: 1;
+    text-align: center;
+}
+
+#addForm input[type="submit"]:hover {
+    background-color: var(--bs-dark);
+    color: var(--bs-primary);
 }
 
 .expanded-view {
     position: fixed;
-    top: 60px;
-    left: 5%;
-    width: 90%;
-    max-height: calc(90% - 60px);
-    overflow: auto;
-    z-index: 999;
-    background-color: var(--base-bg);
-    border-radius: 15px;
-    box-shadow: 0px 0px 30px rgba(0,0,0,0.2);
-    text-align: center;
-    border: 1px solid var(--light-fg);
-}
-
-.expanded-view-header {
-    text-align: center;
-    width: 100%;
-    overflow: hidden;
-}
-
-.header-image {
-    text-align: center;
-    overflow: hidden;
-}
-
-.header-image img {
-    width: 60%;
-    object-fit: contain;
-    border-radius: 15px 15px 0 0;
-}
-.expanded-view-header p {
-    margin: 0;
-    padding: 10px;
-    color: var(--light-fg);
-    font-family: Arial, sans-serif;
-    font-size: 1.2em;
-    text-align: left;
-}
-
-.expanded-view::-webkit-scrollbar {
-    width: 8px;
-}
-
-.expanded-view::-webkit-scrollbar-thumb {
-    background-color: var(--light-bg);
-    border-radius: 4px;
-}
-
-.expanded-view::-webkit-scrollbar-thumb:hover {
-    background-color: var(--secondary-bg);
-}
-
-.expanded-view-content {
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    min-width: 80vw;
+    min-height: 80vh;
+    background-color: var(--bs-light);
+    color: var(--bs-dark);
+    border: 2px solid var(--bs-secondary);
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.15);
+    z-index: 1000;
     padding: 20px;
-    color: var(--light-fg);
-    font-family: Arial, sans-serif;
-    padding-bottom: 0;
-    margin-bottom: 0;
-    text-align: center;
+    font-family: var(--bs-body-font-family);
     display: flex;
     flex-direction: column;
-    padding-bottom: 20px;
+    align-items: center;
+    justify-content: space-between;
 }
 
-.expanded-view-content .close {
+.expanded-view .close {
     position: absolute;
     top: 10px;
     right: 10px;
-    font-size: 30px;
+    font-size: 1.5em;
     cursor: pointer;
 }
 
-.expanded-view-content h2 {
-    margin-top: 0;
-    color: var(--light-fg);
-    text-align: center;
+.expanded-view h2 {
+    font-family: var(--font-primary);
+    color: var(--bs-primary);
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    margin-bottom: 20px;
 }
 
-.expanded-view-content p {
-    margin: 10px 0;
-    line-height: 1.6;
-    text-align: left;
+.expanded-view .header-image img {
+    max-height: 50vh;
+    margin-bottom: 20px;
 }
 
-
-.buttons {
-    margin-top: auto;
-    justify-self: flex-end;
-    text-align: left;
+.expanded-view p {
+    font-size: 1em;
+    color: var(--bs-dark);
+    margin-bottom: 20px;
 }
 
-button {
-    background-color: var(--dark-gray);
-    color: var(--light-fg);
+.expanded-view .buttons {
+    position: absolute;
+    bottom: 20px;
+    left: 20px;
+}
+
+.expanded-view .buttons button {
+    max-width: fit-content;
+    margin: 0 10px;
+}
+
+.delete .buttons {
+    margin-top: 10px;
+}
+
+form.delete input[type="submit"] {
+    background-color: var(--bs-danger);
     border: none;
+    color: var(--bs-light);
     padding: 10px 20px;
+    margin: 10px 0;
+    transition: all var(--transition-speed) ease-in-out;
+    cursor: pointer;
+    text-transform: uppercase;
+    font-weight: 700;
+    flex-grow: 1;
     text-align: center;
-    text-decoration: none;
-    display: inline-block;
-    font-size: 16px;
-    margin: 4px 2px;
-    cursor: pointer;
-    border-radius: 12px;
-    transition: background-color 0.3s ease;
 }
 
-button:hover {
-    background-color: var(--light-bg);
+form.delete input[type="submit"]:hover {
+    background-color: var(--bs-dark);
+    color: var(--bs-danger);
 }
 
-input[type="text"], input[type="file"] {
-    width: 100%;
-    padding: 12px 20px;
-    margin: 4px 0;
-    display: inline-block;
-    border: 1px solid var(--light-fg);
-    color: var(--light-fg);
-    border-radius: 4px;
-    box-sizing: border-box;
-    background-color: var(--secondary-bg);
-}
-
-button.cancel {
-    width: 100%;
-    background-color: var(--dark-gray);
-    color: var(--light-fg);
-    padding: 14px 20px;
-    margin: 4px 0;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-}
-
-button.cancel:hover {
-    background-color: var(--light-bg);
-}
-
-form {
-    border-radius: 5px;
-    background-color: var(--base-bg);
-    padding: 20px;
-}
-
-form label {
-    color: var(--light-fg);
-    font-size: 1.2em;
-    margin-bottom: 0.25rem;
-    margin-top: 0.5rem;
-}
-
-form.edit {
-    border-bottom-left-radius: 0;
-    border-bottom-right-radius: 0;
-}
-form.delete {
-    margin-top: 0;
-    padding-top: 0;
-    border-top-left-radius: 0;
-    border-top-right-radius: 0;
-}
-
-input[type="submit"] {
-    width: 100%;
-    background-color: var(--dark-gray);
-    color: var(--light-fg);
-    padding: 14px 20px;
-    margin: 4px 0;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-}
-
-input[type="submit"]:hover {
-    background-color: var(--light-bg);
-}
-
-input[type="submit"][value="Delete"] {
-    background-color: #c53b3b;
-    color: var(--light-fg);
-    transition: background-color 0.3s ease;
-}
-
-input[type="submit"][value="Delete"]:hover {
-    background-color: var(--xd-gray);
-}
-
-@media screen and (max-width: 1024px) {
-    .portfolio-grid {
-        grid-template-columns: repeat(2, 1fr);
+@keyframes fadeIn {
+    0% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
     }
 }
 
-@media screen and (max-width: 600px) {
-    .portfolio-grid {
-        grid-template-columns: 1fr;
+@keyframes slideRight {
+    0% {
+        transform: translateX(-50px);
+        opacity: 0;
+    }
+    100% {
+        transform: translateX(0);
+        opacity: 1;
     }
 }
 
-@media screen and (max-width: 768px) {
-    .portfolio-intro h1 {
-        font-size: 2em;
+@keyframes slideUp {
+    0% {
+        transform: translateY(50px);
+        opacity: 0;
     }
-
-    .portfolio-intro p {
-        font-size: 1em;
+    100% {
+        transform: translateY(0);
+        opacity: 1;
     }
+}
 
-    #addForm {
-        max-width: 90vw;
+@keyframes slideDown {
+    0% {
+        transform: translateY(-50px);
+        opacity: 0;
     }
-
-    .portfolio-grid {
-        padding: 1vw;
-        gap: 15px;
+    100% {
+        transform: translateY(0);
+        opacity: 1;
     }
+}
 
-    .portfolio-item {
-        padding: 3vw;
-        margin: 4vw;
+@keyframes slideLeft {
+    0% {
+        transform: translateX(50px);
+        opacity: 0;
     }
-
-    .title h1 {
-        font-size: 1.2em;
-    }
-
-    .description {
-        padding: 2vw;
-    }
-
-    .expanded-view {
-        top: 10px;
-        left: 2.5%;
-        width: 95%;
-        max-height: calc(80% - 10px);
-    }
-
-    .header-image img {
-        width: 80%;
-    }
-
-    .expanded-view-content h2 {
-        font-size: 1.5em;
-    }
-
-    .expanded-view-content p {
-        font-size: 1em;
-    }
-
-    button {
-        padding: 8px 16px;
-        font-size: 14px;
-    }
-
-    input[type="text"], input[type="file"] {
-        padding: 10px 16px;
+    100% {
+        transform: translateX(0);
+        opacity: 1;
     }
 }

@@ -12,18 +12,18 @@
             <button id="addButton" onclick="showFormAdd()">Add New Portfolio Item</button>
             <div id="addForm" style="display:none">
                 <form action="{{ url_for('portfolio') }}" method="post" enctype="multipart/form-data">
-                    <label for="title">Title:</label><br>
-                    <input type="text" id="title" name="title"><br>
-                    <label for="image">Image:</label><br>
-                    <input type="file" id="image" name="image"><br>
-                    <label for="description">Abv. Description:</label><br>
-                    <input type="text" id="description" name="description"><br>
-                    <label for="full_description">Full Description:</label><br>
-                    <input type="text" id="full_description" name="full_description"><br>
-                    <label for="link">Link:</label><br>
-                    <input type="text" id="link" name="link"><br>
+                    <label for="title">Title:</label>
+                    <textarea rows="1" id="title" name="title"></textarea>
+                    <label for="image">Image:</label>
+                    <input type="file" id="image" name="image">
+                    <label for="description">Abv. Description:</label>
+                    <textarea rows="1" id="description" name="description"></textarea>
+                    <label for="full_description">Full Description:</label>
+                    <textarea rows="1" id="full_description" name="full_description"></textarea>
+                    <label for="link">Link:</label>
+                    <textarea rows="1" id="link" name="link"></textarea>
                     <input type="submit" value="Submit">
-                    <button type="button" onclick="hideFormAdd()">Cancel</button>
+                    <button class="cancel" type="button" onclick="hideFormAdd()">Cancel</button>
                 </form>
             </div>
             {% endif %}
@@ -31,48 +31,56 @@
         <section class="portfolio-grid">
             {% for item in portfolio_items %}
             <div class="portfolio-item">
-                {% if item.title %}
-                <div class="title"><h1>{{ item.title }}</h1></div>
-                {% endif %}
-                <div class="portfolio-image">
-                    {% if item.image %}
-                        <img src="{{ url_for('static', filename=item.image) }}" style="width:100%">
+                <div class="container">
+                    {% if item.title %}
+                    <div class="title"><h1>{{ item.title }}</h1></div>
                     {% endif %}
-                    {% if item.description %}
-                        <div class="description">
-                            <p>{{ item.description }}</p>
-                        </div>
-                    {% endif %}
+                    <div class="portfolio-image">
+                        {% if item.image %}
+                            <img src="{{ url_for('static', filename=item.image) }}" style="width:100%">
+                        {% endif %}
+                        {% if item.description %}
+                            <div class="description">
+                                <p>{{ item.description }}</p>
+                            </div>
+                        {% endif %}
+                    </div>
                 </div>
-                <div class="buttons">
-                    <button onclick="event.stopPropagation(); showDetails('{{ item.title }}')">Expand</button>
-                    {% if item.link %}
-                        <button onclick="event.stopPropagation(); window.open('{{ item.link }}', '_blank')">View Project</button>
-                    {% endif %}
+                    <div class="buttons">
+                        <button class="initial" onclick="event.stopPropagation(); showDetails('{{ item.title }}')">Expand</button>
+                        {% if item.link %}
+                            <button class="initial" class="viewProjectButton" onclick="event.stopPropagation(); window.open('{{ item.link }}', '_blank')">View Project</button>
+                        {% endif %}
+                        {% if current_user.is_active %}
+                        <button class="initial" class="editButton" id="editButton{{ item.title }}" onclick="showFormEdit('{{ item.title }}')">Edit</button>
+                        {% endif %}
+                    </div>
                     {% if current_user.is_active %}
-                    <button class="editButton" id="editButton{{ item.title }}" onclick="showFormEdit('{{ item.title }}')">Edit</button>
-                    {% endif %}
-                </div>
-                {% if current_user.is_active %}
-                <div class="editForm" id="editForm{{ item.title }}" style="display:none">
-                    <form class="edit" action="{{ url_for('edit_portfolio_item', id=item.id) }}" method="post" enctype="multipart/form-data">
-                        <label for="title">Title:</label><br>
-                        <input type="text" id="title" name="title" value="{{ item.title }}"><br>
-                        <label for="image">Image:</label><br>
-                        <input type="file" id="image" name="image"><br>
-                        <label for="description">Description:</label><br>
-                        <input type="text" id="description" name="description" value="{{ item.description }}"><br>
-                        <label for="full_description">Full Description:</label><br>
-                        <input type="text" id="full_description" name="full_description" value="{{ item.full_description }}"><br>
-                        <label for="link">Link:</label><br>
-                        <input type="text" id="link" name="link" value="{{ item.link }}"><br>
-                        <input type="submit" value="Submit">
-                        <button class="cancel" type="button" onclick="hideFormEdit()">Cancel</button>
-                    </form>
-                    <form class="delete" action="{{ url_for('delete_portfolio_item', id=item.id) }}" method="post" enctype="multipart/form-data">
-                        <input type="submit" value="Delete">
-                    </form>
-                </div>
+                    <div class="editForm" id="editForm{{ item.title }}" style="display:none">
+                        <div class="form-container">
+                            <form class="edit" action="{{ url_for('edit_portfolio_item', id=item.id) }}" method="post" enctype="multipart/form-data">
+                                <label for="title">Title:</label>
+                                <textarea  rows="1" id="title" name="title">{{ item.title }}</textarea>
+                                <label for="image">Image:</label>
+                                <input type="file" id="image" name="image">
+                                <label for="description">Description:</label>
+                                <textarea  rows="1" id="description" name="description">{{ item.description }}</textarea>
+                                <label for="full_description">Full Description:</label>
+                                <textarea  rows="1" id="full_description" name="full_description">{{ item.full_description }}</textarea>
+                                <label for="link">Link:</label>
+                                <textarea  rows="1" id="link" name="link">{{ item.link }}</textarea>
+                                <div class="buttons">
+                                    <button class="cancel" type="button" onclick="hideFormEdit()">Cancel</button>
+                                    <input type="submit" value="Submit">
+                                </div>
+                            </form>
+                            <form class="delete" action="{{ url_for('delete_portfolio_item', id=item.id) }}" method="post" enctype="multipart/form-data">
+                                <div class="buttons">
+                                    <input type="submit" value="Delete">
+                                </div>
+                            </form>
+                        </div>
+                    </div>
                 {% endif %}
             </div>
             <div class="expanded-view" id="{{ item.title }}" style="display:none">
@@ -85,10 +93,10 @@
                         {% if item.image %}
                         <img src="{{ url_for('static', filename=item.image) }}">
                         {% endif %}
+                        {% if item.full_description %}
+                        <p>{{ item.full_description }}</p>
+                        {% endif %}
                     </div>
-                    {% if item.full_description %}
-                    <p>{{ item.full_description }}</p>
-                    {% endif %}
                     <div class="buttons">
                         <button onclick="hideDetails('{{ item.title }}')">Close</button>
                         {% if item.link %}

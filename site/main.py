@@ -107,7 +107,7 @@ def contact():
             html_content=message_body)
 
         try:
-            sg = SendGridAPIClient('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')
+            sg = SendGridAPIClient('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')
             response = sg.send(message)
         except Exception as e:
             print(e)

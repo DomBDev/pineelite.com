@@ -195,3 +195,36 @@ h1 {
         opacity: 1;
     }
 }
+
+/* Small devices (phones, up to 600px) */
+@media (max-width: 600px) {
+    .contact-form {
+        max-width: 100%;
+    }
+
+    .hours-member {
+        flex: 0 1 calc(50% - 1em); /* Make the boxes take up half the width */
+    }
+}
+
+/* Medium devices (tablets, 600px and up) */
+@media (min-width: 600px) {
+    .contact-form {
+        max-width: 75%;
+    }
+
+    .hours-member {
+        flex: 0 1 calc(33% - 1em); /* Make the boxes take up a third of the width */
+    }
+}
+
+/* Large devices (desktops, 992px and up) */
+@media (min-width: 992px) {
+    .contact-form {
+        max-width: 50%;
+    }
+
+    .hours-member {
+        flex: 0 1 calc(25% - 1em); /* Make the boxes take up a quarter of the width */
+    }
+}

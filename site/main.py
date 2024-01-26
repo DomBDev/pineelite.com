@@ -1,6 +1,6 @@
 # main.py
 import os
-from flask import Flask, render_template, request, redirect, url_for, flash, make_response, session
+from flask import Flask, render_template, request, redirect, url_for, flash, make_response, session, Response
 from flask_sqlalchemy import SQLAlchemy
 from werkzeug.utils import secure_filename
 from flask_login import LoginManager, login_user, login_required, current_user, logout_user
@@ -10,6 +10,7 @@ import hashlib
 from openai import OpenAI
 import cv2
 import base64
+import numpy as np
 
 app = Flask(__name__)
 app.secret_key = 'some_secret'
@@ -110,12 +111,25 @@ def chat():
 def receive_frame():
     global global_frame
 
-    data = request.get_json()
-    img_data = data['frame']
+    try:
+        data = request.get_json()
+        img_data = data['frame']
+    except KeyError:
+        print("Error: 'frame' key not found in request data")
+        return 'Error: frame key not found in request data', 400
 
-    # Decode the base64 image
-    img_bytes = base64.b64decode(img_data)
-    global_frame = cv2.imdecode(np.frombuffer(img_bytes, np.uint8), -1)
+    try:
+        # Decode the base64 image
+        img_bytes = base64.b64decode(img_data)
+    except Exception as e:
+        print(f"Error decoding base64 image data: {e}")
+        return f'Error decoding base64 image data: {e}', 400
+
+    try:
+        global_frame = cv2.imdecode(np.frombuffer(img_bytes, np.uint8), -1)
+    except Exception as e:
+        print(f"Error decoding image: {e}")
+        return f'Error decoding image: {e}', 400
 
     return 'Frame received successfully'
 

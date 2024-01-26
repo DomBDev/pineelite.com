@@ -8,8 +8,8 @@ from werkzeug.security import check_password_hash, generate_password_hash
 import json
 import hashlib
 from openai import OpenAI
-
-
+import cv2
+import base64
 
 app = Flask(__name__)
 app.secret_key = 'some_secret'
@@ -54,6 +54,22 @@ def response_template(template, **kwargs):
     
     return response
 
+global_frame = None
+
+def generate():
+    global global_frame
+    while True:
+        # Wait for the next frame
+        if global_frame is not None:
+            # Encode the frame in JPEG format
+            _, buffer = cv2.imencode('.jpg', global_frame)
+            frame_bytes = base64.b64encode(buffer).decode('utf-8')
+
+            # Yield the frame as bytes
+            yield (b'--frame\r\n'
+                   b'Content-Type: image/jpeg\r\n\r\n' + frame_bytes + b'\r\n\r\n')
+
+
 class PortfolioItem(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(80), nullable=False)
@@ -89,6 +105,29 @@ def chat():
         session['chat_history'] = [{'role': 'system', 'content': 'You are PineBot, a helpful chat ai used for anything.'}]
 
     return render_template('chat.html', chat_history=session['chat_history'])
+
+@app.route('/endpoint', methods=['POST'])
+def receive_frame():
+    global global_frame
+
+    data = request.get_json()
+    img_data = data['frame']
+
+    # Decode the base64 image
+    img_bytes = base64.b64decode(img_data)
+    global_frame = cv2.imdecode(np.frombuffer(img_bytes, np.uint8), -1)
+
+    return 'Frame received successfully'
+
+@app.route('/video_feed')
+@login_required
+def video_feed():
+    return Response(generate(), mimetype='multipart/x-mixed-replace; boundary=frame')
+
+@app.route('/video_page')
+@login_required
+def video_page():
+    return render_template('video_page.html')
 
 @app.route('/get_response', methods=['POST'])
 def get_response():

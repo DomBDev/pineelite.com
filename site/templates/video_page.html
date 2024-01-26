@@ -17,7 +17,7 @@ Video Stream
         console.log("attempting update")
         var img = document.getElementById('video_feed');
         img.src = "{{ url_for('video_feed') }}";
-        setTimeout(updateImage, 50);
+        setTimeout(updateImage, 200);
         console.log("Updated image")
     }
     window.onload = updateImage;

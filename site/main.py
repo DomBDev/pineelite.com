@@ -112,7 +112,7 @@ def generate():
         else:
             time.sleep(0.1)
 
-frame_thread = Thread(target=generate_frames)
+frame_thread = Thread(target=generate)
 frame_thread.start()
 
 @app.route('/endpoint', methods=['POST'])

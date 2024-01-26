@@ -93,17 +93,22 @@ def chat():
     return render_template('chat.html', chat_history=session['chat_history'])
 
 global_frame = None
+last_frame = None
 
 def generate():
-    global global_frame
+    global global_frame, last_frame
     while True:
-        # Encode the global frame into JPEG format
-        _, buffer = cv2.imencode('.jpg', global_frame)
-        
-        # Convert the buffer to bytes and yield it as a part of the multipart response
-        frame = buffer.tobytes()
-        yield (b'--frame\r\n'
-               b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n')
+        if global_frame is not last_frame:
+            # Encode the global frame into JPEG format
+            _, buffer = cv2.imencode('.jpg', global_frame)
+            
+            # Convert the buffer to bytes and yield it as a part of the multipart response
+            frame = buffer.tobytes()
+            yield (b'--frame\r\n'
+                   b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n')
+            last_frame = global_frame
+        else:
+            time.sleep(0.1)
 
 @app.route('/endpoint', methods=['POST'])
 def receive_frame():

@@ -12,6 +12,7 @@ import cv2
 import base64
 import numpy as np
 import time
+from queue import Queue
 
 app = Flask(__name__)
 app.secret_key = 'some_secret'
@@ -93,13 +94,13 @@ def chat():
 
     return render_template('chat.html', chat_history=session['chat_history'])
 
-global_frame = None
-last_frame = None
+frame_queue = Queue()
 
 def generate():
-    global global_frame, last_frame
     while True:
-        if not np.array_equal(global_frame, last_frame):
+        if not frame_queue.empty():
+            global_frame = frame_queue.get()
+
             # Encode the global frame into JPEG format
             _, buffer = cv2.imencode('.jpg', global_frame)
             
@@ -107,14 +108,11 @@ def generate():
             frame = buffer.tobytes()
             yield (b'--frame\r\n'
                    b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n')
-            last_frame = global_frame.copy()
         else:
             time.sleep(0.1)
 
 @app.route('/endpoint', methods=['POST'])
 def receive_frame():
-    global global_frame
-
     try:
         data = request.get_json()
         img_data = data['frame']
@@ -131,6 +129,7 @@ def receive_frame():
 
     try:
         global_frame = cv2.imdecode(np.frombuffer(img_bytes, np.uint8), -1)
+        frame_queue.put(global_frame)
     except Exception as e:
         print(f"Error decoding image: {e}")
         return f'Error decoding image: {e}', 400

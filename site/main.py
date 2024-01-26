@@ -105,8 +105,8 @@ def generate():
             # Encode the frame into JPEG format
             _, buffer = cv2.imencode('.jpg', frame)
 
-            # Convert the buffer to bytes
-            frame_bytes = buffer.tobytes()
+            # Convert the buffer to a regular byte string
+            frame_bytes = buffer.tostring()
 
             yield (b'--frame\r\n'
                    b'Content-Type: image/jpeg\r\n\r\n' + frame_bytes + b'\r\n\r\n')

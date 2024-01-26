@@ -1,454 +1,388 @@
 :root {
-    --transition-speed: 300ms;
+	--transition-speed: 300ms;
 }
-
 main {
-    max-width: 100% !important;
-    padding: 0 !important;
+	max-width: 100% !important;
+	padding: 0 !important;
 }
-
-/* Secondary Page Content */
 .portfolio-intro {
-    background-color: var(--bs-dark);
-    color: var(--bs-light);
-    text-align: center;
-    padding: 50px;
-    animation: fadeIn 1s ease-in;
+	background-color: var(--bs-dark);
+	color: var(--bs-light);
+	text-align: center;
+	padding: 50px;
+	animation: fadeIn 1s ease-in;
 }
-
 .portfolio-intro h1 {
-    font-weight: 700;
-    font-size: 2.5em;
-    color: var(--bs-primary);
-    text-transform: uppercase;
-    letter-spacing: 2px;
-    animation: slideRight 1s ease-in;
+	font-weight: 700;
+	font-size: 2.5em;
+	color: var(--bs-primary);
+	text-transform: uppercase;
+	letter-spacing: 2px;
+	animation: slideRight 1s ease-in;
 }
-
 .portfolio-intro p {
-    margin-bottom: 20px;
+	margin-bottom: 20px;
 }
-
 .portfolio-grid {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    max-width: 80%;
-    margin: 0 auto;
-    gap: 25px;
-    padding: 50px;
-    background-color: var(--bs-light);
-    color: var(--bs-dark);
-    flex-grow: 1; /* Add this line */
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: center;
+	max-width: 80%;
+	margin: 0 auto;
+	gap: 25px;
+	padding: 50px;
+	background-color: var(--bs-light);
+	color: var(--bs-dark);
+	flex-grow: 1;
 }
-
 .portfolio-item {
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    width: 23vw;
-    border-radius: 3px 3px 10px 10px;
-    overflow: hidden;
-    transition: all var(--transition-speed) ease-in-out;
-    animation: slideUp 1s ease-in;
-    box-shadow: 0 1rem 3rem rgba(0,0,0, .1);
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+	width: 23vw;
+	border-radius: 3px 3px 10px 10px;
+	overflow: hidden;
+	transition: all var(--transition-speed) ease-in-out;
+	animation: slideUp 1s ease-in;
+	box-shadow: 0 1rem 3rem rgba(0,0,0, .1);
 }
-
 .portfolio-item:hover {
-    transform: scale(1.01);
+	transform: scale(1.01);
 }
-
 .portfolio-item .container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
 }
-
 .portfolio-item:hover button.initial {
-    transform: scale(1.01);
+	transform: scale(1.01);
 }
 .portfolio-item:hover input.initial {
-    transform: scale(1.01);
+	transform: scale(1.01);
 }
-
 .viewProjectButton {
-    white-space: nowrap; /* Prevents the text from wrapping */
-    overflow: hidden; /* Hides any text that overflows the button */
-    text-overflow: scale-down; /* Shrink the text to fit within the button */
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: scale-down;
 }
-
 .portfolio-item .portfolio-image {
-    width: 80%;
-    overflow: hidden;
-    position: relative;
+	width: 80%;
+	overflow: hidden;
+	position: relative;
 }
-
 .portfolio-item img {
-    width: 70%;
-    object-fit: cover;
-    transition: all var(--transition-speed) ease-in-out;
+	width: 70%;
+	object-fit: cover;
+	transition: all var(--transition-speed) ease-in-out;
 }
-
 .portfolio-item .description {
-    padding: 10px;
+	padding: 10px;
 }
-
 .portfolio-item .description p{
-    margin-bottom: 0;
+	margin-bottom: 0;
 }
-
 .portfolio-item .buttons {
-    margin-top: auto;
-    display: flex;
-    justify-content: space-evenly;
-    align-items: center;
-    height: 40px; /* Set a specific height */
+	margin-top: auto;
+	display: flex;
+	justify-content: space-evenly;
+	align-items: center;
+	height: 40px;
 }
-
 button {
-    background-color: var(--bs-primary);
-    border: none;
-    color: var(--bs-light);
-    padding: 10px 20px;
-    margin: 10px 0;
-    transition: all var(--transition-speed) ease-in-out;
-    cursor: pointer;
-    text-transform: uppercase;
-    font-weight: 700;
-    flex-grow: 1;
-    text-align: center;
+	background-color: var(--bs-primary);
+	border: none;
+	color: var(--bs-light);
+	padding: 10px 20px;
+	margin: 10px 0;
+	transition: all var(--transition-speed) ease-in-out;
+	cursor: pointer;
+	text-transform: uppercase;
+	font-weight: 700;
+	flex-grow: 1;
+	text-align: center;
 }
-
 button:hover {
-    background-color: var(--bs-dark);
-    color: var(--bs-primary);
+	background-color: var(--bs-dark);
+	color: var(--bs-primary);
 }
-
 .editForm {
-    margin: 1em auto;
-    background-color: var(--bs-light);
-    padding: 20px;
-    border-radius: 0; /* Make it blocky */
-    box-shadow: 0 1rem 3rem rgba(0,0,0, .1);
+	margin: 1em auto;
+	background-color: var(--bs-light);
+	padding: 20px;
+	border-radius: 0;
+	box-shadow: 0 1rem 3rem rgba(0,0,0, .1);
 }
-
 form.edit label[for="title"] {
-    margin-top: 0;
+	margin-top: 0;
 }
-
 .editForm label {
-    text-align: left;
-    display: block;
-    margin-top: 10px;
-    color: var(--bs-dark); /* Make sure the text color is correct */
+	text-align: left;
+	display: block;
+	margin-top: 10px;
+	color: var(--bs-dark);
 }
-
 .editForm input[type="file"] {
-    overflow-x: wrap;
-    border: none;
-    width: 100%;
-    margin: 0;
-    padding: 10px;
-    border-radius: 0; /* Make it blocky */
-    color: var(--bs-dark); /* Make sure the text color is correct */
-    background-color: var(--bs-light); /* Make sure the background color is correct */
-    background: transparent;
-    transition: border-bottom-color 0.3s ease;
+	overflow-x: wrap;
+	border: none;
+	width: 100%;
+	margin: 0;
+	padding: 10px;
+	border-radius: 0;
+	color: var(--bs-dark);
+	background-color: var(--bs-light);
+	background: transparent;
+	transition: border-bottom-color 0.3s ease;
 }
-
 .editForm textarea {
-    overflow-x: wrap;
-    border: none;
-    width: 100%;
-    margin: 0;
-    padding: 10px;
-    border-radius: 0; /* Make it blocky */
-    color: var(--bs-dark); /* Make sure the text color is correct */
-    background-color: var(--bs-light); /* Make sure the background color is correct */
-    background: transparent;
-    transition: border-bottom-color 0.3s ease;
-    border-bottom: 2px solid var(--bs-dark);
-    resize: vertical; /* Allow vertical resizing */
+	overflow-x: wrap;
+	border: none;
+	width: 100%;
+	margin: 0;
+	padding: 10px;
+	border-radius: 0;
+	color: var(--bs-dark);
+	background-color: var(--bs-light);
+	background: transparent;
+	transition: border-bottom-color 0.3s ease;
+	border-bottom: 2px solid var(--bs-dark);
+	resize: vertical;
 }
-
 .editForm textarea:focus {
-    border-bottom-color: var(--bs-primary);
-    outline: none;
+	border-bottom-color: var(--bs-primary);
+	outline: none;
 }
-
 .editForm input[type="file"] {
-    padding-left: 0;
+	padding-left: 0;
 }
-
 .edit .buttons {
-    gap: 10px;
+	gap: 10px;
 }
-
 input[type="submit"] {
-    background-color: var(--bs-primary);
-    border: none;
-    color: var(--bs-light);
-    padding: 10px 20px;
-    margin: 10px 0;
-    transition: all var(--transition-speed) ease-in-out;
-    cursor: pointer;
-    text-transform: uppercase;
-    font-weight: 700;
-    flex-grow: 1;
-    text-align: center;
+	background-color: var(--bs-primary);
+	border: none;
+	color: var(--bs-light);
+	padding: 10px 20px;
+	margin: 10px 0;
+	transition: all var(--transition-speed) ease-in-out;
+	cursor: pointer;
+	text-transform: uppercase;
+	font-weight: 700;
+	flex-grow: 1;
+	text-align: center;
 }
-
 input[type="submit"]:hover {
-    background-color: var(--bs-dark);
-    color: var(--bs-primary);
+	background-color: var(--bs-dark);
+	color: var(--bs-primary);
 }
-
-/* Edit button styling */
-
-/* Form styling */
-/* Form styling */
 #addForm {
-    margin: 1em auto;
-    background-color: var(--bs-light);
-    padding: 20px;
-    border-radius: 0; /* Make it blocky */
-    box-shadow: 0 1rem 3rem rgba(0,0,0, .1);
-    max-width: 30%;
+	margin: 1em auto;
+	background-color: var(--bs-light);
+	padding: 20px;
+	border-radius: 0;
+	box-shadow: 0 1rem 3rem rgba(0,0,0, .1);
+	max-width: 30%;
 }
-
 #addForm label {
-    text-align: left;
-    display: block;
-    margin-top: 10px;
-    color: var(--bs-dark); /* Make sure the text color is correct */
+	text-align: left;
+	display: block;
+	margin-top: 10px;
+	color: var(--bs-dark);
 }
-
-#addForm input[type="text"],
-#addForm input[type="file"],
+#addForm input[type="text"],#addForm input[type="file"],#addForm textarea {
+	border: none;
+	width: 100%;
+	margin: 0;
+	padding: 10px;
+	border-radius: 0;
+	color: var(--bs-dark);
+	background-color: var(--bs-light);
+	background: transparent;
+	transition: border-bottom-color 0.3s ease;
+	border-bottom: 2px solid var(--bs-dark);
+}
+#addForm input[type="text"]:focus,#addForm input[type="file"]:focus,#addForm textarea:focus {
+	border-bottom-color: var(--bs-primary);
+	outline: none;
+}
 #addForm textarea {
-    border: none;
-    width: 100%;
-    margin: 0;
-    padding: 10px;
-    border-radius: 0; /* Make it blocky */
-    color: var(--bs-dark); /* Make sure the text color is correct */
-    background-color: var(--bs-light); /* Make sure the background color is correct */
-    background: transparent;
-    transition: border-bottom-color 0.3s ease;
-    border-bottom: 2px solid var(--bs-dark);
+	resize: vertical;
 }
-
-#addForm input[type="text"]:focus,
-#addForm input[type="file"]:focus,
-#addForm textarea:focus {
-    border-bottom-color: var(--bs-primary);
-    outline: none;
-}
-
-#addForm textarea {
-    resize: vertical; /* Allow vertical resizing */
-}
-
 #addForm .buttons {
-    gap: 10px;
+	gap: 10px;
 }
-
 #addForm input[type="submit"] {
-    background-color: var(--bs-primary);
-    border: none;
-    color: var(--bs-light);
-    padding: 10px 20px;
-    margin: 10px 0;
-    transition: all var(--transition-speed) ease-in-out;
-    cursor: pointer;
-    text-transform: uppercase;
-    font-weight: 700;
-    flex-grow: 1;
-    text-align: center;
+	background-color: var(--bs-primary);
+	border: none;
+	color: var(--bs-light);
+	padding: 10px 20px;
+	margin: 10px 0;
+	transition: all var(--transition-speed) ease-in-out;
+	cursor: pointer;
+	text-transform: uppercase;
+	font-weight: 700;
+	flex-grow: 1;
+	text-align: center;
 }
-
 #addForm input[type="submit"]:hover {
-    background-color: var(--bs-dark);
-    color: var(--bs-primary);
+	background-color: var(--bs-dark);
+	color: var(--bs-primary);
 }
-
 .expanded-view {
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    min-width: 80vw;
-    min-height: 80vh;
-    background-color: var(--bs-light);
-    color: var(--bs-dark);
-    border: 2px solid var(--bs-secondary);
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.15);
-    z-index: 1000;
-    padding: 20px;
-    font-family: var(--bs-body-font-family);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: space-between;
-    flex-wrap: wrap; /* Add this line */
-    overflow-wrap: break-word; /* Wraps long words onto the next line */
-    word-wrap: break-word; /* An alias for overflow-wrap, use for wider browser support */
+	position: fixed;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	min-width: 80vw;
+	min-height: 80vh;
+	background-color: var(--bs-light);
+	color: var(--bs-dark);
+	border: 2px solid var(--bs-secondary);
+	box-shadow: 0 0 10px rgba(0, 0, 0, 0.15);
+	z-index: 1000;
+	padding: 20px;
+	font-family: var(--bs-body-font-family);
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: space-between;
+	flex-wrap: wrap;
+	overflow-wrap: break-word;
+	word-wrap: break-word;
 }
-
-.expanded-view * { /* Selects all sub-elements of .expanded-item */
-    word-break: break-word;
+.expanded-view * {
+	word-break: break-word;
 }
-
 .expanded-view .close {
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    font-size: 1.5em;
-    cursor: pointer;
+	position: absolute;
+	top: 10px;
+	right: 10px;
+	font-size: 1.5em;
+	cursor: pointer;
 }
-
 .expanded-view h2 {
-    font-family: var(--font-primary);
-    color: var(--bs-primary);
-    text-transform: uppercase;
-    letter-spacing: 2px;
-    margin-bottom: 20px;
+	font-family: var(--font-primary);
+	color: var(--bs-primary);
+	text-transform: uppercase;
+	letter-spacing: 2px;
+	margin-bottom: 20px;
 }
-
 .expanded-view .header-image img {
-    max-height: 70vh;
-    margin-bottom: 20px;
+	max-height: 70vh;
+	margin-bottom: 20px;
 }
-
 .expanded-view p {
-    font-size: 1em;
-    color: var(--bs-dark);
-    margin-bottom: 20px;
+	font-size: 1em;
+	color: var(--bs-dark);
+	margin-bottom: 20px;
 }
-
 .expanded-view .buttons {
-    position: absolute;
-    bottom: 20px;
-    left: 20px;
+	position: absolute;
+	bottom: 20px;
+	left: 20px;
 }
-
 .expanded-view .buttons button {
-    max-width: fit-content;
-    margin: 0 10px;
+	max-width: fit-content;
+	margin: 0 10px;
 }
-
 .delete .buttons {
-    margin-top: 10px;
+	margin-top: 10px;
 }
-
 form.delete input[type="submit"] {
-    background-color: var(--bs-danger);
-    border: none;
-    color: var(--bs-light);
-    padding: 10px 20px;
-    margin: 10px 0;
-    transition: all var(--transition-speed) ease-in-out;
-    cursor: pointer;
-    text-transform: uppercase;
-    font-weight: 700;
-    flex-grow: 1;
-    text-align: center;
+	background-color: var(--bs-danger);
+	border: none;
+	color: var(--bs-light);
+	padding: 10px 20px;
+	margin: 10px 0;
+	transition: all var(--transition-speed) ease-in-out;
+	cursor: pointer;
+	text-transform: uppercase;
+	font-weight: 700;
+	flex-grow: 1;
+	text-align: center;
 }
-
 form.delete input[type="submit"]:hover {
-    background-color: var(--bs-dark);
-    color: var(--bs-danger);
+	background-color: var(--bs-dark);
+	color: var(--bs-danger);
 }
-
 @keyframes fadeIn {
-    0% {
-        opacity: 0;
-    }
-    100% {
-        opacity: 1;
-    }
+	0% {
+		opacity: 0;
+	}
+	100% {
+		opacity: 1;
+	}
 }
-
 @keyframes slideRight {
-    0% {
-        transform: translateX(-50px);
-        opacity: 0;
-    }
-    100% {
-        transform: translateX(0);
-        opacity: 1;
-    }
+	0% {
+		transform: translateX(-50px);
+		opacity: 0;
+	}
+	100% {
+		transform: translateX(0);
+		opacity: 1;
+	}
 }
-
 @keyframes slideUp {
-    0% {
-        transform: translateY(50px);
-        opacity: 0;
-    }
-    100% {
-        transform: translateY(0);
-        opacity: 1;
-    }
+	0% {
+		transform: translateY(50px);
+		opacity: 0;
+	}
+	100% {
+		transform: translateY(0);
+		opacity: 1;
+	}
 }
-
 @keyframes slideDown {
-    0% {
-        transform: translateY(-50px);
-        opacity: 0;
-    }
-    100% {
-        transform: translateY(0);
-        opacity: 1;
-    }
+	0% {
+		transform: translateY(-50px);
+		opacity: 0;
+	}
+	100% {
+		transform: translateY(0);
+		opacity: 1;
+	}
 }
-
 @keyframes slideLeft {
-    0% {
-        transform: translateX(50px);
-        opacity: 0;
-    }
-    100% {
-        transform: translateX(0);
-        opacity: 1;
-    }
+	0% {
+		transform: translateX(50px);
+		opacity: 0;
+	}
+	100% {
+		transform: translateX(0);
+		opacity: 1;
+	}
 }
-
 @media screen and (max-width: 1200px) {
-    .portfolio-item {
-        width: 30vw;
-    }
+	.portfolio-item {
+		width: 30vw;
+	}
 }
-
 @media screen and (max-width: 992px) {
-    .portfolio-item {
-        width: 45vw;
-    }
+	.portfolio-item {
+		width: 45vw;
+	}
 }
-
 @media screen and (max-width: 768px) {
-    .portfolio-item {
-        width: 90vw;
-    }
+	.portfolio-item {
+		width: 90vw;
+	}
 }
-
 @media screen and (max-width: 576px) {
-    .portfolio-item {
-        width: 100vw;
-    }
+	.portfolio-item {
+		width: 100vw;
+	}
 }
-
 @media screen and (max-width: 768px) {
-    .expanded-view {
-        width: 80vw;
-        height: 80vh;
-    }
+	.expanded-view {
+		width: 80vw;
+		height: 80vh;
+	}
 }
-
 @media screen and (max-width: 576px) {
-    .expanded-view {
-        width: 90vw;
-        height: 90vh;
-        padding: 5vw; /* Add some padding to ensure content doesn't touch the edges */
-        overflow: wrap;
-    }
+	.expanded-view {
+		width: 90vw;
+		height: 90vh;
+		padding: 5vw;
+		overflow: wrap;
+	}
 }

@@ -17,7 +17,7 @@ Video Stream
         console.log("attempting update")
         var img = document.getElementById('video_feed');
         img.src = "{{ url_for('video_feed') }}";
-        setTimeout(updateImage, 500); // Update every 3 seconds (3000 milliseconds)
+        setTimeout(updateImage, 50);
         console.log("Updated image")
     }
     window.onload = updateImage;

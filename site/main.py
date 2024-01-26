@@ -100,15 +100,16 @@ frame_queue = Queue()
 def generate():
     while True:
         if not frame_queue.empty():
-            global_frame = frame_queue.get()
+            frame = frame_queue.get()
 
-            # Encode the global frame into JPEG format
-            _, buffer = cv2.imencode('.jpg', global_frame)
-            
-            # Convert the buffer to bytes and yield it as a part of the multipart response
-            frame = buffer.tobytes()
+            # Encode the frame into JPEG format
+            _, buffer = cv2.imencode('.jpg', frame)
+
+            # Convert the buffer to bytes
+            frame_bytes = buffer.tobytes()
+
             yield (b'--frame\r\n'
-                   b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n')
+                   b'Content-Type: image/jpeg\r\n\r\n' + frame_bytes + b'\r\n\r\n')
         else:
             time.sleep(0.1)
 

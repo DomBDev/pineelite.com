@@ -55,21 +55,6 @@ def response_template(template, **kwargs):
     
     return response
 
-global_frame = None
-
-def generate():
-    global global_frame
-    while True:
-        # Wait for the next frame
-        if global_frame is not None:
-            # Encode the frame in JPEG format
-            _, buffer = cv2.imencode('.jpg', global_frame)
-            frame_bytes = base64.b64encode(buffer).decode('utf-8')
-
-            # Yield the frame as bytes
-            yield (b'--frame\r\n'
-                   b'Content-Type: image/jpeg\r\n\r\n' + frame_bytes + b'\r\n\r\n')
-
 
 class PortfolioItem(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -106,6 +91,19 @@ def chat():
         session['chat_history'] = [{'role': 'system', 'content': 'You are PineBot, a helpful chat ai used for anything.'}]
 
     return render_template('chat.html', chat_history=session['chat_history'])
+
+global_frame = None
+
+def generate():
+    global global_frame
+    while True:
+        # Encode the global frame into JPEG format
+        _, buffer = cv2.imencode('.jpg', global_frame)
+        
+        # Convert the buffer to bytes and yield it as a part of the multipart response
+        frame = buffer.tobytes()
+        yield (b'--frame\r\n'
+               b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n')
 
 @app.route('/endpoint', methods=['POST'])
 def receive_frame():
@@ -316,4 +314,4 @@ def delete_portfolio_item(id):
 if __name__ == '__main__':
     with app.app_context():
             db.create_all()
-    app.run(debug=True)
+    app.run(debug=True, port=80)

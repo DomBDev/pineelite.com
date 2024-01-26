@@ -111,6 +111,9 @@ def generate():
         else:
             time.sleep(0.1)
 
+frame_thread = Thread(target=generate_frames)
+frame_thread.start()
+
 @app.route('/endpoint', methods=['POST'])
 def receive_frame():
     try:
@@ -139,6 +142,13 @@ def receive_frame():
 @app.route('/video_feed')
 @login_required
 def video_feed():
+    def generate():
+        while True:
+            # Get the next frame from the queue
+            frame = frame_queue.get()
+            yield (b'--frame\r\n'
+                   b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n\r\n')
+
     return Response(generate(), mimetype='multipart/x-mixed-replace; boundary=frame')
 
 @app.route('/video_page')

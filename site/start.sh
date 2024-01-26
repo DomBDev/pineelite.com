@@ -7,7 +7,7 @@ cd /home/dom/portfolio/site
 source env/bin/activate
 
 # Start Gunicorn for HTTP (port 80)
-sudo /home/dom/portfolio/site/env/bin/gunicorn --bind 0.0.0.0:80 main:app &
+sudo /home/dom/portfolio/site/env/bin/gunicorn --bind 0.0.0.0:80 -k gevent main:app &
 
 # Start Gunicorn for HTTPS (port 443)
-sudo /home/dom/portfolio/site/env/bin/gunicorn --bind 0.0.0.0:443 main:app --certfile=cert.pem --keyfile=privkey.pem --timeout 60 &
+sudo /home/dom/portfolio/site/env/bin/gunicorn --bind 0.0.0.0:443 -k gevent main:app --certfile=cert.pem --keyfile=privkey.pem --timeout 60 &

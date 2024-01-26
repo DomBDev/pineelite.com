@@ -18,6 +18,7 @@ Video Stream
 </div>
 <script>
     function updateImage() {
+        console.log("attempting update")
         var img = document.getElementById('video_feed');
         img.src = "{{ url_for('video_feed') }}" + '?' + new Date().getTime();
         setTimeout(updateImage, 3000); // Update every 3 seconds (3000 milliseconds)

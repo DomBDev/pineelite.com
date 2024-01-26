@@ -98,7 +98,7 @@ last_frame = None
 def generate():
     global global_frame, last_frame
     while True:
-        if global_frame is not last_frame:
+        if not np.array_equal(global_frame, last_frame):
             # Encode the global frame into JPEG format
             _, buffer = cv2.imencode('.jpg', global_frame)
             
@@ -106,7 +106,7 @@ def generate():
             frame = buffer.tobytes()
             yield (b'--frame\r\n'
                    b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n')
-            last_frame = global_frame
+            last_frame = global_frame.copy()
         else:
             time.sleep(0.1)
 

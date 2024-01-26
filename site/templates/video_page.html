@@ -12,8 +12,16 @@ Video Stream
 <div class="container">
     <div class="row justify-content-center">
         <div class="col-md-8">
-            <img src="{{ url_for('video_feed') }}" class="img-fluid" />
+            <img id="video_feed" class="img-fluid" />
         </div>
     </div>
 </div>
+<script>
+    function updateImage() {
+        var img = document.getElementById('video_feed');
+        img.src = "{{ url_for('video_feed') }}" + '?' + new Date().getTime();
+        setTimeout(updateImage, 100);
+    }
+    window.onload = updateImage;
+</script>
 {% endblock %}

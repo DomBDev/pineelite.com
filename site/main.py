@@ -98,7 +98,7 @@ def chat():
 
     return render_template('chat.html', chat_history=session['chat_history'])
 
-socketio = SocketIO(app, async_mode='eventlet')
+socketio = SocketIO(app)
 
 frame_queue = Queue()
 

@@ -138,10 +138,12 @@ async def on_offer(data):
     emit('answer', {'sdp': pc.localDescription.sdp, 'type': pc.localDescription.type})
 
 @app.route('/video_feed')
+@login_required
 def video_feed():
     return Response(generate(), mimetype='multipart/x-mixed-replace; boundary=frame')
 
 @app.route('/video_page')
+@login_required
 def video_page():
     return render_template('video_page.html')
 

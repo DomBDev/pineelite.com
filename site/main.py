@@ -129,7 +129,16 @@ def generate():
 
 def create_pc():
     pc = RTCPeerConnection()
-    pc.addTrack(VideoImageTrack(cv2.VideoCapture(0)))
+
+    @pc.on("track")
+    def on_track(track):
+        if track.kind == "video":
+            print("Video track received")
+
+            @track.on("frame")
+            def on_frame(frame):
+                frame_queue.put_nowait(frame)
+
     return pc
 
 @socketio.on('offer')

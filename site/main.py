@@ -8,6 +8,8 @@ import os
 import time
 from queue import Queue
 from threading import Thread
+from gevent import monkey
+monkey.patch_all()
 
 import aiohttp
 from aiortc import RTCPeerConnection, RTCSessionDescription, VideoStreamTrack

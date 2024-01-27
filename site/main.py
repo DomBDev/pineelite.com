@@ -10,6 +10,7 @@ from queue import Queue
 from threading import Thread
 from gevent import monkey
 monkey.patch_all()
+import logging
 
 import aiohttp
 from aiortc import RTCPeerConnection, RTCSessionDescription, VideoStreamTrack
@@ -24,6 +25,8 @@ from werkzeug.utils import secure_filename
 
 app = Flask(__name__)
 app.secret_key = 'some_secret'
+
+logging.basicConfig(level=logging.INFO)
 
 with open('config.json') as json_file:
     config_data = json.load(json_file)

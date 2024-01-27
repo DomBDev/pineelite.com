@@ -126,6 +126,7 @@ def generate():
 
 @socketio.on('offer')
 async def on_offer(data):
+    app.logger.info('Received offer: {}'.format(data))
     offer = RTCSessionDescription(sdp=data['sdp'], type=data['type'])
     pc = RTCPeerConnection()
     pc.addTrack(VideoImageTrack(cv2.VideoCapture(0)))

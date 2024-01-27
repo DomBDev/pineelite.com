@@ -136,27 +136,30 @@ def create_pc():
             print("Video track received")
 
             @track.on("frame")
-            def on_frame(frame):
-                frame_queue.put_nowait(frame)
+            async def on_frame(frame):
+                frame_queue.put_nowait(frame.to_ndarray(format="bgr24"))
 
     return pc
 
+def run_coroutine(coroutine):
+    return asyncio.run(coroutine)
+
 @socketio.on('offer')
 def on_offer(data):
-    offer = RTCSessionDescription(sdp=data['sdp'], type=data['type'])
-    pc = create_pc()
+    async def handle_offer():
+        offer = RTCSessionDescription(sdp=data['sdp'], type=data['type'])
+        pc = create_pc()
 
-    @pc.on('icecandidate')
-    def on_icecandidate(candidate):
-        socketio.emit('candidate', candidate)
+        @pc.on('icecandidate')
+        def on_icecandidate(candidate):
+            emit('candidate', candidate)
 
-    def run_coroutine(coroutine):
-        asyncio.run(coroutine)
+        await pc.setRemoteDescription(offer)
+        answer = await pc.createAnswer()
+        await pc.setLocalDescription(answer)
+        emit('answer', {'sdp': pc.localDescription.sdp, 'type': pc.localDescription.type})
 
-    run_coroutine(pc.setRemoteDescription(offer))
-    answer = run_coroutine(pc.createAnswer())
-    run_coroutine(pc.setLocalDescription(answer))
-    socketio.emit('answer', {'sdp': pc.localDescription.sdp, 'type': pc.localDescription.type})
+    run_coroutine(handle_offer())
 
 @app.route('/video_feed')
 @login_required

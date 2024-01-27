@@ -105,6 +105,8 @@ def chat():
 
 socketio = SocketIO(app, async_mode='threading')
 
+frame_queue = Queue()
+
 class VideoImageTrack(VideoStreamTrack):
     def __init__(self, video: cv2.VideoCapture):
         super().__init__()

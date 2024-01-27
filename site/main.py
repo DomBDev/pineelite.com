@@ -98,7 +98,7 @@ def chat():
 
     return render_template('chat.html', chat_history=session['chat_history'])
 
-socketio = SocketIO(app)
+socketio = SocketIO(app, async_mode='eventlet')
 
 frame_queue = Queue()
 
@@ -108,7 +108,7 @@ class VideoImageTrack(VideoStreamTrack):
         self.video = video
 
     async def recv(self):
-        frame, _ = self.video.read()
+        frame = self.video.read()[1]
         return frame
 
 def generate():
@@ -130,12 +130,12 @@ async def on_offer(data):
 
     @pc.on('icecandidate')
     def on_icecandidate(candidate):
-        emit('candidate', candidate)
+        socketio.emit('candidate', candidate)
 
     await pc.setRemoteDescription(offer)
     answer = await pc.createAnswer()
     await pc.setLocalDescription(answer)
-    emit('answer', {'sdp': pc.localDescription.sdp, 'type': pc.localDescription.type})
+    socketio.emit('answer', {'sdp': pc.localDescription.sdp, 'type': pc.localDescription.type})
 
 @app.route('/video_feed')
 @login_required

@@ -128,15 +128,13 @@ def generate():
             time.sleep(0.1)
 
 def create_pc():
-    TURN_SERVER = RTCIceServer(
-        urls="turn:pineelite.com:3478",
-        username="cam_stream",
-        credential="admin"
+    STUN_SERVER = RTCIceServer(
+        urls="stun:stun.l.google.com:19302"
     )
 
     pc = RTCPeerConnection(
         configuration=RTCConfiguration(
-            iceServers=[TURN_SERVER]
+            iceServers=[STUN_SERVER]
         )
     )
 

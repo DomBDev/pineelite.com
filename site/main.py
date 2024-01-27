@@ -12,7 +12,8 @@ from threading import Thread
 import aiohttp
 from aiortc import RTCConfiguration, RTCIceServer, RTCPeerConnection, RTCSessionDescription, VideoStreamTrack
 from aiortc.contrib.media import MediaBlackhole, MediaPlayer, MediaRecorder
-from flask import Flask, render_template, request, redirect, url_for, flash, make_response, session, Response
+from flask import Flask, render_template, request, redirect, url_for, flash, make_response, session
+from flask import Response as FlaskResponse
 from flask_login import LoginManager, login_user, login_required, current_user, logout_user
 from flask_socketio import SocketIO, emit
 from flask_sqlalchemy import SQLAlchemy
@@ -183,7 +184,7 @@ aiohttp_app.add_routes(routes)
 @app.route('/video_feed')
 @login_required
 def video_feed():
-    return Response(generate(), mimetype='multipart/x-mixed-replace; boundary=frame')
+    return FlaskResponse(generate(), mimetype='multipart/x-mixed-replace; boundary=frame')
 
 @app.route('/video_page')
 @login_required

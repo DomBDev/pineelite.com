@@ -8,17 +8,17 @@ import os
 import time
 from queue import Queue
 from threading import Thread
-from gevent import monkey
-monkey.patch_all()
-import logging
 
 import aiohttp
-from aiortc import RTCPeerConnection, RTCSessionDescription, VideoStreamTrack
+from aiortc import RTCConfiguration, RTCIceServer, RTCPeerConnection, RTCSessionDescription, VideoStreamTrack
 from aiortc.contrib.media import MediaBlackhole, MediaPlayer, MediaRecorder
 from flask import Flask, render_template, request, redirect, url_for, flash, make_response, session, Response
 from flask_login import LoginManager, login_user, login_required, current_user, logout_user
 from flask_socketio import SocketIO, emit
 from flask_sqlalchemy import SQLAlchemy
+from gevent import monkey
+monkey.patch_all()
+import logging
 from openai import OpenAI
 from werkzeug.security import check_password_hash, generate_password_hash
 from werkzeug.utils import secure_filename
@@ -128,7 +128,15 @@ def generate():
             time.sleep(0.1)
 
 def create_pc():
-    pc = RTCPeerConnection()
+    TURN_SERVER = RTCIceServer(
+        urls="stun:stun.l.google.com:19302"
+    )
+
+    pc = RTCPeerConnection(
+        configuration=RTCConfiguration(
+            iceServers=[TURN_SERVER]
+        )
+    )
 
     @pc.on("track")
     def on_track(track):

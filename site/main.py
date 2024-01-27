@@ -1,19 +1,24 @@
-# main.py
-import os
-from flask import Flask, render_template, request, redirect, url_for, flash, make_response, session, Response
-from flask_sqlalchemy import SQLAlchemy
-from werkzeug.utils import secure_filename
-from flask_login import LoginManager, login_user, login_required, current_user, logout_user
-from werkzeug.security import check_password_hash, generate_password_hash
-import json
-import hashlib
-from openai import OpenAI
-import cv2
+import asyncio
 import base64
+import cv2
+import hashlib
+import json
 import numpy as np
+import os
 import time
 from queue import Queue
 from threading import Thread
+
+import aiohttp
+from aiortc import RTCPeerConnection, RTCSessionDescription, VideoStreamTrack
+from aiortc.contrib.media import MediaBlackhole, MediaPlayer, MediaRecorder
+from flask import Flask, render_template, request, redirect, url_for, flash, make_response, session, Response
+from flask_login import LoginManager, login_user, login_required, current_user, logout_user
+from flask_socketio import SocketIO, emit
+from flask_sqlalchemy import SQLAlchemy
+from openai import OpenAI
+from werkzeug.security import check_password_hash, generate_password_hash
+from werkzeug.utils import secure_filename
 
 app = Flask(__name__)
 app.secret_key = 'some_secret'
@@ -36,7 +41,6 @@ database_path = os.path.join(os.path.abspath(os.curdir), 'data', 'database.db')
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + database_path
 app.config['UPLOAD_FOLDER'] = 'static/images'
 
-
 # Create upload folder if it doesn't already exist
 upload_folder = os.path.join(app.root_path, app.config['UPLOAD_FOLDER'])
 if not os.path.exists(upload_folder):
@@ -57,7 +61,6 @@ def response_template(template, **kwargs):
     response = add_etag(response)
     
     return response
-
 
 class PortfolioItem(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -95,59 +98,50 @@ def chat():
 
     return render_template('chat.html', chat_history=session['chat_history'])
 
+socketio = SocketIO(app)
+
 frame_queue = Queue()
+
+class VideoImageTrack(VideoStreamTrack):
+    def __init__(self, video: cv2.VideoCapture):
+        super().__init__()
+        self.video = video
+
+    async def recv(self):
+        frame, _ = self.video.read()
+        return frame
 
 def generate():
     while True:
         if not frame_queue.empty():
             frame = frame_queue.get()
-
-            # Encode the frame into JPEG format
             _, buffer = cv2.imencode('.jpg', frame)
-
-            # Convert the buffer to a regular byte string
             frame_bytes = buffer.tostring()
-
             yield (b'--frame\r\n'
                    b'Content-Type: image/jpeg\r\n\r\n' + frame_bytes + b'\r\n\r\n')
         else:
             time.sleep(0.1)
 
-frame_thread = Thread(target=generate)
-frame_thread.start()
+@socketio.on('offer')
+async def on_offer(data):
+    offer = RTCSessionDescription(sdp=data['sdp'], type=data['type'])
+    pc = RTCPeerConnection()
+    pc.addTrack(VideoImageTrack(cv2.VideoCapture(0)))
 
-@app.route('/endpoint', methods=['POST'])
-def receive_frame():
-    try:
-        data = request.get_json()
-        img_data = data['frame']
-    except KeyError:
-        print("Error: 'frame' key not found in request data")
-        return 'Error: frame key not found in request data', 400
+    @pc.on('icecandidate')
+    def on_icecandidate(candidate):
+        emit('candidate', candidate)
 
-    try:
-        # Decode the base64 image
-        img_bytes = base64.b64decode(img_data)
-    except Exception as e:
-        print(f"Error decoding base64 image data: {e}")
-        return f'Error decoding base64 image data: {e}', 400
-
-    try:
-        global_frame = cv2.imdecode(np.frombuffer(img_bytes, np.uint8), -1)
-        frame_queue.put(global_frame)
-    except Exception as e:
-        print(f"Error decoding image: {e}")
-        return f'Error decoding image: {e}', 400
-
-    return 'Frame received successfully'
+    await pc.setRemoteDescription(offer)
+    answer = await pc.createAnswer()
+    await pc.setLocalDescription(answer)
+    emit('answer', {'sdp': pc.localDescription.sdp, 'type': pc.localDescription.type})
 
 @app.route('/video_feed')
-@login_required
 def video_feed():
     return Response(generate(), mimetype='multipart/x-mixed-replace; boundary=frame')
 
 @app.route('/video_page')
-@login_required
 def video_page():
     return render_template('video_page.html')
 
@@ -325,3 +319,4 @@ if __name__ == '__main__':
     with app.app_context():
             db.create_all()
     app.run(debug=True)
+    socketio.run(app)

@@ -103,9 +103,7 @@ def chat():
 
     return render_template('chat.html', chat_history=session['chat_history'])
 
-socketio = SocketIO(app)
-
-frame_queue = Queue()
+socketio = SocketIO(app, async_mode='threading')
 
 class VideoImageTrack(VideoStreamTrack):
     def __init__(self, video: cv2.VideoCapture):
@@ -127,20 +125,26 @@ def generate():
         else:
             time.sleep(0.1)
 
-@socketio.on('offer')
-async def on_offer(data):
-    app.logger.info('Received offer: {}'.format(data))
-    offer = RTCSessionDescription(sdp=data['sdp'], type=data['type'])
+def create_pc():
     pc = RTCPeerConnection()
     pc.addTrack(VideoImageTrack(cv2.VideoCapture(0)))
+    return pc
+
+@socketio.on('offer')
+def on_offer(data):
+    offer = RTCSessionDescription(sdp=data['sdp'], type=data['type'])
+    pc = create_pc()
 
     @pc.on('icecandidate')
     def on_icecandidate(candidate):
         socketio.emit('candidate', candidate)
 
-    await pc.setRemoteDescription(offer)
-    answer = await pc.createAnswer()
-    await pc.setLocalDescription(answer)
+    def run_coroutine(coroutine):
+        asyncio.run(coroutine)
+
+    run_coroutine(pc.setRemoteDescription(offer))
+    answer = run_coroutine(pc.createAnswer())
+    run_coroutine(pc.setLocalDescription(answer))
     socketio.emit('answer', {'sdp': pc.localDescription.sdp, 'type': pc.localDescription.type})
 
 @app.route('/video_feed')

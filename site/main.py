@@ -167,7 +167,7 @@ def on_offer(data):
         await pc.setLocalDescription(answer)
         emit('answer', {'sdp': pc.localDescription.sdp, 'type': pc.localDescription.type})
 
-    run_coroutine(handle_offer())
+    socketio.start_background_task(handle_offer)
 
 @app.route('/video_feed')
 @login_required

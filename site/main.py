@@ -22,6 +22,7 @@ import logging
 from openai import OpenAI
 from werkzeug.security import check_password_hash, generate_password_hash
 from werkzeug.utils import secure_filename
+from aiohttp.web import Application, Response, RouteTableDef
 
 app = Flask(__name__)
 app.secret_key = 'some_secret'
@@ -154,20 +155,29 @@ def run_coroutine(coroutine):
 
 @socketio.on('offer')
 def on_offer(data):
-    async def handle_offer():
-        offer = RTCSessionDescription(sdp=data['sdp'], type=data['type'])
-        pc = create_pc()
+    emit('offer_received', data)
 
-        @pc.on('icecandidate')
-        def on_icecandidate(candidate):
-            emit('candidate', candidate)
+aiohttp_app = web.Application()  # Rename 'app' to 'aiohttp_app'
+routes = RouteTableDef()
 
-        await pc.setRemoteDescription(offer)
-        answer = await pc.createAnswer()
-        await pc.setLocalDescription(answer)
-        emit('answer', {'sdp': pc.localDescription.sdp, 'type': pc.localDescription.type})
+@routes.post('/offer')
+async def handle_offer(request):
+    data = await request.json()
+    offer = RTCSessionDescription(sdp=data['sdp'], type=data['type'])
+    pc = create_pc()
 
-    socketio.start_background_task(handle_offer)
+    @pc.on('icecandidate')
+    def on_icecandidate(candidate):
+        emit('candidate', candidate)
+
+    await pc.setRemoteDescription(offer)
+    answer = await pc.createAnswer()
+    await pc.setLocalDescription(answer)
+    emit('answer', {'sdp': pc.localDescription.sdp, 'type': pc.localDescription.type})
+
+    return Response()
+
+aiohttp_app.add_routes(routes)
 
 @app.route('/video_feed')
 @login_required
@@ -354,3 +364,4 @@ if __name__ == '__main__':
             db.create_all()
     app.run(debug=True)
     socketio.run(app)
+    web.run_app(aiohttp_app)

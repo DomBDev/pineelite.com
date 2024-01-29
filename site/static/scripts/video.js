@@ -1,7 +1,11 @@
 var pc = null;
 
 function negotiate() {
-    pc.addTrack(window.stream.getTracks().find(function (track) { return track.kind === "video"; }));
+    if (window.stream && typeof window.stream.getTracks === 'function') {
+        pc.addTrack(window.stream.getTracks().find(function (track) { return track.kind === "video"; }));
+    } else {
+        console.error('window.stream is not defined or does not have a getTracks method');
+    }
     return pc.createOffer().then(function (offer) {
         return pc.setLocalDescription(offer);
     }).then(function () {

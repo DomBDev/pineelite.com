@@ -1,11 +1,6 @@
 var pc = null;
 
 function negotiate() {
-    if (window.stream && typeof window.stream.getTracks === 'function') {
-        pc.addTrack(window.stream.getTracks().find(function (track) { return track.kind === "video"; }));
-    } else {
-        console.error('window.stream is not defined or does not have a getTracks method');
-    }
     return pc.createOffer().then(function (offer) {
         return pc.setLocalDescription(offer);
     }).then(function () {
@@ -59,18 +54,7 @@ function start() {
 
     document.getElementById('start').style.display = 'none';
     document.getElementById('stop').style.display = 'inline-block';
-
-    // Request a video stream from the user's webcam
-    navigator.mediaDevices.getUserMedia({ video: true, audio: false })
-        .then(function(stream) {
-            // Assign the stream to window.stream
-            window.stream = stream;
-            // Call negotiate
-            negotiate();
-        })
-        .catch(function(err) {
-            console.error('Failed to get user media', err);
-        });
+    negotiate();
 }
 
 function stop() {

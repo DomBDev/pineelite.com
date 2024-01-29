@@ -106,7 +106,7 @@ def chat():
     return render_template('chat.html', chat_history=session['chat_history'])
 
 
-socketio = SocketIO(app)
+socketio = SocketIO(app, async_mode='eventlet')
 pc = RTCPeerConnection()
 
 @app.route('/video_page')
@@ -114,7 +114,7 @@ def video_page():
     return render_template('video_page.html')
 
 @socketio.on('offer')
-def on_offer(data):
+async def on_offer(data):
     offer = RTCSessionDescription(sdp=data['sdp'], type=data['type'])
     await pc.setRemoteDescription(offer)
     answer = await pc.createAnswer()
@@ -122,7 +122,7 @@ def on_offer(data):
     emit('answer', {'sdp': answer.sdp, 'type': answer.type})
 
 @socketio.on('candidate')
-def on_candidate(data):
+async def on_candidate(data):
     candidate = RTCIceCandidate(sdpMid=data['sdpMid'], sdpMLineIndex=data['sdpMLineIndex'], candidate=data['candidate'])
     await pc.addIceCandidate(candidate)
 

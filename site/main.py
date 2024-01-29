@@ -12,8 +12,7 @@ from threading import Thread
 import aiohttp
 from aiortc import RTCConfiguration, RTCIceServer, RTCPeerConnection, RTCSessionDescription, VideoStreamTrack
 from aiortc.contrib.media import MediaBlackhole, MediaPlayer, MediaRecorder
-from flask import Flask, render_template, request, redirect, url_for, flash, make_response, session
-from flask import Response as FlaskResponse
+from flask import Flask, render_template, request, redirect, url_for, flash, make_response, session, jsonify
 from flask_login import LoginManager, login_user, login_required, current_user, logout_user
 from flask_socketio import SocketIO, emit
 from flask_sqlalchemy import SQLAlchemy
@@ -25,6 +24,7 @@ from werkzeug.security import check_password_hash, generate_password_hash
 from werkzeug.utils import secure_filename
 from aiohttp.web import Application, Response, RouteTableDef
 from aiohttp import web
+from aiohttp_session import setup, get_session, session_middleware
 
 app = Flask(__name__)
 app.secret_key = 'some_secret'

@@ -46,9 +46,7 @@ function start() {
 
     pc = new RTCPeerConnection(config);
 
-    if (document.getElementById('use-stun').checked) {
-        config.iceServers = [{ urls: ['stun:stun.l.google.com:19302'] }];
-    }
+    config.iceServers = [{ urls: ['stun:stun.l.google.com:19302'] }];
 
     pc.addEventListener('track', function (evt) {
         document.getElementById('video').srcObject = evt.streams[0] || new MediaStream([evt.track]);

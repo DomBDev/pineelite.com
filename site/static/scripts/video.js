@@ -68,6 +68,7 @@ function stop() {
     pc = null;
 }
 
+if (pc) {
 pc.onicecandidate = function (event) {
     if (event.candidate) {
         var candidate = event.candidate;
@@ -84,4 +85,4 @@ pc.onicecandidate = function (event) {
         xhr.setRequestHeader('Content-Type', 'application/json');
         xhr.send(JSON.stringify({ 'candidate': candidate }));
     }
-};
+}};

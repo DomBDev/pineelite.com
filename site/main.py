@@ -107,6 +107,7 @@ def chat():
 
 
 socketio = SocketIO(app)
+pc = RTCPeerConnection()
 
 @app.route('/video_page')
 @login_required
@@ -114,13 +115,13 @@ def video_page():
     return render_template('video_page.html')
 
 @app.route('/offer', methods=['POST'])
-def offer():
-    # handle WebRTC offer 
+async def offer():
     data = request.get_json()
-    # emit the data with SocketIO
-    socketio.emit('offer', data)
-    # also return the data as a response
-    return jsonify(data)
+    offer = RTCSessionDescription(sdp=data['sdp'], type=data['type'])
+    await pc.setRemoteDescription(offer)
+    answer = await pc.createAnswer()
+    await pc.setLocalDescription(answer)
+    return jsonify({'sdp': pc.localDescription.sdp, 'type': pc.localDescription.type})
 
 @app.route('/candidate', methods=['POST'])
 def candidate():

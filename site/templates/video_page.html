@@ -11,8 +11,8 @@ Video Stream
 {% block content %}
 <div class="container">
     <video id="video" playsinline autoplay />
-    <button id="start" onclick="start()">Start</button>
-    <button id="stop" onclick="stop()" style="display: none;">Stop</button>
 </div>
+<button id="start" onclick="start()">Start</button>
+<button id="stop" onclick="stop()" style="display: none;">Stop</button>
 <script src="{{ url_for('static', filename='scripts/video.js') }}"></script>
 {% endblock %}

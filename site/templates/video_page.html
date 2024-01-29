@@ -10,16 +10,9 @@ Video Stream
 
 {% block content %}
 <div class="container">
-    <img id="video_feed" class="img-fluid" width="100%" />
+    <video id="video" playsinline autoplay />
+    <button id="start" onclick="start()">Start</button>
+    <button id="stop" onclick="stop()" style="display: none;">Stop</button>
 </div>
-<script>
-    function updateImage() {
-        console.log("attempting update")
-        var img = document.getElementById('video_feed');
-        img.src = "{{ url_for('video_feed') }}";
-        setTimeout(updateImage, 200);
-        console.log("Updated image")
-    }
-    window.onload = updateImage;
-</script>
+<script src="{{ url_for('static', filename='scripts/video.js') }}"></script>
 {% endblock %}

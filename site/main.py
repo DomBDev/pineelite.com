@@ -106,90 +106,34 @@ def chat():
 
     return render_template('chat.html', chat_history=session['chat_history'])
 
-socketio = SocketIO(app, async_mode='threading')
 
-frame_queue = Queue()
-
-class VideoImageTrack(VideoStreamTrack):
-    def __init__(self, video: cv2.VideoCapture):
-        super().__init__()
-        self.video = video
-
-    async def recv(self):
-        frame = self.video.read()[1]
-        return frame
-
-def generate():
-    while True:
-        if not frame_queue.empty():
-            frame = frame_queue.get()
-            _, buffer = cv2.imencode('.jpg', frame)
-            frame_bytes = buffer.tostring()
-            yield (b'--frame\r\n'
-                   b'Content-Type: image/jpeg\r\n\r\n' + frame_bytes + b'\r\n\r\n')
-        else:
-            time.sleep(0.1)
-
-def create_pc():
-    STUN_SERVER = RTCIceServer(
-        urls="stun:stun.l.google.com:19302"
-    )
-
-    pc = RTCPeerConnection(
-        configuration=RTCConfiguration(
-            iceServers=[STUN_SERVER]
-        )
-    )
-
-    @pc.on("track")
-    def on_track(track):
-        if track.kind == "video":
-            print("Video track received")
-
-            @track.on("frame")
-            async def on_frame(frame):
-                frame_queue.put_nowait(frame.to_ndarray(format="bgr24"))
-
-    return pc
-
-def run_coroutine(coroutine):
-    return asyncio.run(coroutine)
-
-@socketio.on('offer')
-def on_offer(data):
-    emit('offer_received', data)
-
-aiohttp_app = web.Application()  # Rename 'app' to 'aiohttp_app'
-routes = RouteTableDef()
-
-@routes.post('/offer')
-async def handle_offer(request):
-    data = await request.json()
-    offer = RTCSessionDescription(sdp=data['sdp'], type=data['type'])
-    pc = create_pc()
-
-    @pc.on('icecandidate')
-    def on_icecandidate(candidate):
-        emit('candidate', candidate)
-
-    await pc.setRemoteDescription(offer)
-    answer = await pc.createAnswer()
-    await pc.setLocalDescription(answer)
-    emit('answer', {'sdp': pc.localDescription.sdp, 'type': pc.localDescription.type})
-
-    return Response()
-
-aiohttp_app.add_routes(routes)
-
-@app.route('/video_feed')
-@login_required
-def video_feed():
-    return FlaskResponse(generate(), mimetype='multipart/x-mixed-replace; boundary=frame')
+socketio = SocketIO(app)
 
 @app.route('/video_page')
 @login_required
 def video_page():
     return render_template('video_page.html')
+
+@app.route('/offer', methods=['POST'])
+def offer():
+    # handle WebRTC offer 
+    data = json.loads(request.data)['data']
+    socketio.emit('offer', data)
+    return "", 200
+
+@app.route('/answer', methods=['POST'])
+def answer():
+    # handle WebRTC answer 
+    data = json.loads(request.data)['data']
+    socketio.emit('answer', data)
+    return "", 200
+
+@app.route('/candidate', methods=['POST'])
+def candidate():
+    # handle Ice candidate
+    data = json.loads(request.data)['data']
+    socketio.emit('candidate', data)
+    return "", 200
 
 @app.route('/get_response', methods=['POST'])
 def get_response():

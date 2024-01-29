@@ -125,12 +125,11 @@ def offer():
 
 @app.route('/candidate', methods=['POST'])
 def candidate():
-    # handle Ice candidate
     data = request.get_json()
-    # emit the data with SocketIO
-    socketio.emit('candidate', data)
-    # also return the data as a response
-    return jsonify(data)
+    candidate = RTCIceCandidate(sdpMid=data['candidate']['sdpMid'], sdpMLineIndex=data['candidate']['sdpMLineIndex'], candidate=data['candidate']['candidate'])
+    # Add the candidate to your RTCPeerConnection instance
+    # pc.addIceCandidate(candidate)
+    return jsonify({}), 200
 
 @app.route('/get_response', methods=['POST'])
 def get_response():

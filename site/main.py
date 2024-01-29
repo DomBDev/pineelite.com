@@ -117,23 +117,20 @@ def video_page():
 @app.route('/offer', methods=['POST'])
 def offer():
     # handle WebRTC offer 
-    data = json.loads(request.data)['data']
+    data = request.get_json()
+    # emit the data with SocketIO
     socketio.emit('offer', data)
-    return "", 200
-
-@app.route('/answer', methods=['POST'])
-def answer():
-    # handle WebRTC answer 
-    data = json.loads(request.data)['data']
-    socketio.emit('answer', data)
-    return "", 200
+    # also return the data as a response
+    return jsonify(data)
 
 @app.route('/candidate', methods=['POST'])
 def candidate():
     # handle Ice candidate
-    data = json.loads(request.data)['data']
+    data = request.get_json()
+    # emit the data with SocketIO
     socketio.emit('candidate', data)
-    return "", 200
+    # also return the data as a response
+    return jsonify(data)
 
 @app.route('/get_response', methods=['POST'])
 def get_response():

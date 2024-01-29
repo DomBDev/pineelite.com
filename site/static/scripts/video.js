@@ -1,15 +1,19 @@
 var pc = null;
 
 function negotiate() {
+    console.log('Negotiating...');
     return pc.createOffer().then(function (offer) {
+        console.log('Created offer');
         return pc.setLocalDescription(offer);
     }).then(function () {
         return new Promise(function (resolve) {
             if (pc.iceGatheringState === 'complete') {
+                console.log('ICE gathering state complete');
                 resolve();
             } else {
                 function checkState() {
                     if (pc.iceGatheringState === 'complete') {
+                        console.log('ICE gathering state complete');
                         pc.removeEventListener('icegatheringstatechange', checkState);
                         resolve();
                     }
@@ -24,7 +28,10 @@ function negotiate() {
                 if (xhr.status === 200) {
                     var desc = new RTCSessionDescription(JSON.parse(xhr.responseText));
                     pc.setRemoteDescription(desc).then(
-                        function () { resolve(); }
+                        function () { 
+                            console.log('Set remote description');
+                            resolve(); 
+                        }
                     ).catch(function (e) { reject(e); });
                 } else {
                     reject(new Error(xhr.statusText));
@@ -39,6 +46,7 @@ function negotiate() {
 }
 
 function start() {
+    console.log('Starting...');
     var config = { 
         sdpSemantics: 'unified-plan',
     };
@@ -48,6 +56,7 @@ function start() {
     config.iceServers = [{ urls: ['stun:stun.l.google.com:19302'] }];
 
     pc.addEventListener('track', function (evt) {
+        console.log('Received track');
         document.getElementById('video').srcObject = evt.streams[0] || new MediaStream([evt.track]);
         waitForTrack(evt.track, evt.streams[0]);
     });
@@ -58,6 +67,7 @@ function start() {
 }
 
 function stop() {
+    console.log('Stopping...');
     document.getElementById('start').style.display = 'inline-block';
     document.getElementById('stop').style.display = 'none';
     document.getElementById('video').srcObject.getTracks().forEach(track => track.stop());
@@ -66,20 +76,22 @@ function stop() {
 }
 
 if (pc) {
-pc.onicecandidate = function (event) {
-    if (event.candidate) {
-        var candidate = event.candidate;
-        var xhr = new XMLHttpRequest();
-        xhr.onload = function () {
-            if (xhr.status === 500) {
-                alert("Server Error: " + xhr.responseText); 
+    pc.onicecandidate = function (event) {
+        if (event.candidate) {
+            console.log('Received ICE candidate');
+            var candidate = event.candidate;
+            var xhr = new XMLHttpRequest();
+            xhr.onload = function () {
+                if (xhr.status === 500) {
+                    alert("Server Error: " + xhr.responseText); 
+                }
             }
+            xhr.onerror = function () { 
+                alert("Request Error"); 
+            }
+            xhr.open('POST', '/candidate');
+            xhr.setRequestHeader('Content-Type', 'application/json');
+            xhr.send(JSON.stringify({ 'candidate': candidate }));
         }
-        xhr.onerror = function () { 
-            alert("Request Error"); 
-        }
-        xhr.open('POST', '/candidate');
-        xhr.setRequestHeader('Content-Type', 'application/json');
-        xhr.send(JSON.stringify({ 'candidate': candidate }));
     }
-}};
+}

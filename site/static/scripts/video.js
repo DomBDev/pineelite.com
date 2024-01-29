@@ -59,7 +59,18 @@ function start() {
 
     document.getElementById('start').style.display = 'none';
     document.getElementById('stop').style.display = 'inline-block';
-    negotiate();
+
+    // Request a video stream from the user's webcam
+    navigator.mediaDevices.getUserMedia({ video: true, audio: false })
+        .then(function(stream) {
+            // Assign the stream to window.stream
+            window.stream = stream;
+            // Call negotiate
+            negotiate();
+        })
+        .catch(function(err) {
+            console.error('Failed to get user media', err);
+        });
 }
 
 function stop() {

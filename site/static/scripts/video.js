@@ -49,17 +49,35 @@ function start() {
     console.log('Starting...');
     var config = { 
         sdpSemantics: 'unified-plan',
+        iceServers: [{ urls: ['stun:stun.l.google.com:19302'] }]
     };
 
     pc = new RTCPeerConnection(config);
-
-    config.iceServers = [{ urls: ['stun:stun.l.google.com:19302'] }];
 
     pc.addEventListener('track', function (evt) {
         console.log('Received track');
         document.getElementById('video').srcObject = evt.streams[0] || new MediaStream([evt.track]);
         waitForTrack(evt.track, evt.streams[0]);
     });
+
+    pc.onicecandidate = function (event) {
+        if (event.candidate) {
+            console.log('Received ICE candidate');
+            var candidate = event.candidate;
+            var xhr = new XMLHttpRequest();
+            xhr.onload = function () {
+                if (xhr.status === 500) {
+                    alert("Server Error: " + xhr.responseText); 
+                }
+            }
+            xhr.onerror = function () { 
+                alert("Request Error"); 
+            }
+            xhr.open('POST', '/candidate');
+            xhr.setRequestHeader('Content-Type', 'application/json');
+            xhr.send(JSON.stringify({ 'candidate': candidate }));
+        }
+    }
 
     document.getElementById('start').style.display = 'none';
     document.getElementById('stop').style.display = 'inline-block';

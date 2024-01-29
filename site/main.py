@@ -110,26 +110,21 @@ socketio = SocketIO(app)
 pc = RTCPeerConnection()
 
 @app.route('/video_page')
-@login_required
 def video_page():
     return render_template('video_page.html')
 
-@app.route('/offer', methods=['POST'])
-async def offer():
-    data = request.get_json()
+@socketio.on('offer')
+def on_offer(data):
     offer = RTCSessionDescription(sdp=data['sdp'], type=data['type'])
     await pc.setRemoteDescription(offer)
     answer = await pc.createAnswer()
     await pc.setLocalDescription(answer)
-    return jsonify({'sdp': pc.localDescription.sdp, 'type': pc.localDescription.type})
+    emit('answer', {'sdp': answer.sdp, 'type': answer.type})
 
-@app.route('/candidate', methods=['POST'])
-def candidate():
-    data = request.get_json()
-    candidate = RTCIceCandidate(sdpMid=data['candidate']['sdpMid'], sdpMLineIndex=data['candidate']['sdpMLineIndex'], candidate=data['candidate']['candidate'])
-    # Add the candidate to your RTCPeerConnection instance
-    # pc.addIceCandidate(candidate)
-    return jsonify({}), 200
+@socketio.on('candidate')
+def on_candidate(data):
+    candidate = RTCIceCandidate(sdpMid=data['sdpMid'], sdpMLineIndex=data['sdpMLineIndex'], candidate=data['candidate'])
+    await pc.addIceCandidate(candidate)
 
 @app.route('/get_response', methods=['POST'])
 def get_response():

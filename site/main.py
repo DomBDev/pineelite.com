@@ -108,6 +108,13 @@ def chat():
 
 socketio = SocketIO(app)
 
+def gen(camera):
+    '''Video streaming generator function.'''
+    while True:
+        frame = camera.get_frame()
+        yield (b'--frame\r\n'
+               b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n\r\n')
+
 @app.route('/security_feed')
 def security_feed():
     ''' View all of the security video feeds from any device accessing the /camera route '''

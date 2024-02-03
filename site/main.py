@@ -108,14 +108,8 @@ def chat():
 
 socketio = SocketIO(app)
 
-def gen(camera):
-    '''Video streaming generator function.'''
-    while True:
-        frame = camera.get_frame()
-        yield (b'--frame\r\n'
-               b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n\r\n')
-
 @app.route('/security_feed')
+@login_required
 def security_feed():
     ''' View all of the security video feeds from any device accessing the /camera route '''
     return render_template('security_feed.html')
@@ -123,8 +117,7 @@ def security_feed():
 @app.route('/camera')
 def camera_feed():
     ''' Stream video from the camera '''
-    return Response(gen(Camera()),
-                    mimetype='multipart/x-mixed-replace; boundary=frame')
+    return render_template('camera.html')
 
 @socketio.on('stream')
 def handle_stream(data):

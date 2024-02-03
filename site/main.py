@@ -105,26 +105,22 @@ def chat():
 
     return render_template('chat.html', chat_history=session['chat_history'])
 
+socketio = SocketIO(app)
 
-socketio = SocketIO(app, async_mode='eventlet')
-pc = RTCPeerConnection()
+@app.route('/security_feed')
+def security_feed():
+    ''' View all of the security video feeds from any device accessing the /camera route '''
+    return render_template('security_feed.html')
 
-@app.route('/video_page')
-def video_page():
-    return render_template('video_page.html')
+@app.route('/camera')
+def camera_feed():
+    ''' Stream video from the camera '''
+    return Response(gen(Camera()),
+                    mimetype='multipart/x-mixed-replace; boundary=frame')
 
-@socketio.on('offer')
-async def on_offer(data):
-    offer = RTCSessionDescription(sdp=data['sdp'], type=data['type'])
-    await pc.setRemoteDescription(offer)
-    answer = await pc.createAnswer()
-    await pc.setLocalDescription(answer)
-    emit('answer', {'sdp': answer.sdp, 'type': answer.type})
-
-@socketio.on('candidate')
-async def on_candidate(data):
-    candidate = RTCIceCandidate(sdpMid=data['sdpMid'], sdpMLineIndex=data['sdpMLineIndex'], candidate=data['candidate'])
-    await pc.addIceCandidate(candidate)
+@socketio.on('stream')
+def handle_stream(data):
+    emit('broadcast', data, broadcast=True)
 
 @app.route('/get_response', methods=['POST'])
 def get_response():

@@ -1,0 +1,15 @@
+<!-- security_feed.html -->
+{% extends "base.html" %}
+
+{% block title %}
+Security Feed Page
+{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='styles/security_feed.css') }}">
+{% endblock %}
+
+{% block content %}
+<video id="video" autoplay></video>
+<script src="{{ url_for('static', filename='scripts/security_feed.js') }}"></script>
+{% endblock %}

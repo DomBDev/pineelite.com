@@ -4,7 +4,8 @@ var socket = io.connect('wss://' + window.location.hostname + ':' + location.por
     secure: true,
     multiplex: false,
     pingTimeout: 120000,
-    pingInterval: 5000
+    pingInterval: 5000,
+    transports: ['websocket']
 });
 
 // Convert DataURI to Blob

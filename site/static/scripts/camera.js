@@ -32,6 +32,12 @@ pc.onicecandidate = event => {
     }
 };
 
-pc.createOffer()
-.then(offer => pc.setLocalDescription(offer) )
-.then(() => socket.emit('offer', pc.localDescription));
+// Handle 'answer' event
+socket.on('answer', function(answer) {
+    pc.setRemoteDescription(new RTCSessionDescription(answer));
+});
+
+// Handle 'new-ice-candidate' event
+socket.on('new-ice-candidate', function(candidate) {
+    pc.addIceCandidate(new RTCIceCandidate(candidate));
+});

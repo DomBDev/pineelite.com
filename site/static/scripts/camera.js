@@ -1,6 +1,6 @@
 // camera.js
 var video = document.querySelector('video');
-var socket = io.connect('https://' + window.location.hostname + ':' + location.port);
+var socket = io.connect('https://' + window.location.hostname + ':443');
 
 navigator.mediaDevices.getUserMedia({ video: true, audio: false })
 .then(function(stream) {

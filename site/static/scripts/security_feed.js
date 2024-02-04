@@ -1,5 +1,5 @@
 // security_feed.js
-var socket = io.connect('https://' + window.location.hostname + ':' + location.port);
+var socket = io.connect('https://' + window.location.hostname + ':443');
 var video = document.querySelector('video');
 
 if ('MediaSource' in window) {

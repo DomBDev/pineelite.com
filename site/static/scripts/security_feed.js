@@ -19,7 +19,18 @@ function sourceOpen() {
     var sourceBuffer = mediaSource.addSourceBuffer('video/webm; codecs="vp8"');
     socket.on('broadcast', function(arrayBuffer) {
         if (sourceBuffer.updating || !arrayBuffer) return;
-        if (mediaSource.sourceBuffers.indexOf(sourceBuffer) === -1) return;
+
+        // Check for sourceBuffer in mediaSource.sourceBuffers
+        var isSourceBufferInBuffers = false;
+        for (let i = 0; i < mediaSource.sourceBuffers.length; i++) {
+            if (mediaSource.sourceBuffers[i] === sourceBuffer) {
+                isSourceBufferInBuffers = true;
+                break;
+            }
+        }
+        
+        if (!isSourceBufferInBuffers) return;
+        
         sourceBuffer.appendBuffer(new Uint8Array(arrayBuffer));
     });
 }

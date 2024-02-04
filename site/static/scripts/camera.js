@@ -12,15 +12,18 @@ var configuration = {
 
 var pc = new RTCPeerConnection(configuration);
 
-navigator.mediaDevices.getUserMedia({video: true, audio: false})
-.then(function(stream) {
-    video.srcObject = stream;
-    video.play();
-
-    stream.getTracks().forEach(track => pc.addTrack(track, stream));
-})
-.catch(function(err) {
-    console.log(err.name + ": " + err.message);
+socket.on('connect', function() {
+    navigator.mediaDevices.getUserMedia({video: true, audio: false})
+   .then(function(stream) {
+       video.srcObject = stream;
+       stream.getTracks().forEach(track => pc.addTrack(track, stream));
+       return pc.createOffer();
+   })
+   .then(offer => pc.setLocalDescription(offer))
+   .then(() => socket.emit('offer', pc.localDescription))
+   .catch(function(err) {
+       console.log(err.name + ": " + err.message);
+   });
 });
 
 pc.onicecandidate = event => {

@@ -120,16 +120,30 @@ def security_feed():
 def camera_feed():
     return render_template('camera.html')
 
+@socketio.on('connect')
+def on_connect():
+    print("Client connected: ", request.sid)
+    if 'camera' in request.url:
+        session['camera_sid'] = request.sid
+        join_room('camera')
+    elif 'security_feed' in request.url:
+        join_room('security_feed')
+
+@socketio.on('disconnect')
+def on_disconnect():
+    print('Client disconnected: ', request.sid)
+
 @socketio.on('offer')
 def handle_offer(payload):
-    emit('offer', payload, broadcast=True)
+    emit('offer', payload, room='security_feed')
 
 @socketio.on('answer')
 def handle_answer(payload):
-    emit('answer', payload, broadcast=True)
+    emit('answer', payload, room=session['camera_sid'])
 
 @socketio.on('new-ice-candidate')
 def handle_new_ice_candidate(payload):
+    emit('new-ice-candidate', payload, room=session['camera_sid'])
     emit('new-ice-candidate', payload, broadcast=True)
 
 @app.route('/get_response', methods=['POST'])

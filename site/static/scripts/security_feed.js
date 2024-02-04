@@ -19,6 +19,7 @@ function sourceOpen() {
     var sourceBuffer = mediaSource.addSourceBuffer('video/webm; codecs="vp8"');
     socket.on('broadcast', function(arrayBuffer) {
         if (sourceBuffer.updating || !arrayBuffer) return;
+        if (mediaSource.sourceBuffers.indexOf(sourceBuffer) === -1) return;
         sourceBuffer.appendBuffer(new Uint8Array(arrayBuffer));
     });
 }

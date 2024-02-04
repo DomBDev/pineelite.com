@@ -25,8 +25,6 @@ from werkzeug.utils import secure_filename
 from aiohttp.web import Application, Response, RouteTableDef
 from aiohttp import web
 from camera import Camera
-from geventwebsocket import WebSocketServer, WebSocketApplication, Resource
-from gevent.pywsgi import WSGIServer
 
 app = Flask(__name__)
 app.secret_key = 'some_secret'

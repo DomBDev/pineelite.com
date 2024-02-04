@@ -1,6 +1,6 @@
 // camera.js
 var video = document.querySelector('video');
-var socket = io.connect(window.location.protocol + '//' + window.location.hostname + ':' + location.port, {
+var socket = io.connect('wss://' + window.location.hostname + ':' + location.port, {
     secure: true,
     multiplex: false
 });

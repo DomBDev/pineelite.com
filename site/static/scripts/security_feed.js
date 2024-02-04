@@ -3,7 +3,8 @@ document.addEventListener('DOMContentLoaded', function() {
         secure: true,
         multiplex: false,
         pingTimeout: 120000,
-        pingInterval: 5000
+        pingInterval: 5000,
+        transports: ['websocket']
     });
     var video = document.querySelector('video');
 

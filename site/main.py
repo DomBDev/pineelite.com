@@ -123,10 +123,10 @@ def camera_feed():
 @socketio.on('connect')
 def on_connect():
     print("Client connected: ", request.sid)
-    if 'camera' in request.url:
+    if '/camera' in request.namespace:
         session['camera_sid'] = request.sid
         join_room('camera')
-    elif 'security_feed' in request.url:
+    elif '/security_feed' in request.namespace:
         join_room('security_feed')
 
 @socketio.on('disconnect')

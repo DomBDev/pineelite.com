@@ -143,6 +143,9 @@ def handle_answer(payload):
 
 @socketio.on('new-ice-candidate')
 def handle_new_ice_candidate(payload):
+    if 'camera_sid' not in session:
+        print("Error: 'camera_sid' not set in session")
+        return
     emit('new-ice-candidate', payload, room=session['camera_sid'])
 
 @app.route('/get_response', methods=['POST'])

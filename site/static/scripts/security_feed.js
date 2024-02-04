@@ -15,6 +15,20 @@ var pc = new RTCPeerConnection(configuration);
 // Queue to store ICE candidates before the remote description is set
 var iceCandidateQueue = [];
 
+// security_feed.js
+socket.on('connect', function() {
+    var offerOptions = {
+        offerToReceiveAudio: 1,
+        offerToReceiveVideo: 1
+    };
+    pc.createOffer(offerOptions)
+    .then(offer => pc.setLocalDescription(offer))
+    .then(() => socket.emit('offer', pc.localDescription))
+    .catch(function(err) {
+        console.log(err.name + ": " + err.message);
+    });
+});
+
 // Handle 'offer' event
 socket.on('offer', function(offer) {
     pc.setRemoteDescription(new RTCSessionDescription(offer))

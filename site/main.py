@@ -106,22 +106,28 @@ def chat():
 
     return render_template('chat.html', chat_history=session['chat_history'])
 
-socketio = SocketIO(app, cors_allowed_origins='*', ping_timeout=120, ping_interval=5, async_mode='gevent')
+socketio = SocketIO(app, cors_allowed_origins='*', async_mode='gevent')
 
 @app.route('/security_feed')
-@login_required
+#@login_required
 def security_feed():
-    ''' View all of the security video feeds from any device accessing the /camera route '''
     return render_template('security_feed.html')
 
 @app.route('/camera')
 def camera_feed():
-    ''' Stream video from the camera '''
     return render_template('camera.html')
 
-@socketio.on('stream')
-def handle_stream(data):
-    emit('broadcast', data, broadcast=True)
+@socketio.on('offer')
+def handle_offer(payload):
+    emit('offer', payload, broadcast=True)
+
+@socketio.on('answer')
+def handle_answer(payload):
+    emit('answer', payload, broadcast=True)
+
+@socketio.on('new-ice-candidate')
+def handle_new_ice_candidate(payload):
+    emit('new-ice-candidate', payload, broadcast=True)
 
 @app.route('/get_response', methods=['POST'])
 def get_response():

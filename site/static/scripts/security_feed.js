@@ -1,43 +1,27 @@
 document.addEventListener('DOMContentLoaded', function() {
-    var socket = io.connect('wss://' + window.location.hostname + ':' + location.port, {
-        secure: true,
-        multiplex: false,
-        pingTimeout: 120000,
-        pingInterval: 5000,
-        transports: ['websocket']
-    });
     var video = document.querySelector('video');
 
-    if (!video) {
-        console.error('Video element not found');
-        return;
-    }
+    var configuration = {  
+        "iceServers": [{ "url": "stun:stun.1.google.com:19302" }] // Google STUN server
+    };
 
-    if ('MediaSource' in window) {
-        var mediaSource = new MediaSource();
-        video.src = URL.createObjectURL(mediaSource);
-        mediaSource.addEventListener('sourceopen', sourceOpen);
-    } else {
-        console.error('MediaSource API is not available in your browser');
-    }
+    var pc = new RTCPeerConnection(configuration);
 
-    function sourceOpen() {
-        var sourceBuffer = mediaSource.addSourceBuffer('video/webm; codecs="vp8"');
-        socket.on('broadcast', function(arrayBuffer) {
-            if (sourceBuffer.updating || !arrayBuffer) return;
+    socket.on('offer', (description) => {
+        pc.setRemoteDescription(description)
+        .then(() => pc.createAnswer())
+        .then(answer => pc.setLocalDescription(answer))
+        .then(() => socket.emit('answer', pc.localDescription));
+    });
 
-            // Check for sourceBuffer in mediaSource.sourceBuffers
-            var isSourceBufferInBuffers = false;
-            for (let i = 0; i < mediaSource.sourceBuffers.length; i++) {
-                if (mediaSource.sourceBuffers[i] === sourceBuffer) {
-                    isSourceBufferInBuffers = true;
-                    break;
-                }
-            }
-            
-            if (!isSourceBufferInBuffers) return;
-            
-            sourceBuffer.appendBuffer(new Uint8Array(arrayBuffer));
-        });
-    }
+    socket.on('new-ice-candidate', (candidate) => {
+        pc.addIceCandidate(candidate);
+    });
+
+    pc.ontrack = event => {
+        // don't set srcObject again if it is already set.
+        if (video.srcObject) return;
+
+        video.srcObject = event.streams[0]; // video element will display the incoming stream
+    };
 });

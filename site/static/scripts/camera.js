@@ -1,48 +1,28 @@
-// camera.js
 var video = document.querySelector('video');
-var socket = io.connect('wss://' + window.location.hostname + ':' + location.port, {
-    secure: true,
-    multiplex: false,
-    pingTimeout: 120000,
-    pingInterval: 5000,
-    transports: ['websocket']
-});
 
-// Convert DataURI to Blob
-function dataURItoBlob(dataURI) {
-    var byteString = atob(dataURI.split(',')[1]);
-    var mimeString = dataURI.split(',')[0].split(':')[1].split(';')[0]
-    var arrayBuffer = new ArrayBuffer(byteString.length);
-    var _ia = new Uint8Array(arrayBuffer);
-    for (var i = 0; i < byteString.length; i++) {
-        _ia[i] = byteString.charCodeAt(i);
-    }
-    var dataView = new DataView(arrayBuffer);
-    var blob = new Blob([dataView], { type: mimeString });
-    return blob;
-}
+var configuration = {  
+  "iceServers": [{ "url": "stun:stun.1.google.com:19302" }] // Google STUN server
+};
 
-navigator.mediaDevices.getUserMedia({ video: true, audio: false })
+var pc = new RTCPeerConnection(configuration);
+
+navigator.mediaDevices.getUserMedia({video: true, audio: false})
 .then(function(stream) {
     video.srcObject = stream;
-    video.onloadedmetadata = function(e) {
-        video.play();
-        var canvas = document.createElement('canvas');
-        canvas.width = video.videoWidth;
-        canvas.height = video.videoHeight;
-        var context = canvas.getContext('2d');
-        setInterval(function() {
-            context.drawImage(video, 0, 0, canvas.width, canvas.height);
-            var data = canvas.toDataURL('image/jpeg');
-            var blob = dataURItoBlob(data);
-            var reader = new FileReader();
-            reader.onload = function() {
-                var arrayBuffer = this.result;
-                socket.emit('stream', arrayBuffer);
-            };
-            reader.readAsArrayBuffer(blob);
-        }, 1000 / 30); // 30 fps
-    };
-}).catch(function(err) {
+    video.play();
+
+    stream.getTracks().forEach(track => pc.addTrack(track, stream));
+})
+.catch(function(err) {
     console.log(err.name + ": " + err.message);
 });
+
+pc.onicecandidate = event => {
+    if(event.candidate) {
+        socket.emit('new-ice-candidate', event.candidate);
+    }
+};
+
+pc.createOffer()
+.then(offer => pc.setLocalDescription(offer) )
+.then(() => socket.emit('offer', pc.localDescription));

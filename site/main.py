@@ -144,7 +144,6 @@ def handle_answer(payload):
 @socketio.on('new-ice-candidate')
 def handle_new_ice_candidate(payload):
     emit('new-ice-candidate', payload, room=session['camera_sid'])
-    emit('new-ice-candidate', payload, broadcast=True)
 
 @app.route('/get_response', methods=['POST'])
 def get_response():

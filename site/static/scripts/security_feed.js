@@ -65,6 +65,9 @@ socket.on('new-ice-candidate', function(candidate) {
 
 // Add track event handler
 pc.ontrack = function(event) {
+    console.log('ontrack event fired'); // Log when the ontrack event is fired
+    console.log('Received streams:', event.streams); // Log the received streams
+
     if (video.srcObject !== event.streams[0]) {
         video.srcObject = event.streams[0];
     }

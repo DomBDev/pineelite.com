@@ -12,6 +12,9 @@ var configuration = {
 
 var pc = new RTCPeerConnection(configuration);
 
+// Queue to store ICE candidates before the remote description is set
+var iceCandidateQueue = [];
+
 socket.on('connect', function() {
     navigator.mediaDevices.getUserMedia({video: true, audio: false})
    .then(function(stream) {
@@ -34,10 +37,22 @@ pc.onicecandidate = event => {
 
 // Handle 'answer' event
 socket.on('answer', function(answer) {
-    pc.setRemoteDescription(new RTCSessionDescription(answer));
+    pc.setRemoteDescription(new RTCSessionDescription(answer))
+    .then(() => {
+        // Add the ICE candidates from the queue to the RTCPeerConnection
+        while (iceCandidateQueue.length) {
+            var candidate = iceCandidateQueue.shift();
+            pc.addIceCandidate(new RTCIceCandidate(candidate));
+        }
+    });
 });
 
 // Handle 'new-ice-candidate' event
 socket.on('new-ice-candidate', function(candidate) {
-    pc.addIceCandidate(new RTCIceCandidate(candidate));
+    if (pc.remoteDescription) {
+        pc.addIceCandidate(new RTCIceCandidate(candidate));
+    } else {
+        // If the remote description is not set, add the candidate to the queue
+        iceCandidateQueue.push(candidate);
+    }
 });

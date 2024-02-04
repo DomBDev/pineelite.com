@@ -1,7 +1,9 @@
 // security_feed.js
 var socket = io.connect('wss://' + window.location.hostname + ':' + location.port, {
     secure: true,
-    multiplex: false
+    multiplex: false,
+    pingTimeout: 120000,
+    pingInterval: 5000
 });
 var video = document.querySelector('video');
 

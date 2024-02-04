@@ -25,6 +25,8 @@ from werkzeug.utils import secure_filename
 from aiohttp.web import Application, Response, RouteTableDef
 from aiohttp import web
 from camera import Camera
+from geventwebsocket import WebSocketServer, WebSocketApplication, Resource
+from gevent.pywsgi import WSGIServer
 
 app = Flask(__name__)
 app.secret_key = 'some_secret'
@@ -106,7 +108,7 @@ def chat():
 
     return render_template('chat.html', chat_history=session['chat_history'])
 
-socketio = SocketIO(app)
+socketio = SocketIO(app, cors_allowed_origins='*', ping_timeout=120, ping_interval=5)
 
 @app.route('/security_feed')
 @login_required

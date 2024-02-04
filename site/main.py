@@ -14,7 +14,7 @@ from aiortc import RTCConfiguration, RTCIceServer, RTCPeerConnection, RTCSession
 from aiortc.contrib.media import MediaBlackhole, MediaPlayer, MediaRecorder
 from flask import Flask, render_template, request, redirect, url_for, flash, make_response, session, jsonify, Response
 from flask_login import LoginManager, login_user, login_required, current_user, logout_user
-from flask_socketio import SocketIO, emit
+from flask_socketio import SocketIO, emit, join_room
 from flask_sqlalchemy import SQLAlchemy
 from gevent import monkey
 monkey.patch_all()
@@ -123,11 +123,9 @@ def camera_feed():
 @socketio.on('connect')
 def on_connect():
     print("Client connected: ", request.sid)
+    join_room('video_room')
     if '/camera' in request.namespace:
         session['camera_sid'] = request.sid
-        join_room('camera')
-    elif '/security_feed' in request.namespace:
-        join_room('security_feed')
 
 @socketio.on('disconnect')
 def on_disconnect():
@@ -135,18 +133,18 @@ def on_disconnect():
 
 @socketio.on('offer')
 def handle_offer(payload):
-    emit('offer', payload, room='security_feed')
+    emit('offer', payload, room='video_room')
 
 @socketio.on('answer')
 def handle_answer(payload):
-    emit('answer', payload, room=session['camera_sid'])
+    emit('answer', payload, room='video_room')
 
 @socketio.on('new-ice-candidate')
 def handle_new_ice_candidate(payload):
     if 'camera_sid' not in session:
         print("Error: 'camera_sid' not set in session")
         return
-    emit('new-ice-candidate', payload, room=session['camera_sid'])
+    emit('new-ice-candidate', payload, room='video_room')
 
 @app.route('/get_response', methods=['POST'])
 def get_response():

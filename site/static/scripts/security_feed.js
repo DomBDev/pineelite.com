@@ -1,5 +1,8 @@
 // security_feed.js
-var socket = io.connect('https://' + window.location.hostname + ':443');
+var socket = io.connect(window.location.protocol + '//' + window.location.hostname + ':' + location.port, {
+    secure: true,
+    multiplex: false
+});
 var video = document.querySelector('video');
 
 if ('MediaSource' in window) {
@@ -12,8 +15,8 @@ if ('MediaSource' in window) {
 
 function sourceOpen() {
     var sourceBuffer = mediaSource.addSourceBuffer('video/webm; codecs="vp8"');
-    socket.on('broadcast', function(data) {
-        var uint8Array = new Uint8Array(data);
-        sourceBuffer.appendBuffer(uint8Array);
+    socket.on('broadcast', function(arrayBuffer) {
+        if (sourceBuffer.updating || !arrayBuffer) return;
+        sourceBuffer.appendBuffer(new Uint8Array(arrayBuffer));
     });
 }

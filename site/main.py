@@ -124,8 +124,6 @@ def camera_feed():
 def on_connect():
     print("Client connected: ", request.sid)
     join_room('video_room')
-    if '/camera' in request.namespace:
-        session['camera_sid'] = request.sid
 
 @socketio.on('disconnect')
 def on_disconnect():
@@ -141,9 +139,6 @@ def handle_answer(payload):
 
 @socketio.on('new-ice-candidate')
 def handle_new_ice_candidate(payload):
-    if 'camera_sid' not in session:
-        print("Error: 'camera_sid' not set in session")
-        return
     emit('new-ice-candidate', payload, room='video_room')
 
 @app.route('/get_response', methods=['POST'])

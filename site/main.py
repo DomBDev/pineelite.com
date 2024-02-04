@@ -131,14 +131,17 @@ def on_disconnect():
 
 @socketio.on('offer')
 def handle_offer(payload):
+    print('Offer', request.sid)
     emit('offer', payload, room='video_room')
 
 @socketio.on('answer')
 def handle_answer(payload):
+    print('Answer', request.sid)
     emit('answer', payload, room='video_room')
 
 @socketio.on('new-ice-candidate')
 def handle_new_ice_candidate(payload):
+    print('New ice candidate', request.sid)
     emit('new-ice-candidate', payload, room='video_room')
 
 @app.route('/get_response', methods=['POST'])

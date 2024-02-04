@@ -12,11 +12,21 @@ var configuration = {
 
 var pc = new RTCPeerConnection(configuration);
 
+// Queue to store ICE candidates before the remote description is set
+var iceCandidateQueue = [];
+
 // Handle 'offer' event
 socket.on('offer', function(offer) {
     pc.setRemoteDescription(new RTCSessionDescription(offer))
     .then(() => pc.createAnswer())
     .then(answer => pc.setLocalDescription(answer))
+    .then(() => {
+        // Add the ICE candidates from the queue to the RTCPeerConnection
+        while (iceCandidateQueue.length) {
+            var candidate = iceCandidateQueue.shift();
+            pc.addIceCandidate(new RTCIceCandidate(candidate));
+        }
+    })
     .then(() => socket.emit('answer', pc.localDescription))
     .catch(function(err) {
         console.log(err.name + ": " + err.message);
@@ -31,7 +41,12 @@ pc.onicecandidate = event => {
 
 // Handle 'new-ice-candidate' event
 socket.on('new-ice-candidate', function(candidate) {
-    pc.addIceCandidate(new RTCIceCandidate(candidate));
+    if (pc.remoteDescription) {
+        pc.addIceCandidate(new RTCIceCandidate(candidate));
+    } else {
+        // If the remote description is not set, add the candidate to the queue
+        iceCandidateQueue.push(candidate);
+    }
 });
 
 // Add track event handler

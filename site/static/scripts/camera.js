@@ -15,6 +15,19 @@ var pc = new RTCPeerConnection(configuration);
 // Queue to store ICE candidates before the remote description is set
 var iceCandidateQueue = [];
 
+// Get the camera stream
+navigator.mediaDevices.getUserMedia({video: true, audio: true})
+.then(stream => {
+    // Display the local stream in the video element
+    video.srcObject = stream;
+
+    // Add the tracks from the stream to the RTCPeerConnection
+    stream.getTracks().forEach(track => pc.addTrack(track, stream));
+})
+.catch(function(err) {
+    console.log(err.name + ": " + err.message);
+});
+
 // Handle 'offer' event
 socket.on('offer', function(offer) {
     pc.setRemoteDescription(new RTCSessionDescription(offer))
@@ -48,10 +61,3 @@ socket.on('new-ice-candidate', function(candidate) {
         iceCandidateQueue.push(candidate);
     }
 });
-
-// Add track event handler
-pc.ontrack = function(event) {
-    if (video.srcObject !== event.streams[0]) {
-        video.srcObject = event.streams[0];
-    }
-};

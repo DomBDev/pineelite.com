@@ -2,7 +2,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
     var socket = io.connect('wss://' + window.location.hostname + ':' + location.port, {
         secure: true,
-        multiplex: false,
         pingTimeout: 60000,
         transports: ['websocket']
     });

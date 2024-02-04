@@ -25,9 +25,12 @@ from werkzeug.utils import secure_filename
 from aiohttp.web import Application, Response, RouteTableDef
 from aiohttp import web
 from camera import Camera
+from flask_cors import CORS
 
 app = Flask(__name__)
 app.secret_key = 'some_secret'
+CORS(app, resources={r"/*": {"origins": "*"}})
+app.config['DEBUG'] = True
 
 logging.basicConfig(level=logging.INFO)
 

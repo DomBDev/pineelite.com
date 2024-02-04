@@ -1,16 +1,16 @@
-<!-- security_feed.html -->
+<!-- camera.html -->
 {% extends "base.html" %}
 
 {% block title %}
-Security Feed Page
+Camera
 {% endblock %}
 
 {% block extra_css %}
-<link rel="stylesheet" href="{{ url_for('static', filename='styles/security_feed.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='styles/camera.css') }}">
 {% endblock %}
 
 {% block content %}
 <video id="video" autoplay></video>
-<script src="{{ url_for('static', filename='scripts/socket.io.min.js') }}"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.min.js"></script>
 <script src="{{ url_for('static', filename='scripts/camera.js') }}"></script>
 {% endblock %}

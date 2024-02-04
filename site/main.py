@@ -106,7 +106,7 @@ def chat():
 
     return render_template('chat.html', chat_history=session['chat_history'])
 
-socketio = SocketIO(app, cors_allowed_origins='*', ping_timeout=120, ping_interval=5)
+socketio = SocketIO(app, cors_allowed_origins='*', ping_timeout=120, ping_interval=5, async_mode='gevent')
 
 @app.route('/security_feed')
 @login_required

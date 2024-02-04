@@ -15,18 +15,22 @@ var pc = new RTCPeerConnection(configuration);
 // Queue to store ICE candidates before the remote description is set
 var iceCandidateQueue = [];
 
-socket.on('connect', function() {
-    navigator.mediaDevices.getUserMedia({video: true, audio: false})
-   .then(function(stream) {
-       video.srcObject = stream;
-       stream.getTracks().forEach(track => pc.addTrack(track, stream));
-       return pc.createOffer();
-   })
-   .then(offer => pc.setLocalDescription(offer))
-   .then(() => socket.emit('offer', pc.localDescription))
-   .catch(function(err) {
-       console.log(err.name + ": " + err.message);
-   });
+// Handle 'offer' event
+socket.on('offer', function(offer) {
+    pc.setRemoteDescription(new RTCSessionDescription(offer))
+    .then(() => pc.createAnswer())
+    .then(answer => pc.setLocalDescription(answer))
+    .then(() => {
+        // Add the ICE candidates from the queue to the RTCPeerConnection
+        while (iceCandidateQueue.length) {
+            var candidate = iceCandidateQueue.shift();
+            pc.addIceCandidate(new RTCIceCandidate(candidate));
+        }
+    })
+    .then(() => socket.emit('answer', pc.localDescription))
+    .catch(function(err) {
+        console.log(err.name + ": " + err.message);
+    });
 });
 
 pc.onicecandidate = event => {
@@ -34,18 +38,6 @@ pc.onicecandidate = event => {
         socket.emit('new-ice-candidate', event.candidate);
     }
 };
-
-// Handle 'answer' event
-socket.on('answer', function(answer) {
-    pc.setRemoteDescription(new RTCSessionDescription(answer))
-    .then(() => {
-        // Add the ICE candidates from the queue to the RTCPeerConnection
-        while (iceCandidateQueue.length) {
-            var candidate = iceCandidateQueue.shift();
-            pc.addIceCandidate(new RTCIceCandidate(candidate));
-        }
-    });
-});
 
 // Handle 'new-ice-candidate' event
 socket.on('new-ice-candidate', function(candidate) {
@@ -56,3 +48,10 @@ socket.on('new-ice-candidate', function(candidate) {
         iceCandidateQueue.push(candidate);
     }
 });
+
+// Add track event handler
+pc.ontrack = function(event) {
+    if (video.srcObject !== event.streams[0]) {
+        video.srcObject = event.streams[0];
+    }
+};

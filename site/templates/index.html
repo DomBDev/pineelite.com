@@ -51,6 +51,50 @@
                     <span class="carousel-control-next-icon" aria-hidden="true"></span>
                 </a>
             </div>
+            {% if current_user.is_active %}
+                <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#editPortfolioModal">Edit Slideshow</button>
+
+                <div class="modal fade
+                " id="editPortfolioModal" tabindex="-1" aria-labelledby="editPortfolioModalLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="editPortfolioModalLabel">Edit Portfolio Slideshow</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <form action="/edit_portfolio" method="post" enctype="multipart/form-data">
+                                    <div class="mb-3">
+                                        <label for="image" class="form-label">Upload Image</label>
+                                        <input type="file" class="form-control" id="image" name="image" required>
+                                    </div>
+                                    <button type="submit" class="btn btn-primary">Upload</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!--- delete slide item button-->
+                <button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deletePortfolioModal">Delete Item</button>
+
+                <div class="modal fade
+                " id="deletePortfolioModal" tabindex="-1" aria-labelledby="deletePortfolioModalLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="deletePortfolioModalLabel">Delete Item</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body
+                            ">
+                                <form action="/delete_portfolio" method="post">
+                                    <button type="submit" class="btn btn-danger">Delete</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endif %}
         </div>
     </section>
 

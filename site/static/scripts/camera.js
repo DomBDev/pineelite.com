@@ -16,12 +16,10 @@ var pc = new RTCPeerConnection(configuration);
 var iceCandidateQueue = [];
 
 // Get the camera stream
-navigator.mediaDevices.getUserMedia({video: true, audio: true})
+navigator.mediaDevices.getUserMedia({video: true})
 .then(stream => {
-    // Display the local stream in the video element
     video.srcObject = stream;
-
-    // Add the tracks from the stream to the RTCPeerConnection
+    // Add the video track to the RTCPeerConnection
     stream.getTracks().forEach(track => pc.addTrack(track, stream));
 })
 .catch(function(err) {

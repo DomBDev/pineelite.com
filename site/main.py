@@ -121,6 +121,9 @@ def contact():
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
+    if current_user.is_active:
+        flash('Logged in successfully.', 'success')
+        return redirect(url_for('index'))
     if request.method == 'POST':
         user = User.query.filter_by(username=request.form['username']).first()
         if user and check_password_hash(user.password_hash, request.form['password']):

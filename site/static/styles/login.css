@@ -11,9 +11,11 @@ footer {
 .login-section {
     width: 100%;
     max-width: 400px;
-    margin: 0 auto;
+    margin: 1em auto;
     padding: 20px;
     text-align: center;
+    background-color: var(--bs-light);
+    box-shadow: 0 1rem 3rem rgba(0,0,0, .1);
 }
 
 .login-section h1 {
@@ -28,24 +30,41 @@ footer {
 
 .login-section form input[type="text"],
 .login-section form input[type="password"] {
-    padding: 10px;
-    margin-bottom: 10px;
     border: none;
-    border-radius: 5px;
+    width: 100%;
+    margin: 0;
+    padding: 10px;
+    border-radius: 0;
+    color: var(--bs-dark);
+    background-color: var(--bs-light);
+    background: transparent;
+    transition: border-bottom-color 0.3s ease;
+    border-bottom: 2px solid var(--bs-dark);
+}
+
+.login-section form input[type="text"]:focus,
+.login-section form input[type="password"]:focus {
+    border-bottom-color: var(--bs-primary);
+    outline: none;
 }
 
 .login-section form input[type="submit"] {
-    padding: 10px;
+    background-color: var(--bs-primary);
     border: none;
-    border-radius: 5px;
-    background-color: var(--light-fg);
-    color: var(--base-bg);
+    color: var(--bs-light);
+    padding: 10px 20px;
+    margin: 10px 0;
+    transition: all var(--transition-speed) ease-in-out;
     cursor: pointer;
-    transition: background-color 0.3s ease;
+    text-transform: uppercase;
+    font-weight: 700;
+    flex-grow: 1;
+    text-align: center;
 }
 
 .login-section form input[type="submit"]:hover {
-    background-color: var(--light-bg);
+    background-color: var(--bs-dark);
+    color: var(--bs-primary);
 }
 
 .register {
@@ -54,7 +73,7 @@ footer {
 }
 
 .register a {
-    color: var(--light-bg);
+    color: var(--bs-primary);
     text-decoration: none;
 }
 

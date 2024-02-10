@@ -1,0 +1,17 @@
+<!-- camera.html -->
+{% extends "base.html" %}
+
+{% block title %}
+Game
+{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='styles/game.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="canvasContainer">
+    <canvas id="gameCanvas"></canvas>
+</div>
+<script src="{{ url_for('static', filename='scripts/game.js') }}"></script>
+{% endblock %}

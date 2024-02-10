@@ -24,12 +24,10 @@ from werkzeug.security import check_password_hash, generate_password_hash
 from werkzeug.utils import secure_filename
 from aiohttp.web import Application, Response, RouteTableDef
 from aiohttp import web
-from camera import Camera
 from flask_cors import CORS
 
 app = Flask(__name__)
 app.secret_key = 'some_secret'
-CORS(app, resources={r"/*": {"origins": "*"}})
 app.config['DEBUG'] = True
 
 logging.basicConfig(level=logging.INFO)
@@ -109,41 +107,6 @@ def chat():
 
     return render_template('chat.html', chat_history=session['chat_history'])
 
-socketio = SocketIO(app, cors_allowed_origins='*', async_mode='gevent')
-
-@app.route('/security_feed')
-#@login_required
-def security_feed():
-    return render_template('security_feed.html')
-
-@app.route('/camera')
-def camera_feed():
-    return render_template('camera.html')
-
-@socketio.on('connect')
-def on_connect():
-    print("Client connected: ", request.sid)
-    join_room('video_room')
-
-@socketio.on('disconnect')
-def on_disconnect():
-    print('Client disconnected: ', request.sid)
-
-@socketio.on('offer')
-def handle_offer(payload):
-    print('Offer', request.sid)
-    emit('offer', payload, room='video_room')
-
-@socketio.on('answer')
-def handle_answer(payload):
-    print('Answer', request.sid)
-    emit('answer', payload, room='video_room')
-
-@socketio.on('new-ice-candidate')
-def handle_new_ice_candidate(payload):
-    print('New ice candidate', request.sid)
-    emit('new-ice-candidate', payload, room='video_room')
-
 @app.route('/get_response', methods=['POST'])
 def get_response():
     message = request.form['message']
@@ -159,6 +122,10 @@ def get_response():
     assistant_message = response.choices[0].message.content
     session['chat_history'].append({'role': 'assistant', 'content': assistant_message})
     return assistant_message
+
+@app.route('/game', methods=['GET', 'POST'])
+def game():
+    return render_template('game.html')
 
 @app.route('/clear_chat', methods=['POST'])
 def clear_chat():
@@ -318,5 +285,4 @@ if __name__ == '__main__':
     with app.app_context():
             db.create_all()
     app.run(debug=True)
-    socketio.run(app)
     web.run_app(aiohttp_app)

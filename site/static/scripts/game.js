@@ -54,9 +54,25 @@ function drawPlayer() {
 }
 
 function drawPlatforms() {
-    ctx.fillStyle = "#FFA07A";
     for (var i = 0; i < platforms.length; i++) {
-        ctx.fillRect(platforms[i].x - camera.x, platforms[i].y - camera.y, platforms[i].width, platforms[i].height);
+        if (platforms[i].type === "solid") {
+            ctx.fillStyle = "#FFA500";
+            ctx.fillRect(platforms[i].x - camera.x, platforms[i].y - camera.y, platforms[i].width, platforms[i].height);
+        } else if (platforms[i].type === "disappearing") {
+            ctx.fillStyle = "#FFA07A";
+            ctx.fillRect(platforms[i].x - camera.x, platforms[i].y - camera.y, platforms[i].width, platforms[i].height);
+        } else {
+            ctx.fillStyle = "#FF0000";
+            ctx.fillRect(platforms[i].x - camera.x, platforms[i].y - camera.y, platforms[i].width, platforms[i].height);
+        }
+        // Draw the lifetime of the disappearing platform
+        if (platforms[i].type === "disappearing") {
+            ctx.fillStyle = "#FFFFFF";
+            ctx.textAlign = "center"; // Set text alignment to center
+            ctx.textBaseline = "middle"; // Set text baseline to middle
+            ctx.font = "20px Arial";
+            ctx.fillText(platforms[i].lifetime, platforms[i].x - camera.x + platforms[i].width / 2, platforms[i].y - camera.y + platforms[i].height / 2);
+        }
     }
 }
 
@@ -150,6 +166,9 @@ function updatePlayer() {
                 player.dy = 0;
                 player.jumping = false;
                 player.grounded = true;
+                if (p.type === "disappearing" && p.lifetime > 0) {
+                    p.lifetime--;
+                }
             }
             else if (player.dy < 0 && player.y - player.dy >= p.y) {
                 player.y = p.y + p.height;
@@ -185,7 +204,9 @@ function startGame() {
         x: canvas.width / 3 * 2,
         y: canvas.height - (Math.random() * 100 + 100),
         width: Math.random() * 100 + 100,
-        height: 20
+        height: 20,
+        type: "solid",
+        lifetime: -1
     });
 
     lands.push({
@@ -244,22 +265,28 @@ function generateNextPlatform() {
 
     if (direction === "Up") {
         var newY = lastGeneratedY - (Math.random() * (max_gapY-min_gapY) + min_gapY);
+        var newType = ["solid", "disappearing"][Math.floor(Math.random() * 2)];
         newY = Math.max(newY, 0); // Ensure newY is not less than 0
         platforms.push({
             x: lastGeneratedX + gapX,
             y: newY,
             width: platformWidth,
-            height: 20
+            height: 20,
+            type: newType,
+            lifetime: newType === "disappearing" ? Math.floor(Math.random()*30+10) : -1
         });
     }
     else {
         var newY = Math.random() * (canvas.height-lastGeneratedY-min_gapY) + lastGeneratedY + min_gapY;
+        var newType = ["solid", "disappearing"][Math.floor(Math.random() * 2)];
         newY = Math.min(newY, canvas.height - 150); // Ensure newY is not greater than canvas.height - 20
         platforms.push({
             x: lastGeneratedX + gapX,
             y: newY,
             width: platformWidth,
-            height: 20
+            height: 20,
+            type: newType,
+            lifetime: newType === "disappearing" ? Math.floor(Math.random()*30+10) : -1
         });
     }
 }
@@ -310,6 +337,14 @@ function gameLoop() {
             // Generate next platform if necessary
             if (player.x > platforms[platforms.length - 1].x + platforms[platforms.length - 1].width - canvas.width / 2) {
                 generateNextPlatform();
+            }
+
+            for (var i = 0; i < platforms.length; i++) {
+                if (platforms[i].type === "disappearing") {
+                    if (platforms[i].lifetime === 0) {
+                        platforms.splice(i, 1);
+                    }
+                }
             }
         }
     }

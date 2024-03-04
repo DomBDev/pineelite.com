@@ -10,36 +10,66 @@
         </form>
         <div id="messages">
             {% for message in chat_history %}
-            <div><strong>{{ "Bot" if message.role == 'assistant' else "You" if message.role == 'user' else "System"}}:</strong> {{ message.content }}</div>
+            {% if message.role == 'user' %}
+                <div class='user-message'><span class="user-role"><strong>
+            {% else %}
+                <div class='bot-message'><span class="bot-role"><strong>
+            {% endif %}
+            <!---Incorporate a copy button-->
+            {{ message.role.capitalize() }}:</strong></span><br> {{ message.content | safe }}</div>
             {% if message.role == 'assistant' or message.role == 'system' %}
-            <br>
             {% endif %}
             {% endfor %}
         </div>
         <form id="send-message">
-            <input type="text" id="message-input" autocomplete="off">
+            <textarea rows="1" id="message-input" autocomplete="off"></textarea>
             <button type="submit">Send</button>
         </form>
     </div>
 </section>
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 <script>
 $(document).ready(function() {
+    $('#message-input').focus();
+    chat_window = $('#chat-window')
+    chat_window.resizable({
+        handles: 'e'
+    });
+
+    scrollToBottom();
     $('#send-message').on('submit', function(e) {
         e.preventDefault();
         var message = $('#message-input').val();
-        $('#message-input').val('');
-        $('#messages').append('<div><strong>You:</strong> ' + message + '</div>');
+        $('#message-input').val('').css('height', 'auto'); // reset height
+        $('#messages').append('<div class="user-message"><strong>You:</strong> ' + message + '</div>');
+        setTimeout(scrollToBottom, 0);
         $.post('{{ url_for("get_response") }}', { 'message': message })
             .done(function(response) {
-                $('#messages').append('<div><strong>Bot:</strong> ' + response + '</div>');
+                $('#messages').append('<div class="bot-message"><strong>Bot:</strong> ' + response + '</div>');
+                setTimeout(scrollToBottom, 0);
             });
     });
+    function scrollToBottom() {
+        const chatWindow = document.getElementById('messages');
+        chatWindow.scrollTop = chatWindow.scrollHeight;
+    }
+    $('#message-input').on('keydown', function(e) {
+    if (e.key == 'Enter' && !e.shiftKey) {
+        e.preventDefault();
+        $('#send-message').submit();
+    }
+});
+    $('#message-input').on('input', function() {
+    this.style.height = 'auto';
+    this.style.height = (this.scrollHeight) + 'px';
+});
 });
 </script>
 {% endblock %}
 
 {% block extra_css %}
+<link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
 <link rel="stylesheet" href="{{ url_for('static', filename='styles/chat.css') }}">
 {% endblock %}

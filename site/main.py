@@ -8,6 +8,7 @@ import os
 import time
 from queue import Queue
 from threading import Thread
+from markdown import markdown
 
 import aiohttp
 from aiortc import RTCConfiguration, RTCIceServer, RTCPeerConnection, RTCSessionDescription, VideoStreamTrack
@@ -16,8 +17,6 @@ from flask import Flask, render_template, request, redirect, url_for, flash, mak
 from flask_login import LoginManager, login_user, login_required, current_user, logout_user
 from flask_socketio import SocketIO, emit, join_room
 from flask_sqlalchemy import SQLAlchemy
-from gevent import monkey
-monkey.patch_all()
 import logging
 from openai import OpenAI
 from werkzeug.security import check_password_hash, generate_password_hash
@@ -114,24 +113,30 @@ def get_response():
     session.modified = True  # Add this line
 
     # Pass the entire chat history to the model for context
-    response = openai.chat.completions.create(
-        model="gpt-3.5-turbo",
-        messages=session['chat_history']
-    )
+    try:
+        response = openai.chat.completions.create(
+            model="gpt-3.5-turbo",
+            messages=session['chat_history']
+        )
+    except Exception as e:
+        print(e)
+        return str(e)
 
-    assistant_message = response.choices[0].message.content
+    assistant_message = markdown(response.choices[0].message.content, extensions=[
+        'extra',
+        ])
     session['chat_history'].append({'role': 'assistant', 'content': assistant_message})
     return assistant_message
-
-@app.route('/game', methods=['GET', 'POST'])
-def game():
-    return render_template('game.html')
 
 @app.route('/clear_chat', methods=['POST'])
 def clear_chat():
     session['chat_history'] = [{'role': 'system', 'content': 'You are PineBot, a helpful chat ai used for anything.'}]
     session.modified = True
     return redirect(url_for('chat'))
+
+@app.route('/game', methods=['GET', 'POST'])
+def game():
+    return render_template('game.html')
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():

@@ -1,4 +1,7 @@
 // game.js
+
+$(document).ready(function() {
+
 var canvas = document.getElementById('gameCanvas');
 
 canvas.width = window.innerWidth * 0.8;
@@ -432,3 +435,4 @@ window.addEventListener('keyup', function(e) {
 });
 
 gameLoop();
+}

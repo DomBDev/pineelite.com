@@ -14,7 +14,7 @@ from aiortc import RTCConfiguration, RTCIceServer, RTCPeerConnection, RTCSession
 from aiortc.contrib.media import MediaBlackhole, MediaPlayer, MediaRecorder
 from flask import Flask, render_template, request, redirect, url_for, flash, make_response, session, jsonify, Response
 from flask_login import LoginManager, login_user, login_required, current_user, logout_user
-from flask_socketio import SocketIO, manage_session, emit
+from flask_socketio import SocketIO, emit
 from flask_sqlalchemy import SQLAlchemy
 import logging
 from openai import OpenAI

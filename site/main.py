@@ -14,7 +14,7 @@ from aiortc import RTCConfiguration, RTCIceServer, RTCPeerConnection, RTCSession
 from aiortc.contrib.media import MediaBlackhole, MediaPlayer, MediaRecorder
 from flask import Flask, render_template, request, redirect, url_for, flash, make_response, session, jsonify, Response
 from flask_login import LoginManager, login_user, login_required, current_user, logout_user
-from flask_socketio import SocketIO, emit
+from flask_socketio import SocketIO, manage_session, emit
 from flask_sqlalchemy import SQLAlchemy
 import logging
 from openai import OpenAI
@@ -281,7 +281,7 @@ def clear_chat():
 def game():
     return render_template('game.html')
 
-socketio = socketio = SocketIO(app, max_decode_packets=1000, max_http_buffer_size=1000000)#  engineio_logger=True,
+socketio = socketio = SocketIO(app, max_decode_packets=1000, max_http_buffer_size=1000000, async_mode='eventlet')#  engineio_logger=True,
 socketio.init_app(app, cors_allowed_origins="*")
 
 players = {}

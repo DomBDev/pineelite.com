@@ -106,29 +106,77 @@ function drawLands() {
 var players = {};
 var player_id = generateUserId(Object.keys(players));
 var socket = io('/game');
+var peer;
 
 socket.on('connect', () => {
     console.log('Connected to server.');
-    socket.emit('player_data', {
-        id: player_id,
-        x: player.x,
-        y: player.y
-    });
+    initializePeer();
 });
 
-socket.on('player_data', function(updatedPlayers) {
-    console.log("Updated players data:");
-    players = updatedPlayers;
-    console.log(players);
-});
+function initializePeer() {
+    // Create a PeerJS instance
+    peer = new Peer();
 
-function send_player_data(id, x, y) {
-    console.log("Sending player data: " + id + " " + x + " " + y);
-    socket.emit('player_data', {
-        id: id,
-        x: x,
-        y: y
+    // Handle successful connection to the PeerJS server
+    peer.on('open', function() {
+        console.log('Connected to PeerJS server.');
+
+        // Emit the player ID and PeerJS ID to the server
+        socket.emit('player_data', {
+            id: player_id,
+            x: player.x,
+            y: player.y,
+            peerId: peer.id
+        });
     });
+
+    // Handle incoming connection requests from other players
+    peer.on('connection', function(connection) {
+        console.log('Received connection request from ' + connection.peer);
+
+        // Handle data exchange with the connecting player
+        handleDataExchange(connection);
+    });
+}
+
+function processReceivedData(data) {
+    // Update the game state based on the received data
+    for (var id in data) {
+        if (id === player_id) {
+            continue;
+        }
+        if (players[id]) {
+            players[id].x = data[id].x;
+            players[id].y = data[id].y;
+        } else {
+            players[id] = {
+                x: data[id].x,
+                y: data[id].y
+            };
+        }
+    }
+}
+
+function handleDataExchange(connection) {
+    // Receive incoming data from the connecting player
+    connection.on('data', function(data) {
+        console.log('Received data from ' + connection.peer + ':', data);
+
+        // Process the received data and update the game state
+        processReceivedData(data);
+
+        // Broadcast the updated game state to all players
+        broadcastGameState();
+    });
+
+    // Send game state data to the connecting player
+    function sendDataToPlayer() {
+        var data = {}; // Prepare the game state data
+        connection.send(data);
+    }
+
+    // Invoke the function to send game state data initially
+    sendDataToPlayer();
 }
 
 function drawScore() {

@@ -283,30 +283,33 @@ def game():
 
 socketio = socketio = SocketIO(app, max_decode_packets=1000, max_http_buffer_size=1000000, async_mode='eventlet')#  engineio_logger=True,
 socketio.init_app(app, cors_allowed_origins="*")
-
 players = {}
+
 
 @socketio.on('connect', namespace='/game')
 def handle_connect():
     print('Client connected')
     emit('player_data', players)
 
-@socketio.on('disconnect', namespace='/game')
-def handle_disconnect():
-    print('Client disconnected')
-    emit('player_data', players, broadcast=True)
-    
 
 @socketio.on('player_data', namespace='/game')
 def handle_player_data(data):
     print('Player state update:', data)
-    
+
     player_id = data['id']
     player_x = data['x']
     player_y = data['y']
-    active = True 
+    peer_id = data['peerId']
+    active = True
 
-    players[player_id] = {"x": player_x, "y": player_y, "active": active}
+    players[player_id] = {"x": player_x, "y": player_y, "peerId": peer_id, "active": active}
+
+    # Establish peer-to-peer connections with other players
+    for id, player in players.items():
+        if id != player_id:
+            connection = socketio.server.enter_room(request.sid, player['peerId'])
+            if connection:
+                print('Established WebRTC connection between ', player_id, ' and ', id)
 
     emit('player_data', players, broadcast=True)
 

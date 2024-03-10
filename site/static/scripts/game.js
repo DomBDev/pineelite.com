@@ -178,28 +178,34 @@ function playerDeath() {
 }
 
 // Listen for device orientation events
-window.addEventListener('deviceorientation', function(event) {
-    // event.alpha is the compass direction the device is facing in degrees
-    // event.beta is the device front-to-back tilt in degrees (-180 to 180)
-    // event.gamma is the device left-to-right tilt in degrees (-90 to 90)
+$(window).on('deviceorientation', function(event) {
+    // event.originalEvent.alpha is the compass direction the device is facing in degrees
+    // event.originalEvent.beta is the device front-to-back tilt in degrees (-180 to 180)
+    // event.originalEvent.gamma is the device left-to-right tilt in degrees (-90 to 90)
 
-    // Use event.gamma for left and right controls
-    if (event.gamma > 10) {
+    // Use event.originalEvent.gamma for left and right controls
+    if (event.originalEvent.gamma > 10) {
         keys.ArrowRight = true;
+        keys.ArrowLeft = false;
     }
-    if (event.gamma < -10) {
+    if (event.originalEvent.gamma < -10) {
         keys.ArrowLeft = true;
+        keys.ArrowRight = false;
     }
-}, true);
+    if (event.originalEvent.gamma > -10 && event.originalEvent.gamma < 10) {
+        keys.ArrowRight = false;
+        keys.ArrowLeft = false;
+    }
+});
 
 // Listen for touch events
-window.addEventListener('touchstart', function(event) {
+$(window).on('touchstart', function(event) {
     // User tapped on the screen
     if (!player.jumping && player.grounded) {
         player.dy = -player.jumpForce;
         player.jumping = true;
     }
-}, false);
+});
 
 function updatePlayer() {
     var max_speed = 35;
@@ -256,6 +262,7 @@ function updatePlayer() {
 
     for (var i = 0; i<players.length; i++) {
         var p = players[i];
+        if (player === p) continue; // Skip if player is p
         if (player.x < p.x + p.width && player.x + player.width > p.x && player.y < p.y + p.height && player.y + player.height > p.y) {
             if (player.dy > 0 && player.y + player.height - player.dy <= p.y + p.height) {
                 player.y = p.y - player.height;

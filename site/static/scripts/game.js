@@ -133,9 +133,10 @@ socket.on('players', function(data) {
 });
 
 peer.on('connection', function(conn) {
-    console.log("connection received from: " + conn.peer);
 
-    connections[conn.peer] = peer.connect(conn.peer);
+    if (connections[conn.peer] !== undefined) {
+        connections[conn.peer] = peer.connect(conn.peer);
+    }
 
     conn.on('data', function(data) {
         console.log("received data: " + JSON.stringify(data));

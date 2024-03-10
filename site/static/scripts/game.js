@@ -135,6 +135,12 @@ socket.on('players', function(data) {
 peer.on('connection', function(conn) {
     console.log("connection received from: " + conn.peer);
     connections[conn.peer] = conn;
+    conn.send({
+        'id': player_id,
+        'x': player.x,
+        'y': player.y
+    });
+    
     conn.on('data', function(data) {
         console.log("received data: " + JSON.stringify(data));
         players[data.id] = {

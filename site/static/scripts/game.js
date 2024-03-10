@@ -434,7 +434,6 @@ function gameLoop() {
             drawScore();
             drawLands();
             updatePlayer();
-            send_player_data(player_id, player.x, player.y);
             ctx.fillText(player_id, 1000, 10);
 
             cleanup();

@@ -106,6 +106,11 @@ var socket = io('/game');
 
 socket.on('connect', () => {
     console.log('Connected to server.');
+    socket.emit('player_data', {
+        id: player_id,
+        x: player.x,
+        y: player.y
+    });
 });
 
 socket.on('player_data', function(updatedPlayers) {

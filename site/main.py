@@ -1,6 +1,3 @@
-import eventlet
-eventlet.monkey_patch()
-
 import asyncio
 import base64
 import hashlib

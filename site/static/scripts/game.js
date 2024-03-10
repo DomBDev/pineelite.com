@@ -361,11 +361,13 @@ function generateUserId(users) {
     return id;
 }
 
+frame = 0;
 function gameLoop() {
     now = Date.now();
     delta = now - then;
 
     if (delta > interval) {
+        frame += 1;
         then = now - (delta % interval);
         if (!gameOver) {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -375,7 +377,11 @@ function gameLoop() {
             drawLands();
             updatePlayer();
             ctx.fillText(player_id, 1000, 10);
-            send_player_data(player_id, player.x, player.y);
+
+            // limit the number of packets sent to the server
+            if (frame % 5 === 0) {
+                send_player_data(player_id, player.x, player.y);
+            }
 
             cleanup();
             // Generate next land if necessary

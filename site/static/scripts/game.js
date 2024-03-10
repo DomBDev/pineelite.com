@@ -107,6 +107,7 @@ var players = {};
 var socket = io('/game');
 var peer = new Peer();
 var player_id = ""
+var connections = {};
 
 peer.on('open', function(id) {
     console.log('My peer ID is: ' + id);
@@ -121,17 +122,11 @@ socket.on('players', function(data) {
     for (var key in data) {
         if (key === player_id) {
             continue;
-        } else if (peer.connections[key] === undefined) {
-
-            var conn = peer.connect(key);
-            conn.on('open', () => {
-                conn.send({
-                    id: player_id,
-                    x: player.x,
-                    y: player.y
-                });
-            });
         }
+        connections[key] = peer.connect(key);
+        connections[key].on('open', () => {
+            console.log("connected to " + key);
+        });
     }
 });
 
@@ -144,7 +139,6 @@ peer.on('connection', function(conn) {
         };
     });
 });
-var connections = {};
 function sendPlayerData(x, y) {
     for (var key in players) {
         if (key === player_id) {

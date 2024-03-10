@@ -54,6 +54,9 @@ function drawPlayer() {
 
     ctx.fillStyle = "#FF0000";
     for (var key in players) {
+        if (key === player_id) {
+            continue;
+        }
         console.log("drawing player:" + players[key].x + " " + players[key].y)
         ctx.fillRect(players[key].x - camera.x, players[key].y - camera.y, player.width, player.height);
     }
@@ -97,8 +100,8 @@ function drawLands() {
         ctx.fillRect(lands[i].x - camera.x, lands[i].y - camera.y, lands[i].width, lands[i].height);
     }
 }
-var player_id = generateUserId(Object.keys(players));
 var players = {};
+var player_id = generateUserId(Object.keys(players));
 var socket = io('/game');
 
 socket.on('connect', () => {

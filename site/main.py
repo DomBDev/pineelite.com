@@ -299,7 +299,7 @@ def handle_player_data(data):
     player_id = data['id']
     player_x = data['x']
     player_y = data['y']
-    peer_id = data.get('peerId', '')
+    peer_id = data['peerId']
     active = True
 
     players[player_id] = {"x": player_x, "y": player_y, "peerId": peer_id, "active": active}
@@ -307,9 +307,11 @@ def handle_player_data(data):
     # Establish peer-to-peer connections with other players
     for id, player in players.items():
         if id != player_id:
-            connection = socketio.server.enter_room(request.sid, player['peerId'])
-            if connection:
-                print('Established WebRTC connection between ', player_id, ' and ', id)
+            # Check if the target player's peerId is connected to the current namespace
+            if player['peerId'] in socketio.server.manager.rooms.get(request.namespace, {}).keys():
+                connection = socketio.server.enter_room(request.sid, player['peerId'])
+                if connection:
+                    print('Established WebRTC connection between', player_id, 'and', id)
 
     emit('player_data', players, broadcast=True)
 

@@ -6,7 +6,7 @@
 }
 
 #chat-window {
-    width: 100%;
+    width: 50%;
     max-width: 90vw;
     height: 80vh;
     border: none;
@@ -39,6 +39,7 @@
     cursor: pointer;
     border-radius: 5px;
     transition: background-color 0.3s ease;
+    margin-bottom: 1vh;
 }
 
 #clear-chat-button:hover {
@@ -84,6 +85,50 @@
     font-family: monospace;
 }
 
+/* Styling for the dropdown menu */
+#response-mode {
+    background-color: var(--xd-gray); /* background color */
+    color: var(--light-green); /* text color */
+    border: none; /* remove default border */
+    border-radius: 10px; /* rounded corners */
+    padding: 10px; /* space around text */
+    font-size: 14px; /* text size */
+    cursor: pointer; /* cursor style */
+    transition: background-color 0.3s ease; /* transition effect */
+    margin-bottom: 1vh;
+    background-color: var(--dark-gray);
+    border: none;
+    color: var(--light-green);
+    padding: 10px 20px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 14px;
+    margin: 4px 2px;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+    margin-bottom: 1vh;
+}
+
+/* Styling for the dropdown menu on hover */
+#response-mode:hover {
+    background-color: var(--light-green); /* background color */
+    color: var(--dark-gray); /* text color */
+}
+
+/* Styling for the dropdown options */
+#response-mode option {
+    background-color: var(--xd-gray); /* background color */
+    color: var(--light-green); /* text color */
+}
+
+/* Styling for the dropdown options on hover */
+#response-mode option:hover {
+    background-color: var(--light-green); /* background color */
+    color: var(--dark-gray); /* text color */
+}
+
 #messages pre {
     background-color: var(--xd-gray);
     color: var(--light-green);
@@ -107,7 +152,7 @@
     margin-right: 10px;
     padding: 10px;
     border: none;
-    border-radius: 20px;
+    border-radius: 10px;
     background-color: var(--xd-gray);
     color: var(--light-green);
     max-height: 35vh;
@@ -117,7 +162,7 @@
     background-color: var(--dark-teal);
     color: var(--light-green);
     border: none;
-    border-radius: 20px;
+    border-radius: 10px;
     padding: 10px 20px;
     cursor: pointer;
     transition: background-color 0.3s ease;

@@ -51,6 +51,12 @@ var platforms = [];
 function drawPlayer() {
     ctx.fillStyle = "#6495ED";
     ctx.fillRect(player.x - camera.x, player.y - camera.y, player.width, player.height);
+
+    ctx.fillStyle = "#FF0000";
+    for (var key in players) {
+        console.log("drawing player:" + players[key].x + " " + players[key].y)
+        ctx.fillRect(players[key].x - camera.x, players[key].y - camera.y, player.width, player.height);
+    }
 }
 
 function drawPlatforms() {
@@ -76,13 +82,44 @@ function drawPlatforms() {
     }
 }
 
+// update canvas size on window resize
+window.addEventListener('resize', function() {
+    canvas.width = window.innerWidth * 0.8;
+    canvas.height = window.innerHeight * 0.8;
+    camera.width = canvas.width;
+    camera.height = canvas.height;
+    max_jump_height = player.jumpForce * player.jumpForce / (2 * player.gravity);
+});
+
 function drawLands() {
     ctx.fillStyle = "#90EE90";
     for (var i = 0; i < lands.length; i++) {
         ctx.fillRect(lands[i].x - camera.x, lands[i].y - camera.y, lands[i].width, lands[i].height);
     }
 }
+var players = {};
+var socket = io('/game');
 
+socket.on('connect', () => {
+    console.log('Connected to server.');
+});
+
+socket.on('player_data', function(updatedPlayers) {
+    console.log("Updated players data:");
+    players = updatedPlayers;
+    console.log(players);
+});
+
+var player_id = generateUserId(Object.keys(players));
+
+function send_player_data(id, x, y) {
+    console.log("Sending player data: " + id + " " + x + " " + y);
+    socket.emit('player_data', {
+        id: id,
+        x: x,
+        y: y
+    });
+}
 
 function drawScore() {
     ctx.fillStyle = "#FFFFFF";
@@ -316,6 +353,14 @@ function cleanup() {
     });
 }
 
+function generateUserId(users) {
+    var id = Math.floor(Math.random() * 1000000);
+    if (users.includes(id)) {
+        return generateUserId(users);
+    }
+    return id;
+}
+
 function gameLoop() {
     now = Date.now();
     delta = now - then;
@@ -329,6 +374,9 @@ function gameLoop() {
             drawScore();
             drawLands();
             updatePlayer();
+            ctx.fillText(player_id, 1000, 10);
+            send_player_data(player_id, player.x, player.y);
+
             cleanup();
             // Generate next land if necessary
             if (player.x > lastLandX + lastLandWidth - canvas.width / 2) {
@@ -338,6 +386,7 @@ function gameLoop() {
             if (player.x > platforms[platforms.length - 1].x + platforms[platforms.length - 1].width - canvas.width / 2) {
                 generateNextPlatform();
             }
+            
 
             for (var i = 0; i < platforms.length; i++) {
                 if (platforms[i].type === "disappearing") {

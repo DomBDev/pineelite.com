@@ -1,6 +1,5 @@
 import asyncio
 import base64
-import cv2
 import hashlib
 import json
 import numpy as np
@@ -15,7 +14,7 @@ from aiortc import RTCConfiguration, RTCIceServer, RTCPeerConnection, RTCSession
 from aiortc.contrib.media import MediaBlackhole, MediaPlayer, MediaRecorder
 from flask import Flask, render_template, request, redirect, url_for, flash, make_response, session, jsonify, Response
 from flask_login import LoginManager, login_user, login_required, current_user, logout_user
-from flask_socketio import SocketIO, emit, join_room
+from flask_socketio import SocketIO, emit
 from flask_sqlalchemy import SQLAlchemy
 import logging
 from openai import OpenAI
@@ -24,6 +23,8 @@ from werkzeug.utils import secure_filename
 from aiohttp.web import Application, Response, RouteTableDef
 from aiohttp import web
 from flask_cors import CORS
+import autogen
+import sqlite3
 
 app = Flask(__name__)
 app.secret_key = 'some_secret'
@@ -103,14 +104,15 @@ class User(db.Model):
 def chat():
     if 'chat_history' not in session:
         session['chat_history'] = [{'role': 'system', 'content': 'You are PineBot, a helpful chat ai used for anything.'}]
+    if 'chat_mode' not in session:
+        session['chat_mode'] = 'simple'
+    return render_template('chat.html', chat_history=session['chat_history'], mode=session['chat_mode'])
 
-    return render_template('chat.html', chat_history=session['chat_history'])
-
-@app.route('/get_response', methods=['POST'])
-def get_response():
+@app.route('/simple_response', methods=['POST'])
+def simple_response():
     message = request.form['message']
     session['chat_history'].append({'role': 'user', 'content': message})
-    session.modified = True  # Add this line
+    session.modified = True 
 
     # Pass the entire chat history to the model for context
     try:
@@ -126,7 +128,148 @@ def get_response():
         'extra',
         ])
     session['chat_history'].append({'role': 'assistant', 'content': assistant_message})
+    session['chat_mode'] = 'simple'
+    session.modified = True
     return assistant_message
+
+
+### Autogen Response (NOT APPLICABLE YET) ###
+"""
+config_list = autogen.config_list_from_json(
+    "OAI_CONFIG_LIST",
+    filter_dict={
+        "model": ["gpt-3.5-turbo"],
+    },
+)
+
+# Initialize AutoGen agents and chat settings
+llm_config = {"config_list": config_list, "cache_seed": 42}
+user_proxy = autogen.UserProxyAgent(
+    name="User_proxy",
+    system_message="A human admin.",
+    code_execution_config=False,
+    human_input_mode="TERMINATE",
+    llm_config=llm_config,
+)
+
+user_proxy.max_consecutive_auto_reply(1)
+
+
+writer = autogen.AssistantAgent( 
+    name="Writer", 
+    system_message="Flesh out the existing output, as well as developing and progressing pre-existing information (whether that be code or language). Be sure to also forward the pre-existing and updated information to the other agents.",
+    llm_config=llm_config, )
+
+editor = autogen.AssistantAgent( 
+    name="Editor", 
+    system_message="Finalize the output from the Writer, as well as finalizing pre-existing and updated information (whether that be code or language). Be sure to also forward the pre-existing and updated information to the other agents.",
+    llm_config=llm_config, )
+groupchat = autogen.GroupChat(agents=[user_proxy, writer, editor], messages=[], max_round=12)
+manager = autogen.GroupChatManager(groupchat=groupchat, llm_config=llm_config)
+"""
+"""
+    # Pass user message to AutoGen UserProxyAgent
+    user_proxy.initiate_chat(manager, message=message)
+    
+    # Get the message history of the AutoGen GroupChat
+    chat_history = manager.groupchat.messages
+    try:
+        summary = openai.chat.completions.create(
+            model="gpt-3.5-turbo",
+            messages=chat_history + [{"role": "system", "content": f"Your job is to extract all the important information from this entire conversation between AI agents. Do not explain it as a conversation, finalize the document, whether that be code or a paper or whatever, finalize it. The object of this conversation is to result in a specific task being accomplished, extract the information that completes this task and finish it off and format it with markdown. Don't forward 'tasks' as those are meant to be completed by the AI. Extract all the important information regarding the initial task: {message}"}],
+        )
+    except Exception as e:
+        print(e)
+        return str(e)
+
+    assistant_message = markdown(summary.choices[0].message.content, extensions=[
+        'extra',
+        ])
+    session['chat_history'].append({'role': 'assistant', 'content': assistant_message})
+"""
+
+retry_count = 0
+def generate_task_list(outline, message):
+    global retry_count
+    if retry_count <= 3:
+        try: 
+            task_list = eval(openai.chat.completions.create(
+                model="gpt-3.5-turbo",
+                messages=session['chat_history']+[{"role":"system", "content":f"Break down the outline into chunks, Each chunk should be a single prompt given to an AI to complete one sequential step, and should accomplish a portion of the task, and should be accomplishable in one prompt. Overall each chunk/prompt should progress towards the overall task or goal. Output ONLY a python list, giving a prompt for each chunk (EXAMPLE: ['insert_chunk_one_prompt', 'insert_chunk_two_prompt']) Make each prompt as long as possible. The max number of tasks should be 8, so combine then if needed (specify sub-tasks to complete within one prompt). For each task/prompt, make sure to explain to the AI agent how to respond and how long to make its response to fit the guidlines specified by the overall goal. Each item on the outline will be executed sequentially and the output of each chunk will be appended to the final output, so plan for this. If the chunks/tasks are too similar, they will be skipped, so if they're similar specify differences between them. The sub task/step you're assigned is '{message}'"}]
+            ).choices[0].message.content)
+        except Exception as e:
+            print(e)
+            retry_count += 1
+            task_list = generate_task_list(outline, message)
+        else:
+            retry_count = 0
+    else:
+        task_list = "I'm sorry, I can't complete this task at the moment. Please try again later."
+    
+    return task_list
+
+@app.route('/complex_response', methods=['POST'])
+def complex_response():
+    message = request.form['message']
+
+    session['chat_history'].append({'role': 'user', 'content': message})
+    session.modified = True
+
+    # Pass the entire chat history to the model for context
+    task = None
+    output = ""
+    try:
+        outline = openai.chat.completions.create(
+            model="gpt-3.5-turbo",
+            messages=session['chat_history']+[{"role":"system", "content":f"Create an outline for completing the task. Each item on the outline will be executed sequentially, so plan for this. The initial task is '{message}'"}]
+            )
+        print(f"Outline Created")
+
+        task_list = generate_task_list(outline.choices[0].message.content, message)
+        if task_list == "I'm sorry, I can't complete this task at the moment. Please try again later.":
+            raise Exception("I'm sorry, I can't complete this task at the moment. Please try again later.")
+
+        print(f"Task List: {task_list}")
+        previous_task = "No Task"
+        count = 0
+        for task in task_list:
+            if count >= 7:
+                break
+            count += 1
+            new_task = openai.chat.completions.create(
+                model="gpt-3.5-turbo",
+                messages=session['chat_history']+[{"role":"system", "content":f"You're supposed to complete the tasks assigned to you. Keep in mind your output is appended directly to the output from the last task, so don't include any information before or after your 'chunk' to contribute towards the task. The output so far is {output} (Don't include anything from the output completion so far, but this is what comes right before what you're appending to the output, so don't include duplicate information. The initial goal is: '{message}'. Complete the sub-task: '{task}'"}]
+                )
+
+            new_task = new_task.choices[0].message.content
+
+            decision = openai.chat.completions.create(
+                model="gpt-3.5-turbo",
+                messages=[{"role":"system", "content":f"Decide whether to include the output from the last task in the final output. The output from all the previous tasks combined into one continuous output: {output}. The output from the current task is: {new_task}. Respond with only 'yes' or 'no'. Respond 'yes' if it should be appended to the output, or 'no' if it should be removed"}]
+                )
+            decision = decision.choices[0].message.content.lower().strip()
+            if decision == "yes":
+                output += f"\n\n{new_task}"
+                print(f"Output Completed: {task}")
+            else:
+                print(f"Output Skipped: {task}")
+            previous_task = task
+
+        output = output.strip()
+        output = markdown(output, extensions=[
+            'extra',
+            ])
+
+    except Exception as e:
+        print(e)
+        return str(e)
+
+    session['chat_history'].append({'role': 'assistant', 'content': output})
+    session['chat_mode'] = 'complex'
+
+    return output
+
+
 
 @app.route('/clear_chat', methods=['POST'])
 def clear_chat():
@@ -137,6 +280,32 @@ def clear_chat():
 @app.route('/game', methods=['GET', 'POST'])
 def game():
     return render_template('game.html')
+
+socketio = SocketIO(app, max_http_buffer_size=1000000)
+
+players = {}
+
+@socketio.on('connect', namespace='/game')
+def handle_connect():
+    print('Client connected')
+    emit('player_data', players)
+
+@socketio.on('disconnect', namespace='/game')
+def handle_disconnect():
+    print('Client disconnected')
+
+@socketio.on('player_data', namespace='/game')
+def handle_player_data(data):
+    print('Player state update:', data)
+    
+    player_id = data['id']
+    player_x = data['x']
+    player_y = data['y']
+    active = True 
+
+    players[player_id] = {"x": player_x, "y": player_y, "active": active}
+
+    emit('player_data', players, broadcast=True)
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
@@ -164,9 +333,6 @@ def register():
     if request.method == 'POST':
         # Check if admin password is correct
         admin_pass = app.config.get('ADMIN_PASSWORD')
-        print(admin_pass)
-        print(type(request.form['admin_pass']))
-        print(type(admin_pass))
         if str(request.form['admin_pass']) != str(admin_pass):
             flash('Incorrect admin password.', 'error')
             return redirect(url_for('register'))
@@ -291,3 +457,4 @@ if __name__ == '__main__':
             db.create_all()
     app.run(debug=True)
     web.run_app(aiohttp_app)
+    socketio.run(app, debug=True)

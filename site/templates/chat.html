@@ -6,6 +6,15 @@
 <section class="chat">
     <div id="chat-window">
         <form id="clear" action="/clear_chat" method="post">
+            <select id="response-mode" name="response-mode">
+                {% if chat_mode == 'simple' %}
+                    <option value="simple" selected>Simple</option>
+                    <option value="complex">Complex</option>
+                {% else %}
+                    <option value="simple">Simple</option>
+                    <option value="complex" selected>Complex</option>
+                {% endif %}
+            </select>
             <button type="submit" id="clear-chat-button">Clear Chat</button>
         </form>
         <div id="messages">
@@ -22,51 +31,18 @@
             {% endfor %}
         </div>
         <form id="send-message">
-            <textarea rows="1" id="message-input" autocomplete="off"></textarea>
+            <textarea id="message-input" autocomplete="false" rows="1"></textarea>
             <button type="submit">Send</button>
         </form>
     </div>
 </section>
-
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
-<script>
-$(document).ready(function() {
-    $('#message-input').focus();
-    chat_window = $('#chat-window')
-    chat_window.resizable({
-        handles: 'e'
-    });
-
-    scrollToBottom();
-    $('#send-message').on('submit', function(e) {
-        e.preventDefault();
-        var message = $('#message-input').val();
-        $('#message-input').val('').css('height', 'auto'); // reset height
-        $('#messages').append('<div class="user-message"><strong>You:</strong> ' + message + '</div>');
-        setTimeout(scrollToBottom, 0);
-        $.post('{{ url_for("get_response") }}', { 'message': message })
-            .done(function(response) {
-                $('#messages').append('<div class="bot-message"><strong>Bot:</strong> ' + response + '</div>');
-                setTimeout(scrollToBottom, 0);
-            });
-    });
-    function scrollToBottom() {
-        const chatWindow = document.getElementById('messages');
-        chatWindow.scrollTop = chatWindow.scrollHeight;
-    }
-    $('#message-input').on('keydown', function(e) {
-    if (e.key == 'Enter' && !e.shiftKey) {
-        e.preventDefault();
-        $('#send-message').submit();
-    }
-});
-    $('#message-input').on('input', function() {
-    this.style.height = 'auto';
-    this.style.height = (this.scrollHeight) + 'px';
-});
-});
+<script type="text/javascript">
+    var simple_response = "{{ url_for('simple_response') }}";
+    var complex_response = "{{ url_for('complex_response') }}";
 </script>
+<script src="{{ url_for('static', filename='scripts/chat.js') }}"></script>
 {% endblock %}
 
 {% block extra_css %}

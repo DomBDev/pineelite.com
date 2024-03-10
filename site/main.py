@@ -293,10 +293,13 @@ def handle_connect():
 @socketio.on('disconnect', namespace='/game')
 def handle_disconnect():
     print('Client disconnected')
-    player_id = session_player_map[request.sid]
-    players.remove(player_id)
-    session_player_map.pop(request.sid)
-    emit('players', players, broadcast=True)
+    try:
+        player_id = session_player_map[request.sid]
+        players.remove(player_id)
+        session_player_map.pop(request.sid)
+        emit('players', players, broadcast=True)
+    except Exception as e:
+        print(e)
 
 @socketio.on('join', namespace='/game')
 def handle_join(player_id):

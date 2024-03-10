@@ -120,7 +120,7 @@ socket.on('players', function(data) {
     console.log("players: " + JSON.stringify(data));
     // create a connection to each player
     for (var key in data) {
-        print("key: " + key)
+        console.log("key: " + key)
         if (key === player_id) {
             continue;
         }

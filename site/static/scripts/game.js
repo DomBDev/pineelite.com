@@ -119,6 +119,7 @@ function broadcastGameState() {
         x: player.x,
         y: player.y,
     };
+    console.log("broadcasting game state: " + data)
     socket.emit('game_state', data);
 }
 
@@ -149,6 +150,7 @@ function initializePeer() {
 }
 
 function processReceivedData(data) {
+    console.log("processing data: " + data)
     // Update the game state based on the received data
     for (var id in data) {
         if (id === player_id) {
@@ -170,6 +172,7 @@ function processReceivedData(data) {
 function connect_to_player(player_id) {
     // Connect to the player with the specified ID
     var connection = peer.connect(player_id);
+    console.log("connecting to player: " + player_id);
 
     // Handle data exchange with the connected player
     handle_data_exchange(connection);
@@ -189,6 +192,7 @@ function handle_data_exchange(connection) {
     // Send game state data to the connecting player
     function send_data_to_player() {
         var data = {}; // Prepare the game state data
+        console.log("sending data to player: " + connection.peer);
         connection.send(data);
     }
 

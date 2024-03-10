@@ -177,6 +177,30 @@ function playerDeath() {
     ctx.fillText("Click to Respawn", canvas.width / 2, canvas.height / 2 + 50);
 }
 
+// Listen for device orientation events
+window.addEventListener('deviceorientation', function(event) {
+    // event.alpha is the compass direction the device is facing in degrees
+    // event.beta is the device front-to-back tilt in degrees (-180 to 180)
+    // event.gamma is the device left-to-right tilt in degrees (-90 to 90)
+
+    // Use event.gamma for left and right controls
+    if (event.gamma > 10) {
+        keys.ArrowRight = true;
+    }
+    if (event.gamma < -10) {
+        keys.ArrowLeft = true;
+    }
+}, true);
+
+// Listen for touch events
+window.addEventListener('touchstart', function(event) {
+    // User tapped on the screen
+    if (!player.jumping && player.grounded) {
+        player.dy = -player.jumpForce;
+        player.jumping = true;
+    }
+}, false);
+
 function updatePlayer() {
     var max_speed = 35;
     player.dy += player.gravity;

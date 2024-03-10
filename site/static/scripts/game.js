@@ -122,6 +122,7 @@ socket.on('players', function(data) {
         if (key === player_id) {
             continue;
         } else if (peer.connections[key] === undefined) {
+
             var conn = peer.connect(key);
             conn.on('open', () => {
                 conn.send({
@@ -143,20 +144,29 @@ peer.on('connection', function(conn) {
         };
     });
 });
-
+var connections = {};
 function sendPlayerData(x, y) {
     for (var key in players) {
         if (key === player_id) {
             continue;
         }
-        var conn = peer.connect(key);
-        conn.on('open', () => {
-            conn.send({
+        if (connections[key] === undefined) {
+            connections[key] = peer.connect(key);
+            connections[key].on('open', () => {
+                connections[key].send({
+                    id: player_id,
+                    x: x,
+                    y: y
+                });
+            });
+        } else {
+            connections[key].send({
                 id: player_id,
                 x: x,
                 y: y
             });
-        });
+        }
+
     }
 }
 

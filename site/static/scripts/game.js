@@ -145,6 +145,8 @@ peer.on('connection', function(conn) {
             'x': data.x,
             'y': data.y
         };
+        console.log(connections)
+        sendPlayerData(player.x, player.y);
     });
 });
 function sendPlayerData(x, y) {

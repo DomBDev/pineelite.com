@@ -112,6 +112,7 @@ peer.on('open', function(id) {
     console.log('My peer ID is: ' + id);
     player_id = id;
     socket.emit('join', player_id);
+    console.log('join sent')
 });
 
 socket.on('players', function(data) {

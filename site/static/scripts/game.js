@@ -113,93 +113,54 @@ socket.on('connect', () => {
     initializePeer();
 });
 
-function broadcastGameState() {
-    var data = {}; // Prepare the game state data
-    data[player_id] = {
-        x: player.x,
-        y: player.y,
-    };
-    console.log("broadcasting game state: " + data)
-    socket.emit('game_state', data);
-}
-
 function initializePeer() {
-    // Create a PeerJS instance
-    peer = new Peer();
+    peer = new Peer(player_id);
+    peer.on('open', (id) => {
+        console.log('Connected to peer server.');
+    });
 
-    // Handle successful connection to the PeerJS server
-    peer.on('open', function() {
-        console.log('Connected to PeerJS server.');
-        console.log('My PeerJS ID is ' + peer.id);
-        // Emit the player ID and PeerJS ID to the server
-        socket.emit('player_data', {
-            id: player_id,
-            x: player.x,
-            y: player.y,
-            peerId: peer.id
+    peer.on('connection', (conn) => {
+        console.log('Connected to peer.');
+        conn.on('data', (data) => {
+            console.log('Received data:', data);
+            players[data.id] = data;
         });
     });
 
-    // Handle incoming connection requests from other players
-    peer.on('connection', function(connection) {
-        console.log('Received connection request from', connection.peer);
-    
-        // Handle data exchange with the connecting player
-        handle_data_exchange(connection);
-    });
+    peer.on('error', (err) => {
+        console.log('Error:', err);
+    }
+    );
+
+    peer.on('disconnected', () => {
+        console.log('Disconnected from peer server.');
+    }
+    );
+
+    peer.on('close', () => {
+        console.log('Connection closed.');
+    }
+    );
+
 }
 
-function processReceivedData(data) {
-    console.log("processing data: " + data)
-    // Update the game state based on the received data
-    for (var id in data) {
-        if (id === player_id) {
+function sendPlayerData() {
+    var data = {
+        id: player_id,
+        x: player.x,
+        y: player.y
+    };
+    for (var key in players) {
+        if (key === player_id) {
             continue;
         }
-        connect_to_player(id);
-        if (players[id]) {
-            players[id].x = data[id].x;
-            players[id].y = data[id].y;
-        } else {
-            players[id] = {
-                x: data[id].x,
-                y: data[id].y
-            };
-        }
+        var conn = peer.connect(key);
+        conn.on('open', () => {
+            conn.send(data);
+        });
+
     }
 }
-
-function connect_to_player(player_id) {
-    // Connect to the player with the specified ID
-    var connection = peer.connect(player_id);
-    console.log("connecting to player: " + player_id);
-
-    // Handle data exchange with the connected player
-    handle_data_exchange(connection);
-}
-
-function handle_data_exchange(connection) {
-    connection.on('data', function(data) {
-        console.log('Received data from', connection.peer, ':', data);
-
-        // Process the received data and update the game state
-        processReceivedData(data);
-
-        // Broadcast the updated game state to all players
-        broadcastGameState();
-    });
-
-    // Send game state data to the connecting player
-    function send_data_to_player() {
-        var data = {}; // Prepare the game state data
-        console.log("sending data to player: " + connection.peer);
-        connection.send(data);
-    }
-
-    // Invoke the function to send game state data initially
-    send_data_to_player();
-}
-
 
 function drawScore() {
     ctx.fillStyle = "#FFFFFF";
@@ -455,6 +416,7 @@ function gameLoop() {
             drawPlatforms();
             drawScore();
             drawLands();
+            sendPlayerData();
             updatePlayer();
             ctx.fillText(player_id, 1000, 10);
 

@@ -247,7 +247,7 @@ def complex_response():
             if decision == "yes":
                 output += f"\n\n{new_task}"
             else:
-            previous_task = task
+                previous_task = task
 
         output = output.strip()
         output = markdown(output, extensions=[

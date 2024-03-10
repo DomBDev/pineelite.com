@@ -120,7 +120,6 @@ socket.on('player_data', function(updatedPlayers) {
     console.log("Updated players data:");
     players = updatedPlayers;
     console.log(players);
-    send_player_data(player_id, player.x, player.y);
 });
 
 function send_player_data(id, x, y) {
@@ -387,6 +386,7 @@ function gameLoop() {
             drawScore();
             drawLands();
             updatePlayer();
+            send_player_data(player_id, player.x, player.y);
             ctx.fillText(player_id, 1000, 10);
 
             cleanup();
@@ -435,4 +435,4 @@ window.addEventListener('keyup', function(e) {
 });
 
 gameLoop();
-}
+});

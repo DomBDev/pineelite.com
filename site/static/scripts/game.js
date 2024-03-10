@@ -140,27 +140,12 @@ peer.on('connection', function(conn) {
     });
 });
 function sendPlayerData(x, y) {
-    for (var key in players) {
-        if (key === player_id) {
-            continue;
-        }
-        if (connections[key] === undefined) {
-            connections[key] = peer.connect(key);
-            connections[key].on('open', () => {
-                connections[key].send({
-                    id: player_id,
-                    x: x,
-                    y: y
-                });
-            });
-        } else {
-            connections[key].send({
-                id: player_id,
-                x: x,
-                y: y
-            });
-        }
-
+    for (var key in connections) {
+        connections[key].send({
+            'id': player_id,
+            'x': x,
+            'y': y
+        });
     }
 }
 

@@ -123,6 +123,15 @@ socket.on('players', function(data) {
     }
 });
 
+socket.on('player_check', function(data) {
+    for (var key in players) {
+        if (!data.includes(key)) {
+            delete players[key];
+        }
+    }
+
+});
+
 peer.on('connection', function(conn) {
 
     if (Object.keys(connections).includes(conn.peer) === false) {

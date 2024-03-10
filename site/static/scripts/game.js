@@ -182,7 +182,7 @@ $(window).on('touchstart', function(event) {
     // User tapped on the screen
 
     // if touch is on the right third of the screen, move right
-    if (event.originalEvent.touches[0].clientX > canvas.width / 3) {
+    if (event.originalEvent.touches[0].clientX > canvas.width * 2 / 3) {
         keys.ArrowRight = true;
     } else if (event.originalEvent.touches[0].clientX < canvas.width/3){
         keys.ArrowLeft = true;

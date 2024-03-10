@@ -120,7 +120,7 @@ function initializePeer() {
     // Handle successful connection to the PeerJS server
     peer.on('open', function() {
         console.log('Connected to PeerJS server.');
-
+        console.log('My PeerJS ID is ' + peer.id);
         // Emit the player ID and PeerJS ID to the server
         socket.emit('player_data', {
             id: player_id,

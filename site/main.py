@@ -121,7 +121,6 @@ def simple_response():
             messages=session['chat_history']
         )
     except Exception as e:
-        print(e)
         return str(e)
 
     assistant_message = markdown(response.choices[0].message.content, extensions=[
@@ -198,7 +197,6 @@ def generate_task_list(outline, message):
                 messages=session['chat_history']+[{"role":"system", "content":f"Break down the outline into chunks, Each chunk should be a single prompt given to an AI to complete one sequential step, and should accomplish a portion of the task, and should be accomplishable in one prompt. Overall each chunk/prompt should progress towards the overall task or goal. Output ONLY a python list, giving a prompt for each chunk (EXAMPLE: ['insert_chunk_one_prompt', 'insert_chunk_two_prompt']) Make each prompt as long as possible. The max number of tasks should be 8, so combine then if needed (specify sub-tasks to complete within one prompt). For each task/prompt, make sure to explain to the AI agent how to respond and how long to make its response to fit the guidlines specified by the overall goal. Each item on the outline will be executed sequentially and the output of each chunk will be appended to the final output, so plan for this. If the chunks/tasks are too similar, they will be skipped, so if they're similar specify differences between them. The sub task/step you're assigned is '{message}'"}]
             ).choices[0].message.content)
         except Exception as e:
-            print(e)
             retry_count += 1
             task_list = generate_task_list(outline, message)
         else:
@@ -223,13 +221,11 @@ def complex_response():
             model="gpt-3.5-turbo",
             messages=session['chat_history']+[{"role":"system", "content":f"Create an outline for completing the task. Each item on the outline will be executed sequentially, so plan for this. The initial task is '{message}'"}]
             )
-        print(f"Outline Created")
 
         task_list = generate_task_list(outline.choices[0].message.content, message)
         if task_list == "I'm sorry, I can't complete this task at the moment. Please try again later.":
             raise Exception("I'm sorry, I can't complete this task at the moment. Please try again later.")
 
-        print(f"Task List: {task_list}")
         previous_task = "No Task"
         count = 0
         for task in task_list:
@@ -250,9 +246,7 @@ def complex_response():
             decision = decision.choices[0].message.content.lower().strip()
             if decision == "yes":
                 output += f"\n\n{new_task}"
-                print(f"Output Completed: {task}")
             else:
-                print(f"Output Skipped: {task}")
             previous_task = task
 
         output = output.strip()
@@ -261,7 +255,6 @@ def complex_response():
             ])
 
     except Exception as e:
-        print(e)
         return str(e)
 
     session['chat_history'].append({'role': 'assistant', 'content': output})
@@ -286,29 +279,18 @@ socketio.init_app(app, cors_allowed_origins="*")
 players = []
 session_player_map = {}
 
-@socketio.on('connect', namespace='/game')
-def handle_connect():
-    print('Client connected')
-
 @socketio.on('disconnect', namespace='/game')
 def handle_disconnect():
-    print('Client disconnected')
     try:
         player_id = session_player_map[request.sid]
         players.remove(player_id)
         session_player_map.pop(request.sid)
         emit('player_check', players, broadcast=True)
-    except Exception as e:
-        print(e)
-
-@socketio.on_error_default  # handles all namespaces without an explicit error handler
-def default_error_handler(e):
-    print(f'Error: {e}')
+    except: pass
 
 @socketio.on('join', namespace='/game')
 def handle_join(player_id):
     # Handle PeerJS connection
-    print(f'Player {player_id} joined')
 
     # Add the new player to the list of players
     players.append(player_id)
@@ -317,7 +299,6 @@ def handle_join(player_id):
     session_player_map[request.sid] = player_id
 
     # Send the new player the current list of players
-    print(f'Players: {players}')
     emit('players', players, broadcast=False)
 
 @app.route('/login', methods=['GET', 'POST'])

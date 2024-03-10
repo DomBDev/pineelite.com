@@ -184,7 +184,7 @@ $(window).on('touchstart', function(event) {
     // if touch is on the right third of the screen, move right
     if (event.originalEvent.touches[0].clientX > canvas.width / 3) {
         keys.ArrowRight = true;
-    } else if (event.originalEvent.touches[0].clientX < canvas.width-canvas.width/3){
+    } else if (event.originalEvent.touches[0].clientX < canvas.width/3){
         keys.ArrowLeft = true;
     } else {
         if (!player.jumping && player.grounded) {

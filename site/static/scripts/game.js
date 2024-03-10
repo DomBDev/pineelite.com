@@ -122,15 +122,16 @@ socket.on('players', function(data) {
     for (var key in players) {
         if (key === player_id) {
             continue;
-        }
-        var conn = peer.connect(key);
-        conn.on('open', () => {
-            conn.send({
-                id: player_id,
-                x: player.x,
-                y: player.y
+        } else if (peer.connections[key] === undefined) {
+            var conn = peer.connect(key);
+            conn.on('open', () => {
+                conn.send({
+                    id: player_id,
+                    x: player.x,
+                    y: player.y
+                });
             });
-        });
+        }
     }
 });
 

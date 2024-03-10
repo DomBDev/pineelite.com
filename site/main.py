@@ -25,6 +25,8 @@ from aiohttp import web
 from flask_cors import CORS
 import autogen
 import sqlite3
+import eventlet
+eventlet.monkey_patch()
 
 app = Flask(__name__)
 app.secret_key = 'some_secret'

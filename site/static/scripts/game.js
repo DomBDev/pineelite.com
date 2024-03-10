@@ -134,7 +134,7 @@ socket.on('players', function(data) {
 
 peer.on('connection', function(conn) {
 
-    if (connections[conn.peer] !== undefined) {
+    if (Object.keys(connections).includes(conn.peer) === false) {
         connections[conn.peer] = peer.connect(conn.peer);
     }
 

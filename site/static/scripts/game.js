@@ -113,6 +113,15 @@ socket.on('connect', () => {
     initializePeer();
 });
 
+function broadcastGameState() {
+    var data = {}; // Prepare the game state data
+    data[player_id] = {
+        x: player.x,
+        y: player.y,
+    };
+    connection.send(data); // Send the game state data to the connecting player
+}
+
 function initializePeer() {
     // Create a PeerJS instance
     peer = new Peer();
@@ -171,7 +180,6 @@ function handleDataExchange(connection) {
 
     // Send game state data to the connecting player
     function sendDataToPlayer() {
-        var data = {}; // Prepare the game state data
         connection.send(data);
     }
 

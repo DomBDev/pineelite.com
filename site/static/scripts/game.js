@@ -230,6 +230,30 @@ function updatePlayer() {
         }
     }
 
+    for (var i = 0; i<players.length; i++) {
+        var p = players[i];
+        if (player.x < p.x + p.width && player.x + player.width > p.x && player.y < p.y + p.height && player.y + player.height > p.y) {
+            if (player.dy > 0 && player.y + player.height - player.dy <= p.y + p.height) {
+                player.y = p.y - player.height;
+                player.dy = 0;
+                player.jumping = false;
+                player.grounded = true;
+            }
+            else if (player.dy < 0 && player.y - player.dy >= p.y) {
+                player.y = p.y + p.height;
+                player.dy = 0;
+            }
+            else if (player.dx > 0 && player.x + player.width - player.dx <= p.x + p.width) {
+                player.x = p.x - player.width;
+                player.dx = 0;
+            }
+            else if (player.dx < 0 && player.x - player.dx >= p.x) {
+                player.x = p.x + p.width;
+                player.dx = 0;
+            }
+        }
+    }
+
     for (var i = 0; i < platforms.length; i++) {
         var p = platforms[i];
         if (player.x < p.x + p.width && player.x + player.width > p.x && player.y < p.y + p.height && player.y + player.height > p.y) {

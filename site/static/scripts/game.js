@@ -143,7 +143,7 @@ peer.on('connection', function(conn) {
         console.log("received data: " + JSON.stringify(data));
         players[data.id] = {
             'x': data.x,
-            'y': data.y
+            'y': canvas.height - data.y
         };
         console.log(connections)
         sendPlayerData(player.x, player.y);
@@ -155,7 +155,7 @@ function sendPlayerData(x, y) {
         connections[key].send({
             'id': player_id,
             'x': x,
-            'y': y
+            'y': canvas.height - y
         });
     }
 }

@@ -285,15 +285,15 @@ socketio = socketio = SocketIO(app, max_decode_packets=1000, max_http_buffer_siz
 socketio.init_app(app, cors_allowed_origins="*")
 players = []
 
-@socketio.on('connect', namespace='/game')
+@socketio.on('connect')
 def handle_connect():
     print('Client connected')
 
-@socketio.on('disconnect', namespace='/game')
+@socketio.on('disconnect')
 def handle_disconnect():
     print('Client disconnected')
 
-@socketio.on('join', namespace='/game')
+@socketio.on('join')
 def handle_join(player_id):
     # Handle PeerJS connection
     print(f'Player {player_id} joined')

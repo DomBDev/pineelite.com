@@ -97,6 +97,7 @@ function drawLands() {
         ctx.fillRect(lands[i].x - camera.x, lands[i].y - camera.y, lands[i].width, lands[i].height);
     }
 }
+var player_id = generateUserId(Object.keys(players));
 var players = {};
 var socket = io('/game');
 
@@ -108,9 +109,8 @@ socket.on('player_data', function(updatedPlayers) {
     console.log("Updated players data:");
     players = updatedPlayers;
     console.log(players);
+    send_player_data(player_id, player.x, player.y);
 });
-
-var player_id = generateUserId(Object.keys(players));
 
 function send_player_data(id, x, y) {
     console.log("Sending player data: " + id + " " + x + " " + y);
@@ -377,11 +377,6 @@ function gameLoop() {
             drawLands();
             updatePlayer();
             ctx.fillText(player_id, 1000, 10);
-
-            // limit the number of packets sent to the server
-            if (frame % 5 === 0) {
-                send_player_data(player_id, player.x, player.y);
-            }
 
             cleanup();
             // Generate next land if necessary

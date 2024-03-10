@@ -281,7 +281,7 @@ def clear_chat():
 def game():
     return render_template('game.html')
 
-socketio = socketio = SocketIO(app, max_decode_packets=500)#  engineio_logger=True,
+socketio = socketio = SocketIO(app, max_decode_packets=1000)#  engineio_logger=True,
 
 players = {}
 

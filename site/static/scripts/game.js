@@ -140,7 +140,7 @@ peer.on('connection', function(conn) {
         'x': player.x,
         'y': player.y
     });
-    
+
     conn.on('data', function(data) {
         console.log("received data: " + JSON.stringify(data));
         players[data.id] = {
@@ -151,6 +151,7 @@ peer.on('connection', function(conn) {
 });
 function sendPlayerData(x, y) {
     for (var key in connections) {
+        console.log("sending data to: " + key + " " + x + " " + y)
         connections[key].send({
             'id': player_id,
             'x': x,

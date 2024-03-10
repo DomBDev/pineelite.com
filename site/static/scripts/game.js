@@ -197,6 +197,7 @@ $(window).on('touchstart', function(event) {
 $(window).on('touchend', function(event) {
     keys.ArrowLeft = false;
     keys.ArrowRight = false;
+});
 
 function updatePlayer() {
     var max_speed = 35;
@@ -506,4 +507,4 @@ window.addEventListener('keyup', function(e) {
 });
 
 gameLoop();
-})});
+});

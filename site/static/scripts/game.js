@@ -177,35 +177,26 @@ function playerDeath() {
     ctx.fillText("Click to Respawn", canvas.width / 2, canvas.height / 2 + 50);
 }
 
-// Listen for device orientation events
-$(window).on('deviceorientation', function(event) {
-    // event.originalEvent.alpha is the compass direction the device is facing in degrees
-    // event.originalEvent.beta is the device front-to-back tilt in degrees (-180 to 180)
-    // event.originalEvent.gamma is the device left-to-right tilt in degrees (-90 to 90)
-
-    // Use event.originalEvent.gamma for left and right controls
-    if (event.originalEvent.gamma > 10) {
-        keys.ArrowRight = true;
-        keys.ArrowLeft = false;
-    }
-    if (event.originalEvent.gamma < -10) {
-        keys.ArrowLeft = true;
-        keys.ArrowRight = false;
-    }
-    if (event.originalEvent.gamma > -10 && event.originalEvent.gamma < 10) {
-        keys.ArrowRight = false;
-        keys.ArrowLeft = false;
-    }
-});
-
 // Listen for touch events
 $(window).on('touchstart', function(event) {
     // User tapped on the screen
-    if (!player.jumping && player.grounded) {
-        player.dy = -player.jumpForce;
-        player.jumping = true;
+
+    // if touch is on the right third of the screen, move right
+    if (event.originalEvent.touches[0].clientX > canvas.width / 3) {
+        keys.ArrowRight = true;
+    } else if (event.originalEvent.touches[0].clientX < canvas.width-canvas.width/3){
+        keys.ArrowLeft = true;
+    } else {
+        if (!player.jumping && player.grounded) {
+            player.dy = -player.jumpForce;
+            player.jumping = true;
+        }
     }
 });
+
+$(window).on('touchend', function(event) {
+    keys.ArrowLeft = false;
+    keys.ArrowRight = false;
 
 function updatePlayer() {
     var max_speed = 35;
@@ -515,4 +506,4 @@ window.addEventListener('keyup', function(e) {
 });
 
 gameLoop();
-});
+})});

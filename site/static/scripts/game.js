@@ -119,7 +119,7 @@ function broadcastGameState() {
         x: player.x,
         y: player.y,
     };
-    connection.send(data); // Send the game state data to the connecting player
+    socket.emit('game_state', data);
 }
 
 function initializePeer() {
@@ -141,10 +141,10 @@ function initializePeer() {
 
     // Handle incoming connection requests from other players
     peer.on('connection', function(connection) {
-        console.log('Received connection request from ' + connection.peer);
-
+        console.log('Received connection request from', connection.peer);
+    
         // Handle data exchange with the connecting player
-        handleDataExchange(connection);
+        handle_data_exchange(connection);
     });
 }
 
@@ -166,10 +166,9 @@ function processReceivedData(data) {
     }
 }
 
-function handleDataExchange(connection) {
-    // Receive incoming data from the connecting player
+function handle_data_exchange(connection) {
     connection.on('data', function(data) {
-        console.log('Received data from ' + connection.peer + ':', data);
+        console.log('Received data from', connection.peer, ':', data);
 
         // Process the received data and update the game state
         processReceivedData(data);
@@ -179,13 +178,15 @@ function handleDataExchange(connection) {
     });
 
     // Send game state data to the connecting player
-    function sendDataToPlayer() {
+    function send_data_to_player() {
+        var data = {}; // Prepare the game state data
         connection.send(data);
     }
 
     // Invoke the function to send game state data initially
-    sendDataToPlayer();
+    send_data_to_player();
 }
+
 
 function drawScore() {
     ctx.fillStyle = "#FFFFFF";

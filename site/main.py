@@ -281,7 +281,7 @@ def clear_chat():
 def game():
     return render_template('game.html')
 
-socketio = SocketIO(app, max_http_buffer_size=1000000)
+socketio = socketio = SocketIO(app, engineio_logger=True, max_decode_packets=500)
 
 players = {}
 
@@ -293,6 +293,8 @@ def handle_connect():
 @socketio.on('disconnect', namespace='/game')
 def handle_disconnect():
     print('Client disconnected')
+    emit('player_data', players, broadcast=True)
+    
 
 @socketio.on('player_data', namespace='/game')
 def handle_player_data(data):

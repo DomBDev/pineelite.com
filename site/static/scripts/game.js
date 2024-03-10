@@ -119,14 +119,15 @@ peer.on('open', function(id) {
 socket.on('players', function(data) {
     console.log("players: " + JSON.stringify(data));
     // create a connection to each player
-    for (var key in data) {
-        console.log("key: " + key)
-        if (key === player_id) {
+    for (var i = 0; i < data.length; i++) {
+        if (data[i] === player_id) {
+            console.log("skipping player_id: " + player_id)
             continue;
         }
-        connections[key] = peer.connect(key);
-        connections[key].on('open', () => {
-            console.log("connected to " + key);
+        var conn = peer.connect(data[i]);
+        connections[data[i]] = conn;
+        conn.on('open', function() {
+            console.log("connection opened");
         });
     }
 });

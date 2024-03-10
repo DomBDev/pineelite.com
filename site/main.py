@@ -284,6 +284,7 @@ def game():
 socketio = socketio = SocketIO(app, max_decode_packets=1000, max_http_buffer_size=1000000, async_mode='eventlet')#  engineio_logger=True,
 socketio.init_app(app, cors_allowed_origins="*")
 players = []
+session_player_map = {}
 
 @socketio.on('connect', namespace='/game')
 def handle_connect():
@@ -292,6 +293,10 @@ def handle_connect():
 @socketio.on('disconnect', namespace='/game')
 def handle_disconnect():
     print('Client disconnected')
+    player_id = session_player_map[request.sid]
+    players.remove(player_id)
+    session_player_map.pop(request.sid)
+    emit('players', players, broadcast=True)
 
 @socketio.on('join', namespace='/game')
 def handle_join(player_id):
@@ -300,6 +305,9 @@ def handle_join(player_id):
 
     # Add the new player to the list of players
     players.append(player_id)
+
+    # Add the player to the session-player map
+    session_player_map[request.sid] = player_id
 
     # Send the new player the current list of players
     print(f'Players: {players}')

@@ -60,7 +60,6 @@ function drawPlayer() {
         if (key === player_id) {
             continue;
         }
-        console.log("drawing player:" + players[key].x + " " + players[key].y)
         ctx.fillRect(players[key].x - camera.x, players[key].y - camera.y, player.width, player.height);
     }
 }
@@ -110,48 +109,36 @@ var player_id = ""
 var connections = {};
 
 peer.on('open', function(id) {
-    console.log('My peer ID is: ' + id);
     player_id = id;
     socket.emit('join', player_id);
-    console.log('join sent')
 });
 
 socket.on('players', function(data) {
-    console.log("players: " + JSON.stringify(data));
-    // create a connection to each player
     for (var i = 0; i < data.length; i++) {
         if (data[i] === player_id) {
-            console.log("skipping player_id: " + player_id)
             continue;
         }
         var conn = peer.connect(data[i]);
         connections[data[i]] = conn;
-        conn.on('open', function() {
-            console.log("connection opened");
-        });
     }
 });
 
 peer.on('connection', function(conn) {
 
     if (Object.keys(connections).includes(conn.peer) === false) {
-        console.log("ensuring mutual connection: " + conn.peer)
         connections[conn.peer] = peer.connect(conn.peer);
     }
 
     conn.on('data', function(data) {
-        console.log("received data: " + JSON.stringify(data));
         players[data.id] = {
             'x': data.x,
             'y': canvas.height - data.y
         };
-        console.log(connections)
         sendPlayerData(player.x, player.y);
     });
 });
 function sendPlayerData(x, y) {
     for (var key in connections) {
-        console.log("sending data to: " + key + " " + x + " " + y)
         connections[key].send({
             'id': player_id,
             'x': x,

@@ -154,6 +154,7 @@ function processReceivedData(data) {
         if (id === player_id) {
             continue;
         }
+        connect_to_player(id);
         if (players[id]) {
             players[id].x = data[id].x;
             players[id].y = data[id].y;
@@ -164,6 +165,14 @@ function processReceivedData(data) {
             };
         }
     }
+}
+
+function connect_to_player(player_id) {
+    // Connect to the player with the specified ID
+    var connection = peer.connect(player_id);
+
+    // Handle data exchange with the connected player
+    handle_data_exchange(connection);
 }
 
 function handle_data_exchange(connection) {

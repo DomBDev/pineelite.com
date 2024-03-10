@@ -301,6 +301,10 @@ def handle_disconnect():
     except Exception as e:
         print(e)
 
+@socketio.on_error_default  # handles all namespaces without an explicit error handler
+def default_error_handler(e):
+    print(f'Error: {e}')
+
 @socketio.on('join', namespace='/game')
 def handle_join(player_id):
     # Handle PeerJS connection

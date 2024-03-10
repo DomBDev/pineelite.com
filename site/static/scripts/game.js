@@ -104,61 +104,48 @@ function drawLands() {
     }
 }
 var players = {};
-var player_id = generateUserId(Object.keys(players));
 var socket = io('/game');
-var peer;
+var peer = new Peer();
+var player_id = ""
 
-socket.on('connect', () => {
-    console.log('Connected to server.');
-    initializePeer();
+peer.on('open', function(id) {
+    console.log('My peer ID is: ' + id);
+    player_id = id;
+    socket.emit('join', player_id);
 });
 
-function initializePeer() {
-    peer = new Peer(player_id);
-    peer.on('open', (id) => {
-        console.log('Connected to peer server.');
-    });
-
-    peer.on('connection', (conn) => {
-        console.log('Connected to peer.');
-        conn.on('data', (data) => {
-            console.log('Received data:', data);
-            players[data.id] = data;
-        });
-    });
-
-    peer.on('error', (err) => {
-        console.log('Error:', err);
-    }
-    );
-
-    peer.on('disconnected', () => {
-        console.log('Disconnected from peer server.');
-    }
-    );
-
-    peer.on('close', () => {
-        console.log('Connection closed.');
-    }
-    );
-
-}
-
-function sendPlayerData() {
-    var data = {
-        id: player_id,
-        x: player.x,
-        y: player.y
-    };
+socket.on('players', function(data) {
+    players = data;
+    console.log("players: " + JSON.stringify(players));
+    // create a connection to each player
     for (var key in players) {
         if (key === player_id) {
             continue;
         }
         var conn = peer.connect(key);
         conn.on('open', () => {
-            conn.send(data);
+            conn.send({
+                id: player_id,
+                x: player.x,
+                y: player.y
+            });
         });
+    }
+});
 
+function sendPlayerData(x, y) {
+    for (var key in players) {
+        if (key === player_id) {
+            continue;
+        }
+        var conn = peer.connect(key);
+        conn.on('open', () => {
+            conn.send({
+                id: player_id,
+                x: x,
+                y: y
+            });
+        });
     }
 }
 
@@ -416,7 +403,7 @@ function gameLoop() {
             drawPlatforms();
             drawScore();
             drawLands();
-            sendPlayerData();
+            sendPlayerData(player.x, player.y);
             updatePlayer();
             ctx.fillText(player_id, 1000, 10);
 

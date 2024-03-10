@@ -283,33 +283,27 @@ def game():
 
 socketio = socketio = SocketIO(app, max_decode_packets=1000, max_http_buffer_size=1000000, async_mode='eventlet')#  engineio_logger=True,
 socketio.init_app(app, cors_allowed_origins="*")
-players = {}
-
+players = []
 
 @socketio.on('connect', namespace='/game')
 def handle_connect():
     print('Client connected')
-    emit('player_data', players)
 
+@socketio.on('disconnect', namespace='/game')
+def handle_disconnect():
+    print('Client disconnected')
 
-@socketio.on('player_data', namespace='/game')
-def handle_player_data(data):
-    print('Player state update:', data)
+@socketio.on('join', namespace='/game')
+def handle_join(player_id):
+    # Handle PeerJS connection
+    print(f'Player {player_id} joined')
 
-    player_id = data['id']
-    player_x = data['x']
-    player_y = data['y']
-    peer_id = data['peerId']
-    active = True
+    # Add the new player to the list of players
+    players.append(player_id)
 
-    players[player_id] = {"x": player_x, "y": player_y, "peerId": peer_id, "active": active}
-
-    # Establish peer-to-peer connections with other players
-    for id, player in players.items():
-        if id != player_id and player['peerId'] != '':
-            emit('peer_connect', {'peerId': player['peerId']}, room=request.sid)
-
-    emit('player_data', players, broadcast=True)
+    # Send the new player the current list of players
+    print(f'Players: {players}')
+    emit('players', players, broadcast=False)
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():

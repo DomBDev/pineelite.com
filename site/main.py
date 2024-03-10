@@ -299,7 +299,7 @@ def handle_player_data(data):
     player_id = data['id']
     player_x = data['x']
     player_y = data['y']
-    peer_id = data['peerId']
+    peer_id = data.get('peerId', '')
     active = True
 
     players[player_id] = {"x": player_x, "y": player_y, "peerId": peer_id, "active": active}

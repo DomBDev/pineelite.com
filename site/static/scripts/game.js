@@ -74,6 +74,7 @@ var GameState = {
     
         // Create the player sprite
         this.player = this.physics.add.sprite(0, 0, 'player');
+        this.player.setScale(0.1);
         this.cameras.main.startFollow(this.player); // Enable camera follow
     
         // Create the player controls
@@ -127,6 +128,7 @@ const config = {
     type: Phaser.AUTO,
     width: 800,
     height: 600,
+    parent: 'gameCanvas',
     physics: {
         default: 'arcade',
         arcade: {

@@ -93,16 +93,20 @@ var GameState = {
     update: function() {
         // Player movement
         if (this.cursors.up.isDown) {
+            console.log('up')
             this.player.setVelocityY(-200);
         } else if (this.cursors.down.isDown) {
+            console.log('down')
             this.player.setVelocityY(200);
         } else {
             this.player.setVelocityY(0);
         }
     
         if (this.cursors.left.isDown) {
+            console.log('left')
             this.player.setVelocityX(-200);
         } else if (this.cursors.right.isDown) {
+            console.log('right')
             this.player.setVelocityX(200);
         } else {
             this.player.setVelocityX(0);

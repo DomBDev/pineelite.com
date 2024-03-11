@@ -87,26 +87,27 @@ var GameState = {
     preload: function() {
         // Load the player sprite
         this.load.image('player', player_sprite);
+        this.load.image('enemy', enemy_sprite);
     },
 
     update: function() {
         // Player movement
-        this.player.body.velocity.x = 0;
-        this.player.body.velocity.y = 0;
-
         if (this.cursors.up.isDown) {
-            this.player.body.velocity.y = -200;
+            this.player.setVelocityY(-200);
         } else if (this.cursors.down.isDown) {
-            this.player.body.velocity.y = 200;
+            this.player.setVelocityY(200);
+        } else {
+            this.player.setVelocityY(0);
         }
-
+    
         if (this.cursors.left.isDown) {
-            this.player.body.velocity.x = -200;
+            this.player.setVelocityX(-200);
         } else if (this.cursors.right.isDown) {
-            this.player.body.velocity.x = 200;
+            this.player.setVelocityX(200);
+        } else {
+            this.player.setVelocityX(0);
         }
-
-
+    
         // Send player data to other players
         sendPlayerData({
             id: player_id,
@@ -115,11 +116,11 @@ var GameState = {
                 y: this.player.y
             }
         });
-        
     },
 
     add_player: function(data) {
-        players[data.id]['sprite'] = this.physics.add.sprite(data.location.x, data.location.y, 'player');
+        players[data.id]['sprite'] = this.physics.add.sprite(data.location.x, data.location.y, 'enemy');
+        console.log('added player sprite')
     }
 };
 

@@ -83,6 +83,11 @@ var GameState = {
         this.player.setOrigin(0.5, 0.5);
     },
 
+    preload: function() {
+        // Load the player sprite
+        this.load.image('player', player_sprite);
+    },
+
     update: function() {
         // Player movement
         this.player.body.velocity.x = 0;

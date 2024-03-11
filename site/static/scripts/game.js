@@ -116,14 +116,11 @@ var GameState = {
             if (Object.keys(players[player]).includes('sprite') === false && player != player_id) {
                 add_player(player, this);
             } else if (Object.keys(players[player]).includes('sprite') === true && player != player_id) {
-                try {
                     console.log("Player: ", player, "Location: ", players[player]['location'])
                     console.log("Player Data: ", players[player])
                     players[player]['sprite'].x = players[player]['location']['x'];
                     players[player]['sprite'].y = players[player]['location']['y'];
-                } catch (error) {
                     console.log("Error: ", error);
-                }
             }
         }
     

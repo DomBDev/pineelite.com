@@ -98,7 +98,7 @@ var GameState = {
         players[player_id]['sprite'].setOrigin(0.5, 0.5);
     },
 
-    update: function() {
+    update: () => {
         // Move the background images based on the player's velocity
         this.background1.tilePositionX += this.player.body.velocity.x / 100;
         this.background1.tilePositionY += this.player.body.velocity.y / 100;

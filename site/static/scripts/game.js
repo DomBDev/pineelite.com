@@ -13,7 +13,6 @@ peer.on('open', function(id) {
 });
 
 peer.on('connection', function(conn) {
-    console.log('connection made');
 
     conn.on('data', function(data) {
         players[data.id]['location'] = data.location;
@@ -59,9 +58,27 @@ function sendPlayerData(data) {
 }
 
 
+//
+const config = {
+    type: Phaser.AUTO,
+    width: 800,
+    height: 600,
+    parent: 'game-container',
+    physics: {
+        default: 'arcade',
+        arcade: {
+            gravity: { y: 0 }
+        }
+    },
+    scene: {
+        preload: preload,
+        create: create,
+        update: update
+    }
+};
 
 // Phaser game code
-var game = new Phaser.Game(window.innerWidth, window.innerHeight, Phaser.AUTO, 'gameCanvas');
+var game = new Phaser.Game(config);
 
 var GameState = {
     create: function() {

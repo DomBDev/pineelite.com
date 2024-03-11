@@ -233,7 +233,7 @@ def handle_join(player_id):
     session_player_map[request.sid] = player_id
 
     # Send the new player the current list of players
-    emit('player_list', session_player_map.values(), broadcast=False)
+    emit('player_list', list(session_player_map.values()), broadcast=False)
     emit('player_join', player_id, broadcast=True)
 
 @socketio.on('disconnect', namespace='/game')

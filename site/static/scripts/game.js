@@ -16,7 +16,6 @@ peer.on('connection', function(conn) {
 
     conn.on('data', function(data) {
         players[data.id]['location'] = data.location;
-        console.log("Location Data: ", data.location)
         if (data.id !== player_id && Object.keys(players[data.id]).includes('sprite')) {
             players[data.id]['sprite'].x = data.x;
             players[data.id]['sprite'].y = data.y;
@@ -117,11 +116,11 @@ var GameState = {
             if (Object.keys(players[player]).includes('sprite') === false && player != player_id) {
                 add_player(player, this);
             } else if (Object.keys(players[player]).includes('sprite') === true && player != player_id) {
-                    console.log("Player: ", player, "Location: ", players[player]['location'])
-                    console.log("Player Data: ", players[player])
+                // If player location data exists, update the player sprite location
+                if (Object.keys(players[player]).includes('location')) {
                     players[player]['sprite'].x = players[player]['location']['x'];
                     players[player]['sprite'].y = players[player]['location']['y'];
-                    console.log("Error: ", error);
+                }
             }
         }
     

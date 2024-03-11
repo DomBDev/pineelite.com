@@ -66,23 +66,6 @@ function sendPlayerData(data) {
 }
 
 
-//
-const config = {
-    type: Phaser.AUTO,
-    width: 800,
-    height: 600,
-    parent: 'gameCanvas',
-    physics: {
-        default: 'arcade',
-        arcade: {
-            gravity: { y: 0 }
-        }
-    },
-    scene: GameState
-};
-
-// Phaser game code
-var game = new Phaser.Game(config);
 
 var GameState = {
     create: function() {
@@ -137,6 +120,24 @@ var GameState = {
         
     }
 };
+
+// Config
+const config = {
+    type: Phaser.AUTO,
+    width: 800,
+    height: 600,
+    parent: 'gameCanvas',
+    physics: {
+        default: 'arcade',
+        arcade: {
+            gravity: { y: 0 }
+        }
+    },
+    scene: GameState
+};
+
+// Phaser game code
+var game = new Phaser.Game(config);
 
 game.state.add('GameState', GameState);
 game.state.start('GameState');

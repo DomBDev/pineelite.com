@@ -72,6 +72,10 @@ var GameState = {
         // Create the game world
         this.physics.world.setBounds(0, 0, 1920, 1920);
     
+        // Create the background sprites
+        this.background1 = this.add.tileSprite(0, 0, 1920, 1920, 'background');
+        this.background2 = this.add.tileSprite(0, 0, 1920, 1920, 'background');
+    
         // Create the player sprite
         this.player = this.physics.add.sprite(0, 0, 'player');
         this.player.setScale(0.1);
@@ -88,28 +92,30 @@ var GameState = {
         // Load the player sprite
         this.load.image('player', player_sprite);
         this.load.image('enemy', enemy_sprite);
+        this.load.image('background', background_sprite);
     },
 
     update: function() {
-        // Player movement
-        if (this.cursors.up.isDown) {
-            console.log('up')
-            this.player.setVelocityY(-200);
-        } else if (this.cursors.down.isDown) {
-            console.log('down')
-            this.player.setVelocityY(200);
-        } else {
-            this.player.setVelocityY(0);
-        }
+        // Move the background images based on the player's velocity
+        this.background1.tilePositionX += this.player.body.velocity.x / 100;
+        this.background1.tilePositionY += this.player.body.velocity.y / 100;
+        this.background2.tilePositionX += this.player.body.velocity.x / 100;
+        this.background2.tilePositionY += this.player.body.velocity.y / 100;
     
+        // Player movement
         if (this.cursors.left.isDown) {
-            console.log('left')
-            this.player.setVelocityX(-200);
+            this.player.setVelocityX(-160);
         } else if (this.cursors.right.isDown) {
-            console.log('right')
-            this.player.setVelocityX(200);
+            this.player.setVelocityX(160);
         } else {
             this.player.setVelocityX(0);
+        }
+        if (this.cursors.up.isDown) {
+            this.player.setVelocityY(-160);
+        } else if (this.cursors.down.isDown) {
+            this.player.setVelocityY(160);
+        } else {
+            this.player.setVelocityY(0);
         }
     
         // Send player data to other players

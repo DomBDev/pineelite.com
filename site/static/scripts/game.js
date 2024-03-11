@@ -116,7 +116,7 @@ var GameState = {
         }
         for (var player in players) {
             if (Object.keys(players[player]).includes('sprite') === false) {
-                add_player(player);
+                add_player(player, this);
             }
         }
     
@@ -131,8 +131,10 @@ var GameState = {
     }
 };
 
-function add_player(player_id) {
-    players[player_id]['sprite'] = GameState.physics.add.sprite(0, 0, 'other_player');
+function add_player(player_id, game_state) {
+    console.log("Adding player: ", player_id)
+    console.log("Game state: ", game_state)
+    players[player_id]['sprite'] = game_state.physics.add.sprite(0, 0, 'other_player');
     players[player_id]['sprite'].setScale(0.1);
     players[player_id]['sprite'].setOrigin(0.5, 0.5);
 }

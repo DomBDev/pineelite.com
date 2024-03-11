@@ -15,7 +15,14 @@ peer.on('open', function(id) {
 peer.on('connection', function(conn) {
 
     conn.on('data', function(data) {
+        console.log("Data from peer: ", data);
         players[data.id]['location'] = data.location;
+        if (data.id !== player_id && Object.keys(players[data.id]).includes('sprite') === false) {
+            players[data.id]['sprite'] = game.add.sprite(data.x, data.y, 'player');
+        } else if (data.id !== player_id) {
+            players[data.id]['sprite'].x = data.x;
+            players[data.id]['sprite'].y = data.y;
+        }
     });
 
 });
@@ -51,9 +58,10 @@ socket.on('player_list', function(data) {
 });
 
 function sendPlayerData(data) {
-    // x, y, rotation
+    // id, location(x,y)
     for (var key in connections) {
         connections[key].send(data);
+        console.log("Sending data to peer: ", data);
     }
 }
 
@@ -71,9 +79,8 @@ const config = {
         }
     },
     scene: {
-        preload: preload,
         create: create,
-        update: update
+        update: update,
     }
 };
 
@@ -100,12 +107,7 @@ var GameState = {
         // render other players
         for (var key in players) {
             // ensure player is not the current player, and that the player doesnt already have a sprite.
-            if (key !== player_id && Object.keys(players[key]).includes('sprite') === false) {
-                players[key]['sprite'] = game.add.sprite(data.x, data.y, 'player');
-            } else if (key !== player_id) {
-                players[key]['sprite'].x = data.x;
-                players[key]['sprite'].y = data.y;
-            }
+
         }
         
     },
@@ -129,11 +131,13 @@ var GameState = {
 
         // Send player data to other players
         sendPlayerData({
+            id: player_id,
             location: {
                 x: this.player.x,
                 y: this.player.y
             }
         });
+        
     }
 };
 

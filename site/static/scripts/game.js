@@ -15,7 +15,6 @@ peer.on('open', function(id) {
 peer.on('connection', function(conn) {
 
     conn.on('data', function(data) {
-        console.log("Data from peer: ", data);
         players[data.id]['location'] = data.location;
         if (data.id !== player_id && Object.keys(players[data.id]).includes('sprite')) {
             players[data.id]['sprite'].x = data.x;

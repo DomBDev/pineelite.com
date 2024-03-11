@@ -70,26 +70,17 @@ function sendPlayerData(data) {
 var GameState = {
     create: function() {
         // Create the game world
-        game.world.setBounds(0, 0, 2000, 2000); // Set the world bounds
-
+        this.physics.world.setBounds(0, 0, 1920, 1920);
+    
         // Create the player sprite
-        this.player = game.add.sprite(0, 0, 'player');
-        game.physics.arcade.enable(this.player);
-        game.camera.follow(this.player); // Enable camera follow
-
+        this.player = this.physics.add.sprite(0, 0, 'player');
+        this.cameras.main.startFollow(this.player); // Enable camera follow
+    
         // Create the player controls
-        this.cursors = game.input.keyboard.createCursorKeys();
-
+        this.cursors = this.input.keyboard.createCursorKeys();
+    
         // Set the player anchor to the center of the sprite
-        this.player.anchor.setTo(0.5, 0.5);
-    },
-    render_player: function(data) {
-        // render other players
-        for (var key in players) {
-            // ensure player is not the current player, and that the player doesnt already have a sprite.
-
-        }
-        
+        this.player.setOrigin(0.5, 0.5);
     },
 
     update: function() {
@@ -108,6 +99,7 @@ var GameState = {
         } else if (this.cursors.right.isDown) {
             this.player.body.velocity.x = 200;
         }
+
 
         // Send player data to other players
         sendPlayerData({

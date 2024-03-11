@@ -13,6 +13,7 @@ peer.on('open', function(id) {
 });
 
 peer.on('connection', function(conn) {
+    console.log('connection made');
 
     conn.on('data', function(data) {
         players[data.id]['location'] = data.location;

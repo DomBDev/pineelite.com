@@ -78,10 +78,7 @@ const config = {
             gravity: { y: 0 }
         }
     },
-    scene: {
-        create: create,
-        update: update,
-    }
+    scene: GameState
 };
 
 // Phaser game code

@@ -9,6 +9,12 @@ __pycache__/
 # Config
 config.json
 
+# Db
+game.db
+
+# OAI_CONFIG_LIST
+OAI_CONFIG_LIST
+
 # Distribution / packaging
 .Python
 build/

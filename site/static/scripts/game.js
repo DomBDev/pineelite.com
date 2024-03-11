@@ -92,13 +92,7 @@ var GameState = {
         this.load.image('other_player', enemy_sprite);
     },
 
-    add_player: function(player_id) {
-        players[player_id]['sprite'] = this.physics.add.sprite(players[player_id]['location']['x'], players[player_id]['location']['y'], 'other_player');
-        players[player_id]['sprite'].setScale(0.1);
-        players[player_id]['sprite'].setOrigin(0.5, 0.5);
-    },
-
-    update: () => {
+    update: function() {
         // Move the background images based on the player's velocity
         this.background1.tilePositionX += this.player.body.velocity.x / 100;
         this.background1.tilePositionY += this.player.body.velocity.y / 100;
@@ -122,7 +116,7 @@ var GameState = {
         }
         for (var player in players) {
             if (Object.keys(players[player]).includes('sprite') === false) {
-                this.add_player(player);
+                add_player(player);
             }
         }
     
@@ -136,6 +130,12 @@ var GameState = {
         });
     }
 };
+
+function add_player(player_id) {
+    players[player_id]['sprite'] = GameState.physics.add.sprite(0, 0, 'other_player');
+    players[player_id]['sprite'].setScale(0.1);
+    players[player_id]['sprite'].setOrigin(0.5, 0.5);
+}
 
 // Config
 const config = {

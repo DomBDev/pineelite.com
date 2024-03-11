@@ -117,8 +117,8 @@ var GameState = {
             if (Object.keys(players[player]).includes('sprite') === false && player !== player_id) {
                 add_player(player, this);
             } else if (Object.keys(players[player]).includes('sprite') === true && player !== player_id) {
-                players[player]['sprite'].x = players[player]['sprite'].x + 1;
-                players[player]['sprite'].y = players[player]['sprite'].y + 1;
+                players[player]['sprite'].x = players[player]['location']['x'];
+                players[player]['sprite'].y = players[player]['location']['y'];
             }
         }
     

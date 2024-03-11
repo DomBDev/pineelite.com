@@ -114,11 +114,15 @@ var GameState = {
             this.player.setVelocityY(0);
         }
         for (var player in players) {
-            if (Object.keys(players[player]).includes('sprite') === false && player !== player_id) {
+            if (Object.keys(players[player]).includes('sprite') === false && player != player_id) {
                 add_player(player, this);
-            } else if (Object.keys(players[player]).includes('sprite') === true && player !== player_id) {
-                players[player]['sprite'].x = players[player]['location']['x'];
-                players[player]['sprite'].y = players[player]['location']['y'];
+            } else if (Object.keys(players[player]).includes('sprite') === true && player != player_id) {
+                try {
+                    players[player]['sprite'].x = players[player]['location']['x'];
+                    players[player]['sprite'].y = players[player]['location']['y'];
+                } catch (error) {
+                    console.log("Error: ", error);
+                }
             }
         }
     
@@ -133,12 +137,16 @@ var GameState = {
     }
 };
 
-function add_player(player_id, game_state) {
-    console.log("Adding player: ", player_id)
-    console.log("Game state: ", game_state)
-    players[player_id]['sprite'] = game_state.physics.add.sprite(0, 0, 'other_player');
-    players[player_id]['sprite'].setScale(0.1);
-    players[player_id]['sprite'].setOrigin(0.5, 0.5);
+function add_player(other_player_id, game_state) {
+    if (player_id != other_player_id) {
+        console.log("Not adding player: ", other_player_id)
+        return;
+    } else {
+        console.log("Adding player: ", player_id)
+        players[other_player_id]['sprite'] = game_state.physics.add.sprite(0, 0, 'other_player');
+        players[other_player_id]['sprite'].setScale(0.1);
+        players[other_player_id]['sprite'].setOrigin(0.5, 0.5);
+    }
 }
 
 // Config

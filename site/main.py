@@ -6,12 +6,8 @@ import numpy as np
 import os
 import time
 from queue import Queue
-from threading import Thread
 from markdown import markdown
 
-import aiohttp
-from aiortc import RTCConfiguration, RTCIceServer, RTCPeerConnection, RTCSessionDescription, VideoStreamTrack
-from aiortc.contrib.media import MediaBlackhole, MediaPlayer, MediaRecorder
 from flask import Flask, render_template, request, redirect, url_for, flash, make_response, session, jsonify, Response
 from flask_login import LoginManager, login_user, login_required, current_user, logout_user
 from flask_socketio import SocketIO, emit
@@ -20,56 +16,37 @@ import logging
 from openai import OpenAI
 from werkzeug.security import check_password_hash, generate_password_hash
 from werkzeug.utils import secure_filename
-from aiohttp.web import Application, Response, RouteTableDef
-from aiohttp import web
 from flask_cors import CORS
-import autogen
 import sqlite3
+
+### Flask app setup
 
 app = Flask(__name__)
 app.secret_key = 'some_secret'
 app.config['DEBUG'] = True
 
-logging.basicConfig(level=logging.INFO)
-
-with open('config.json') as json_file:
-    config_data = json.load(json_file)
-    admin_password = config_data['Credentials']['admin_password']
-    app.config['ADMIN_PASSWORD'] = admin_password
-    openai = OpenAI(api_key=config_data['Credentials']['openai_key'])
-
 login_manager = LoginManager()
 login_manager.init_app(app)
+
+logging.basicConfig(level=logging.INFO)
+
+### Database setup
 
 # Check if data directory exists, if not create it
 data_directory = os.path.join(app.root_path, 'data')
 if not os.path.exists(data_directory):
     os.makedirs(data_directory)
 
+# Set up the database
 database_path = os.path.join(os.path.abspath(os.curdir), 'data', 'database.db')
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + database_path
 app.config['UPLOAD_FOLDER'] = 'static/images'
+db = SQLAlchemy(app)
 
 # Create upload folder if it doesn't already exist
 upload_folder = os.path.join(app.root_path, app.config['UPLOAD_FOLDER'])
 if not os.path.exists(upload_folder):
     os.makedirs(upload_folder)
-
-db = SQLAlchemy(app)
-
-def generate_etag(data):
-    return hashlib.md5(data).hexdigest()
-
-def add_etag(response):
-    response.headers['ETag'] = generate_etag(response.get_data())
-    return response
-
-def response_template(template, **kwargs):
-    response = make_response(render_template(template, **kwargs))
-    response.headers['Cache-Control'] = 'public, max-age=3600'
-    response = add_etag(response)
-    
-    return response
 
 class PortfolioItem(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -78,10 +55,6 @@ class PortfolioItem(db.Model):
     description = db.Column(db.String(120), nullable=False)
     full_description = db.Column(db.String(120), nullable=False)
     link = db.Column(db.String(120), nullable=False)
-
-@login_manager.user_loader
-def load_user(user_id):
-    return User.query.get(int(user_id))
 
 class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -99,6 +72,37 @@ class User(db.Model):
 
     def get_id(self):
         return str(self.id)
+
+@login_manager.user_loader
+def load_user(user_id):
+    return User.query.get(int(user_id))
+
+    
+
+# Create an instance of the OpenAI class
+with open('config.json') as json_file:
+    config_data = json.load(json_file)
+    admin_password = config_data['Credentials']['admin_password']
+    app.config['ADMIN_PASSWORD'] = admin_password
+    openai = OpenAI(api_key=config_data['Credentials']['openai_key'])
+
+
+
+def generate_etag(data):
+    return hashlib.md5(data).hexdigest()
+
+def add_etag(response):
+    response.headers['ETag'] = generate_etag(response.get_data())
+    return response
+
+def response_template(template, **kwargs):
+    response = make_response(render_template(template, **kwargs))
+    response.headers['Cache-Control'] = 'public, max-age=3600'
+    response = add_etag(response)
+    
+    return response
+
+
 
 @app.route('/chat')
 def chat():
@@ -130,62 +134,6 @@ def simple_response():
     session['chat_mode'] = 'simple'
     session.modified = True
     return assistant_message
-
-
-### Autogen Response (NOT APPLICABLE YET) ###
-"""
-config_list = autogen.config_list_from_json(
-    "OAI_CONFIG_LIST",
-    filter_dict={
-        "model": ["gpt-3.5-turbo"],
-    },
-)
-
-# Initialize AutoGen agents and chat settings
-llm_config = {"config_list": config_list, "cache_seed": 42}
-user_proxy = autogen.UserProxyAgent(
-    name="User_proxy",
-    system_message="A human admin.",
-    code_execution_config=False,
-    human_input_mode="TERMINATE",
-    llm_config=llm_config,
-)
-
-user_proxy.max_consecutive_auto_reply(1)
-
-
-writer = autogen.AssistantAgent( 
-    name="Writer", 
-    system_message="Flesh out the existing output, as well as developing and progressing pre-existing information (whether that be code or language). Be sure to also forward the pre-existing and updated information to the other agents.",
-    llm_config=llm_config, )
-
-editor = autogen.AssistantAgent( 
-    name="Editor", 
-    system_message="Finalize the output from the Writer, as well as finalizing pre-existing and updated information (whether that be code or language). Be sure to also forward the pre-existing and updated information to the other agents.",
-    llm_config=llm_config, )
-groupchat = autogen.GroupChat(agents=[user_proxy, writer, editor], messages=[], max_round=12)
-manager = autogen.GroupChatManager(groupchat=groupchat, llm_config=llm_config)
-"""
-"""
-    # Pass user message to AutoGen UserProxyAgent
-    user_proxy.initiate_chat(manager, message=message)
-    
-    # Get the message history of the AutoGen GroupChat
-    chat_history = manager.groupchat.messages
-    try:
-        summary = openai.chat.completions.create(
-            model="gpt-3.5-turbo",
-            messages=chat_history + [{"role": "system", "content": f"Your job is to extract all the important information from this entire conversation between AI agents. Do not explain it as a conversation, finalize the document, whether that be code or a paper or whatever, finalize it. The object of this conversation is to result in a specific task being accomplished, extract the information that completes this task and finish it off and format it with markdown. Don't forward 'tasks' as those are meant to be completed by the AI. Extract all the important information regarding the initial task: {message}"}],
-        )
-    except Exception as e:
-        print(e)
-        return str(e)
-
-    assistant_message = markdown(summary.choices[0].message.content, extensions=[
-        'extra',
-        ])
-    session['chat_history'].append({'role': 'assistant', 'content': assistant_message})
-"""
 
 retry_count = 0
 def generate_task_list(outline, message):
@@ -262,13 +210,14 @@ def complex_response():
 
     return output
 
-
-
 @app.route('/clear_chat', methods=['POST'])
 def clear_chat():
     session['chat_history'] = [{'role': 'system', 'content': 'You are PineBot, a helpful chat ai used for anything.'}]
     session.modified = True
     return redirect(url_for('chat'))
+
+
+
 
 @app.route('/game', methods=['GET', 'POST'])
 def game():
@@ -276,8 +225,16 @@ def game():
 
 socketio = socketio = SocketIO(app, max_decode_packets=1000, max_http_buffer_size=1000000, async_mode='eventlet')#  engineio_logger=True,
 socketio.init_app(app, cors_allowed_origins="*")
-players = []
 session_player_map = {}
+
+@socketio.on('join', namespace='/game')
+def handle_join(player_id):
+    # Add the player to the session-player map
+    session_player_map[request.sid] = player_id
+
+    # Send the new player the current list of players
+    emit('player_list', players, broadcast=False)
+    emit('player_join', player_id, broadcast=True)
 
 @socketio.on('disconnect', namespace='/game')
 def handle_disconnect():
@@ -285,21 +242,10 @@ def handle_disconnect():
         player_id = session_player_map[request.sid]
         players.remove(player_id)
         session_player_map.pop(request.sid)
-        emit('player_check', players, broadcast=True)
+        emit('player_leave', player_id, broadcast=True)
     except: pass
 
-@socketio.on('join', namespace='/game')
-def handle_join(player_id):
-    # Handle PeerJS connection
 
-    # Add the new player to the list of players
-    players.append(player_id)
-
-    # Add the player to the session-player map
-    session_player_map[request.sid] = player_id
-
-    # Send the new player the current list of players
-    emit('players', players, broadcast=False)
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
@@ -349,6 +295,8 @@ def register():
         return redirect(url_for('login'))
     else:
         return response_template('register.html')
+
+
 
 @app.route('/')
 def index():

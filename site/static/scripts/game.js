@@ -1,107 +1,6 @@
-// game.js
 
-$(document).ready(function() {
 
-var canvas = document.getElementById('gameCanvas');
-
-canvas.width = window.innerWidth * 0.8;
-canvas.height = window.innerHeight * 0.8;
-
-var ctx = canvas.getContext('2d');
-
-var fps = 30;
-var now;
-var then = Date.now();
-var interval = 1000 / fps;
-var delta;
-
-var friction = 0.8;
-
-var gameOver = false;
-
-var keys = {
-    ArrowRight: false,
-    ArrowLeft: false
-};
-
-var camera = {
-    x: 0,
-    y: 0,
-    width: canvas.width,
-    height: canvas.height
-};
-
-var player = {
-    x: canvas.width / 2,
-    y: canvas.height - 100,
-    width: 50,
-    height: 50,
-    dy: 0,
-    dx: 0,
-    gravity: 1.25,
-    jumpForce: 25,
-    jumping: false,
-    grounded: false,
-    score: 0
-};
-
-var max_jump_height = player.jumpForce * player.jumpForce / (2 * player.gravity);
-
-var lands = [];
-
-var platforms = [];
-
-function drawPlayer() {
-    ctx.fillStyle = "#6495ED";
-    ctx.fillRect(player.x - camera.x, player.y - camera.y, player.width, player.height);
-
-    ctx.fillStyle = "#FF0000";
-    for (var key in players) {
-        if (key === player_id) {
-            continue;
-        }
-        ctx.fillRect(players[key].x - camera.x, players[key].y - camera.y, player.width, player.height);
-    }
-}
-
-function drawPlatforms() {
-    for (var i = 0; i < platforms.length; i++) {
-        if (platforms[i].type === "solid") {
-            ctx.fillStyle = "#FFA500";
-            ctx.fillRect(platforms[i].x - camera.x, platforms[i].y - camera.y, platforms[i].width, platforms[i].height);
-        } else if (platforms[i].type === "disappearing") {
-            ctx.fillStyle = "#FFA07A";
-            ctx.fillRect(platforms[i].x - camera.x, platforms[i].y - camera.y, platforms[i].width, platforms[i].height);
-        } else {
-            ctx.fillStyle = "#FF0000";
-            ctx.fillRect(platforms[i].x - camera.x, platforms[i].y - camera.y, platforms[i].width, platforms[i].height);
-        }
-        // Draw the lifetime of the disappearing platform
-        if (platforms[i].type === "disappearing") {
-            ctx.fillStyle = "#FFFFFF";
-            ctx.textAlign = "center"; // Set text alignment to center
-            ctx.textBaseline = "middle"; // Set text baseline to middle
-            ctx.font = "20px Arial";
-            ctx.fillText(platforms[i].lifetime, platforms[i].x - camera.x + platforms[i].width / 2, platforms[i].y - camera.y + platforms[i].height / 2);
-        }
-    }
-}
-
-// update canvas size on window resize
-window.addEventListener('resize', function() {
-    canvas.width = window.innerWidth * 0.8;
-    canvas.height = window.innerHeight * 0.8;
-    camera.width = canvas.width;
-    camera.height = canvas.height;
-    max_jump_height = player.jumpForce * player.jumpForce / (2 * player.gravity);
-});
-
-function drawLands() {
-    ctx.fillStyle = "#90EE90";
-    for (var i = 0; i < lands.length; i++) {
-        ctx.fillRect(lands[i].x - camera.x, lands[i].y - camera.y, lands[i].width, lands[i].height);
-    }
-}
+// Multiplayer code
 var players = {};
 var socket = io('/game');
 var peer = new Peer();
@@ -113,398 +12,112 @@ peer.on('open', function(id) {
     socket.emit('join', player_id);
 });
 
-socket.on('players', function(data) {
-    for (var i = 0; i < data.length; i++) {
-        if (data[i] === player_id) {
-            continue;
-        }
-        var conn = peer.connect(data[i]);
-        connections[data[i]] = conn;
-    }
-});
-
-socket.on('player_check', function(data) {
-    for (var key in players) {
-        if (!data.includes(key)) {
-            delete players[key];
-        }
-    }
-
-});
-
 peer.on('connection', function(conn) {
 
-    if (Object.keys(connections).includes(conn.peer) === false) {
-        connections[conn.peer] = peer.connect(conn.peer);
-    }
-
     conn.on('data', function(data) {
-        players[data.id] = {
-            'x': data.x,
-            'y': canvas.height - data.y
-        };
-        sendPlayerData(player.x, player.y);
+        players[data.id]['location'] = data.location;
     });
+
 });
-function sendPlayerData(x, y) {
+
+socket.on('player_join', function(data) {
+    if (data !== player_id) {
+        connections[data] = peer.connect(data);
+        players[data] = {};
+    }
+});
+
+socket.on('player_leave', function(data) {
+    if (data === player_id) {
+        peer.disconnect();
+        return;
+    }
+    if (Object.keys(players).includes(data) === true){
+        delete players[data];
+    }
+    if (Object.keys(connections).includes(data) === true){
+        connections[data].close();
+        delete connections[data];
+    }
+});
+
+socket.on('player_list', function(data) {
+    for (var i = 0; i < data.length; i++) {
+        if (data[i] !== player_id) {
+            connections[data[i]] = peer.connect(data[i]);
+            players[data[i]] = {};
+        }
+    }
+});
+
+function sendPlayerData(data) {
+    // x, y, rotation
     for (var key in connections) {
-        connections[key].send({
-            'id': player_id,
-            'x': x,
-            'y': canvas.height - y
+        connections[key].send(data);
+    }
+}
+
+
+
+// Phaser game code
+var game = new Phaser.Game(window.innerWidth, window.innerHeight, Phaser.AUTO, 'gameCanvas');
+
+var GameState = {
+    create: function() {
+        // Create the game world
+        game.world.setBounds(0, 0, 2000, 2000); // Set the world bounds
+
+        // Create the player sprite
+        this.player = game.add.sprite(0, 0, 'player');
+        game.physics.arcade.enable(this.player);
+        game.camera.follow(this.player); // Enable camera follow
+
+        // Create the player controls
+        this.cursors = game.input.keyboard.createCursorKeys();
+
+        // Set the player anchor to the center of the sprite
+        this.player.anchor.setTo(0.5, 0.5);
+    },
+    render_player: function(data) {
+        // render other players
+        for (var key in players) {
+            // ensure player is not the current player, and that the player doesnt already have a sprite.
+            if (key !== player_id && Object.keys(players[key]).includes('sprite') === false) {
+                players[key]['sprite'] = game.add.sprite(data.x, data.y, 'player');
+            } else if (key !== player_id) {
+                players[key]['sprite'].x = data.x;
+                players[key]['sprite'].y = data.y;
+            }
+        }
+        
+    },
+
+    update: function() {
+        // Player movement
+        this.player.body.velocity.x = 0;
+        this.player.body.velocity.y = 0;
+
+        if (this.cursors.up.isDown) {
+            this.player.body.velocity.y = -200;
+        } else if (this.cursors.down.isDown) {
+            this.player.body.velocity.y = 200;
+        }
+
+        if (this.cursors.left.isDown) {
+            this.player.body.velocity.x = -200;
+        } else if (this.cursors.right.isDown) {
+            this.player.body.velocity.x = 200;
+        }
+
+        // Send player data to other players
+        sendPlayerData({
+            location: {
+                x: this.player.x,
+                y: this.player.y
+            }
         });
     }
-}
+};
 
-function drawScore() {
-    ctx.fillStyle = "#FFFFFF";
-    ctx.textAlign = "left"; // Set text alignment to left
-    ctx.textBaseline = "top"; // Set text baseline to top
-    ctx.font = "20px Arial";
-    ctx.fillText("Score: " + player.score, 10, 10);
-}
-
-function playerDeath() {
-    gameOver = true;
-    ctx.fillStyle = "#000000";
-    ctx.fillRect(canvas.width / 4, canvas.height / 4, canvas.width / 2, canvas.height / 2);
-    ctx.fillStyle = "#FFFFFF";
-    ctx.textAlign = "center"; // Set text alignment to center
-    ctx.textBaseline = "middle"; // Set text baseline to middle
-    ctx.font = "30px Arial";
-    ctx.fillText("Game Over", canvas.width / 2, canvas.height / 2);
-    ctx.font = "20px Arial";
-    ctx.fillText("Click to Respawn", canvas.width / 2, canvas.height / 2 + 50);
-}
-
-// Listen for touch events
-$(window).on('touchstart', function(event) {
-    // User tapped on the screen
-
-    // if touch is on the right third of the screen, move right
-    if (event.originalEvent.touches[0].clientX > canvas.width * 2 / 3) {
-        keys.ArrowRight = true;
-    } else if (event.originalEvent.touches[0].clientX < canvas.width/3){
-        keys.ArrowLeft = true;
-    } else {
-        if (!player.jumping && player.grounded) {
-            player.dy = -player.jumpForce;
-            player.jumping = true;
-        }
-    }
-});
-
-$(window).on('touchend', function(event) {
-    keys.ArrowLeft = false;
-    keys.ArrowRight = false;
-});
-
-function updatePlayer() {
-    var max_speed = 35;
-    player.dy += player.gravity;
-    
-    if (keys.ArrowRight && player.dx < max_speed) {
-        player.dx += 2;
-    }
-    if (keys.ArrowLeft && player.dx > -max_speed) {
-        player.dx -= 2;
-    }
-
-    player.x += player.dx;
-    player.y += player.dy;
-
-    camera.x = player.x - (camera.width / 2);
-    
-    if (camera.x < 0) {
-        camera.x = 0;
-    }
-
-    if (player.dx > 0) {
-        player.dx -= friction;
-    }
-    else if (player.dx < 0) {
-        player.dx += friction;
-    }
-    
-    if (Math.abs(player.dx) < 0.8) {
-        player.dx = 0;
-    }
-
-    player.grounded = false;
-
-    for (var i = 0; i < lands.length; i++) {
-        var l = lands[i];
-        if (player.x < l.x + l.width && player.x + player.width > l.x && player.y < l.y + l.height && player.y + player.height > l.y) {
-            player.y = l.y - player.height;
-            player.dy = 0;
-            player.jumping = false;
-            player.grounded = true;
-        }
-    }
-    
-    for (var i = 0; i < lands.length; i++) {
-        var l = lands[i];
-        if (player.x < l.x + l.width && player.x + player.width > l.x && player.y < l.y + l.height && player.y + player.height > l.y) {
-            player.y = l.y - player.height;
-            player.dy = 0;
-            player.jumping = false;
-            player.grounded = true;
-        }
-    }
-
-    for (var i = 0; i<players.length; i++) {
-        var p = players[i];
-        if (player === p) continue; // Skip if player is p
-        if (player.x < p.x + p.width && player.x + player.width > p.x && player.y < p.y + p.height && player.y + player.height > p.y) {
-            if (player.dy > 0 && player.y + player.height - player.dy <= p.y + p.height) {
-                player.y = p.y - player.height;
-                player.dy = 0;
-                player.jumping = false;
-                player.grounded = true;
-            }
-            else if (player.dy < 0 && player.y - player.dy >= p.y) {
-                player.y = p.y + p.height;
-                player.dy = 0;
-            }
-            else if (player.dx > 0 && player.x + player.width - player.dx <= p.x + p.width) {
-                player.x = p.x - player.width;
-                player.dx = 0;
-            }
-            else if (player.dx < 0 && player.x - player.dx >= p.x) {
-                player.x = p.x + p.width;
-                player.dx = 0;
-            }
-        }
-    }
-
-    for (var i = 0; i < platforms.length; i++) {
-        var p = platforms[i];
-        if (player.x < p.x + p.width && player.x + player.width > p.x && player.y < p.y + p.height && player.y + player.height > p.y) {
-            if (player.dy > 0 && player.y + player.height - player.dy <= p.y + p.height) {
-                player.y = p.y - player.height;
-                player.dy = 0;
-                player.jumping = false;
-                player.grounded = true;
-                if (p.type === "disappearing" && p.lifetime > 0) {
-                    p.lifetime--;
-                }
-            }
-            else if (player.dy < 0 && player.y - player.dy >= p.y) {
-                player.y = p.y + p.height;
-                player.dy = 0;
-            }
-            else if (player.dx > 0 && player.x + player.width - player.dx <= p.x + p.width) {
-                player.x = p.x - player.width;
-                player.dx = 0;
-            }
-            else if (player.dx < 0 && player.x - player.dx >= p.x) {
-                player.x = p.x + p.width;
-                player.dx = 0;
-            }
-        }
-    }
-
-    if (player.y > canvas.height) {
-        playerDeath();
-    }
-
-    player.score = Math.max(0, Math.floor(player.x / 100)-10);
-
-}
-
-var lastLandX;
-var lastLandWidth;
-
-function startGame() {
-    lands = [];
-    platforms = [];
-
-    platforms.push({
-        x: canvas.width / 3 * 2,
-        y: canvas.height - (Math.random() * 100 + 100),
-        width: Math.random() * 100 + 100,
-        height: 20,
-        type: "solid",
-        lifetime: -1
-    });
-
-    lands.push({
-        x: 0,
-        y: canvas.height - 50,
-        width: canvas.width,
-        height: 50
-    });
-
-    lastLandX = 0;
-    lastLandWidth = canvas.width;
-
-
-}
-startGame();
-
-function generateNextLand() {
-
-    var min_gap = 350*Math.max(1, Math.floor(player.score/100));
-    var max_gap = 800*Math.max(1, Math.floor(player.score/100));
-    var min_land = 250/Math.max(1, Math.floor(player.score/100));
-    var max_land = 1500/Math.max(1, Math.floor(player.score/100));
-
-    var gapWidth = Math.random() * (max_gap-min_gap) + min_gap; // Random gap width between 200 and 300
-    var landWidth = Math.random() * (max_land-min_land) + min_land; // Random land width between 200 and 300
-
-    // Generate new land
-    lands.push({
-        x: lastLandX + lastLandWidth + gapWidth,
-        y: canvas.height - 50,
-        width: landWidth,
-        height: 50
-    });
-
-    // Update lastLandX and lastLandWidth
-    lastLandX = lastLandX + lastLandWidth + gapWidth;
-    lastLandWidth = landWidth;
-}
-
-function generateNextPlatform() {
-    var min_gapX = 250*Math.max(1, Math.floor(player.score/100));
-    var max_gapX = 600*Math.max(1, Math.floor(player.score/100));
-    var min_platform_width = 50*Math.max(1, Math.floor(player.score/100));
-    var max_platform_width = 150/Math.max(1, Math.floor(player.score/100));
-
-    var min_gapY = 200;
-    var max_gapY = max_jump_height;
-
-    var gapX = Math.random() * (max_gapX-min_gapX) + min_gapX; // Random gap width between 200 and 300
-    var platformWidth = Math.random() * (max_platform_width-min_platform_width) + min_platform_width; // Random land width between 200 and 300
-    var direction = Math.random() > 0.5 ? "Up" : "Down";
-
-    var lastGeneratedPlatform = platforms[platforms.length - 1];
-    var lastGeneratedX = lastGeneratedPlatform.x;
-    var lastGeneratedY = lastGeneratedPlatform.y;
-
-    if (direction === "Up") {
-        var newY = lastGeneratedY - (Math.random() * (max_gapY-min_gapY) + min_gapY);
-        var newType = ["solid", "disappearing"][Math.floor(Math.random() * 2)];
-        newY = Math.max(newY, 0); // Ensure newY is not less than 0
-        platforms.push({
-            x: lastGeneratedX + gapX,
-            y: newY,
-            width: platformWidth,
-            height: 20,
-            type: newType,
-            lifetime: newType === "disappearing" ? Math.floor(Math.random()*30+10) : -1
-        });
-    }
-    else {
-        var newY = Math.random() * (canvas.height-lastGeneratedY-min_gapY) + lastGeneratedY + min_gapY;
-        var newType = ["solid", "disappearing"][Math.floor(Math.random() * 2)];
-        newY = Math.min(newY, canvas.height - 150); // Ensure newY is not greater than canvas.height - 20
-        platforms.push({
-            x: lastGeneratedX + gapX,
-            y: newY,
-            width: platformWidth,
-            height: 20,
-            type: newType,
-            lifetime: newType === "disappearing" ? Math.floor(Math.random()*30+10) : -1
-        });
-    }
-}
-
-function restartGame() {
-    gameOver = false;
-    player.x = canvas.width / 4;
-    player.y = canvas.height - 100;
-    player.dx = 0;
-    player.dy = 0;
-    startGame();
-}
-
-canvas.addEventListener('click', function(e) {
-    if (gameOver) {
-        restartGame();
-    }
-});
-
-function cleanup() {
-    lands = lands.filter(function(l) {
-        return l.x + l.width > camera.x;
-    });
-
-    platforms = platforms.filter(function(p) {
-        return p.x + p.width > camera.x;
-    });
-}
-
-function generateUserId(users) {
-    var id = Math.floor(Math.random() * 1000000);
-    if (users.includes(id)) {
-        return generateUserId(users);
-    }
-    return id;
-}
-
-frame = 0;
-function gameLoop() {
-    now = Date.now();
-    delta = now - then;
-
-    if (delta > interval) {
-        frame += 1;
-        then = now - (delta % interval);
-        if (!gameOver) {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            drawPlayer();
-            drawPlatforms();
-            drawScore();
-            drawLands();
-            sendPlayerData(player.x, player.y);
-            updatePlayer();
-            ctx.fillText(player_id, 1000, 10);
-
-            cleanup();
-            // Generate next land if necessary
-            if (player.x > lastLandX + lastLandWidth - canvas.width / 2) {
-                generateNextLand();
-            }
-            // Generate next platform if necessary
-            if (player.x > platforms[platforms.length - 1].x + platforms[platforms.length - 1].width - canvas.width / 2) {
-                generateNextPlatform();
-            }
-            
-
-            for (var i = 0; i < platforms.length; i++) {
-                if (platforms[i].type === "disappearing") {
-                    if (platforms[i].lifetime === 0) {
-                        platforms.splice(i, 1);
-                    }
-                }
-            }
-        }
-    }
-    requestAnimationFrame(gameLoop);
-}
-
-window.addEventListener('keydown', function(e) {
-    if ((e.key === ' ' || e.key === 'ArrowUp') && !player.jumping && player.grounded) {
-        player.dy = -player.jumpForce;
-        player.jumping = true;
-    }
-    if (e.code === 'ArrowRight') {
-        keys.ArrowRight = true;
-    }
-    if (e.key === 'ArrowLeft') {
-        keys.ArrowLeft = true;
-    }
-});
-
-window.addEventListener('keyup', function(e) {
-    if (e.key === 'ArrowRight') {
-        keys.ArrowRight = false;
-    }
-    if (e.key === 'ArrowLeft') {
-        keys.ArrowLeft = false;
-    }
-});
-
-gameLoop();
-});
+game.state.add('GameState', GameState);
+game.state.start('GameState');

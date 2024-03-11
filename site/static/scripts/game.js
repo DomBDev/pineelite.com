@@ -137,7 +137,7 @@ var GameState = {
 };
 
 function add_player(other_player_id, game_state) {
-    if (player_id != other_player_id) {
+    if (player_id == other_player_id) {
         console.log("Not adding player: ", other_player_id)
         return;
     } else {

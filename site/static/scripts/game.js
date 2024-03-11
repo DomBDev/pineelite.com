@@ -17,9 +17,7 @@ peer.on('connection', function(conn) {
     conn.on('data', function(data) {
         console.log("Data from peer: ", data);
         players[data.id]['location'] = data.location;
-        if (data.id !== player_id && Object.keys(players[data.id]).includes('sprite') === false) {
-            GameState.add_player(data);
-        } else if (data.id !== player_id) {
+        if (data.id !== player_id && Object.keys(players[data.id]).includes('sprite')) {
             players[data.id]['sprite'].x = data.x;
             players[data.id]['sprite'].y = data.y;
         }
@@ -116,6 +114,11 @@ var GameState = {
             this.player.setVelocityY(160);
         } else {
             this.player.setVelocityY(0);
+        }
+        for (var player in players) {
+            if (Object.keys(players[player]).includes('sprite') === false) {
+                this.add_player(player);
+            }
         }
     
         // Send player data to other players

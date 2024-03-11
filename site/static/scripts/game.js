@@ -59,7 +59,6 @@ function sendPlayerData(data) {
     // id, location(x,y)
     for (var key in connections) {
         connections[key].send(data);
-        console.log("Sending data to peer: ", data);
     }
 }
 

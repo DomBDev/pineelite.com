@@ -18,7 +18,7 @@ peer.on('connection', function(conn) {
         console.log("Data from peer: ", data);
         players[data.id]['location'] = data.location;
         if (data.id !== player_id && Object.keys(players[data.id]).includes('sprite') === false) {
-            players[data.id]['sprite'] = game.add.sprite(data.x, data.y, 'player');
+            GameState.add_player(data);
         } else if (data.id !== player_id) {
             players[data.id]['sprite'].x = data.x;
             players[data.id]['sprite'].y = data.y;
@@ -110,6 +110,10 @@ var GameState = {
             }
         });
         
+    },
+
+    add_player: function(data) {
+        players[data.id]['sprite'] = this.physics.add.sprite(data.location.x, data.location.y, 'player');
     }
 };
 

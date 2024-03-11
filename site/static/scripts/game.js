@@ -134,6 +134,3 @@ const config = {
 
 // Phaser game code
 var game = new Phaser.Game(config);
-
-game.state.add('GameState', GameState);
-game.state.start('GameState');

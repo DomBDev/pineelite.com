@@ -46,7 +46,6 @@ socket.on('player_leave', function(data) {
         console.log("Removing player due to leaving: ", data)
         players[data]['sprite'].destroy();
         players[data]['sprite_text'].destroy();
-        delete players[data];
     }
     if (Object.keys(connections).includes(data) === true){
         connections[data].close();
@@ -158,7 +157,6 @@ var GameState = {
                     console.log("Removing player due to innactivity: ", player)
                     players[player]['sprite'].destroy();
                     players[player]['sprite_text'].destroy();
-                    delete players[player];
                 }
             }
         }
@@ -188,7 +186,7 @@ function add_player(other_player_id, game_state) {
             players[other_player_id] = {};
         }
         if (Object.keys(players[other_player_id]).includes('sprite') === false) {
-            console.log("Sprite: " + players[other_player_id]['sprite'])
+            console.log("AllPlayers: " + players)
             console.log("Adding player: ", other_player_id)
             players[other_player_id]['sprite'] = game_state.physics.add.sprite(0, 0, 'player');
             players[other_player_id]['sprite_text'] = game_state.add.text(0, -50, other_player_id, { fontFamily: 'Georgia, "Goudy Bookletter 1911", Times, serif' });

@@ -70,7 +70,7 @@ function sendPlayerData(data) {
         if (key === player_id) {
             continue;
         }
-        if (players[key]['last_update'] === undefined) {
+        if (Object.keys(players[key]).includes('last_update') === false) {
             continue;
         }
        

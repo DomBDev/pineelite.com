@@ -40,6 +40,21 @@ socket.on('player_join', function(data) {
     }
 });
 
+function remove_player(player_id) {
+    if (added_sprites.includes(player_id) === true) {
+        added_sprites.splice(added_sprites.indexOf(player_id), 1);
+    }
+    if (Object.keys(players).includes(player_id) === true) {
+        players[player_id]['sprite'].destroy();
+        players[player_id]['sprite_text'].destroy();
+        delete players[player_id];
+    }
+    if (Object.keys(connections).includes(player_id) === true){
+        connections[player_id].close();
+        delete connections[player_id];
+    }
+}
+
 socket.on('player_leave', function(data) {
     if (data === player_id) {
         peer.disconnect();

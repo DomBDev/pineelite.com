@@ -15,7 +15,6 @@ var GameState = {
     
         // Create the player sprite
         this.player = this.physics.add.sprite(0, 0, 'player');
-        this.own_sprite = true;
         this.user_id = this.add.text(0, -50, player_id, { fontFamily: 'Georgia, "Goudy Bookletter 1911", Times, serif' });
         this.player.setScale(0.1);
         this.cameras.main.startFollow(this.player); // Enable camera follow
@@ -66,8 +65,8 @@ var GameState = {
                     this.players[data.id]['location'] = data['location']
                     this.players[data.id]['last_update'] = new Date().getTime();
                 }
-                console.log("Player Sprite Generated?" + Object.keys(this.players[data.id]).includes('sprite') + " Own Sprite: " + this.own_sprite);
-                if (Object.keys(this.players[data.id]).includes('sprite') === false && this.own_sprite) {
+                
+                if (Object.keys(this.players[data.id]).includes('sprite') === false) {
                     console.log("Creating sprite for: ", data.id)
                     this.players[data.id]['sprite'] = this.physics.add.sprite(data.location.x, data.location.y, 'player');
                     this.players[data.id]['sprite_text'] = this.add.text(data.location.x, data.location.y - 50, data.id, { fontFamily: 'Georgia, "Goudy Bookletter 1911", Times, serif' });

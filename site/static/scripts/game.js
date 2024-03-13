@@ -135,8 +135,8 @@ var GameState = {
             } else if (Object.keys(players[player]).includes('sprite') === true && player != player_id) {
                 // If player location data exists, update the player sprite location
                 if (Object.keys(players[player]).includes('location') && players[player]['sprite'].x != players[player]['location']['x'] && players[player]['sprite'].y != players[player]['location']['y']) {
-                    players[player]['sprite'].x = players[player]['location']['x'] + this.player.offsetX;
-                    players[player]['sprite'].y = players[player]['location']['y'] + this.player.offsetY;
+                    players[player]['sprite'].x = players[player]['location']['x'] - this.player.offsetX;
+                    players[player]['sprite'].y = players[player]['location']['y'] - this.player.offsetY;
                 }
             }
         }

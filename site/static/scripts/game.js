@@ -63,11 +63,6 @@ socket.on('player_list', function(data) {
 function sendPlayerData(data) {
     // id, location(x,y)
     for (var key in connections) {
-        if (connections[key].open === false) {
-            delete connections[key];
-            delete players[key];
-            continue;
-        }
         if (key === player_id) {
             continue;
         }
@@ -140,7 +135,6 @@ var GameState = {
         }
     
         // Send player data to other players
-        console.log("Sending player data")
         sendPlayerData({
             id: player_id,
             location: {

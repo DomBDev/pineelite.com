@@ -138,11 +138,6 @@ var GameState = {
         this.user_id.text = player_id;
         for (var player in players) {
             if (Object.keys(players[player]).includes('sprite') === false && player != player_id) {
-                console.log("Player: ", players[player])
-                console.log("players[player] = " + players[player])
-                console.log("players[player]['sprite'] = " + players[player]['sprite'])
-                console.log("players[player].sprite = " + players[player].sprite)
-
                 add_player(player, this);
             } else if (Object.keys(players[player]).includes('sprite') === true && player != player_id) {
                 // If player location data exists, update the player sprite location
@@ -204,7 +199,8 @@ function add_player(other_player_id, game_state) {
             players[other_player_id]['sprite_text'] = game_state.add.text(0, -50, other_player_id, { fontFamily: 'Georgia, "Goudy Bookletter 1911", Times, serif' });
             players[other_player_id]['sprite'].setScale(0.1);
             players[other_player_id]['sprite'].setOrigin(0.5, 0.5);
-            players[other_player_id]['sprite'].tint = 0xcc0000;
+            players[other_player_id]['sprite_text'].setOrigin(0.5, 0.5);
+            players[other_player_id]['sprite'].tint = 0xfa736e;
         }
 
     }

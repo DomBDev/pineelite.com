@@ -31,6 +31,79 @@ var GameState = {
         this.socket = io('/game');
         this.peer = new Peer();
 
+        var socket = this.socket;
+        var peer = this.peer;
+
+        peer.on('open', function(id) {
+            player_id = id;
+            socket.emit('join', player_id);
+        });
+
+        peer.on('connection', function(conn) {
+            console.log("Connection established with: ", conn.peer);
+            if (Object.keys(players).includes(conn.peer) === false) {
+                players[conn.peer] = {};
+            }
+            players[conn.peer]['last_update'] = new Date().getTime();
+
+            if (Object.keys(players).includes(conn.peer) === false) {
+                players[conn.peer] = {};
+            }
+
+            conn.on('data', function(data) {
+                if (Object.keys(players).includes(conn.peer)) {
+                    players[data.id]['location'] = data['location']
+                    players[data.id]['last_update'] = new Date().getTime();
+                }
+                if (Object.keys(players[data.id]).includes('sprite') === false) {
+                    players[data.id]['sprite'] = GameState.add.sprite(data.location.x, data.location.y, 'player');
+                    players[data.id]['sprite_text'] = GameState.add.text(data.location.x, data.location.y - 50, data.id, { fontFamily: 'Georgia, "Goudy Bookletter 1911", Times, serif' });
+                    players[data.id]['sprite'].setScale(0.1);
+                }
+            });
+
+        });
+
+        socket.on('player_join', function(data) {
+            if (data !== player_id) {
+                connections[data] = peer.connect(data);
+                players[data] = {};
+            }
+        });
+
+        socket.on('player_leave', function(data) {
+            remove_player(data);
+        });
+
+        socket.on('player_list', function(data) {
+            for (var i = 0; i < data.length; i++) {
+                if (data[i] !== player_id) {
+                    connections[data[i]] = peer.connect(data[i]);
+                }
+            }
+        });
+
+        function sendPlayerData(data) {
+            // id, location(x,y)
+            for (var key in connections) {
+                if (key === player_id) {
+                    continue;
+                }
+            
+                connections[key].send(data);
+            }
+        }
+
+        $(window).on('focus', function() {
+            console.log("Window focused")
+            socket.emit('join', player_id);
+        });
+
+        $(window).on('blur', function() {
+            console.log("Window blurred")
+            socket.emit('player_leave', player_id);
+        });
+
     },
 
     preload: function() {
@@ -128,76 +201,3 @@ const config = {
 
 // Phaser game code
 var game = new Phaser.Game(config);
-
-var socket = GameState.socket;
-var peer = GameState.peer;
-
-peer.on('open', function(id) {
-    player_id = id;
-    socket.emit('join', player_id);
-});
-
-peer.on('connection', function(conn) {
-    console.log("Connection established with: ", conn.peer);
-    if (Object.keys(players).includes(conn.peer) === false) {
-        players[conn.peer] = {};
-    }
-    players[conn.peer]['last_update'] = new Date().getTime();
-
-    if (Object.keys(players).includes(conn.peer) === false) {
-        players[conn.peer] = {};
-    }
-
-    conn.on('data', function(data) {
-        if (Object.keys(players).includes(conn.peer)) {
-            players[data.id]['location'] = data['location']
-            players[data.id]['last_update'] = new Date().getTime();
-        }
-        if (Object.keys(players[data.id]).includes('sprite') === false) {
-            players[data.id]['sprite'] = GameState.add.sprite(data.location.x, data.location.y, 'player');
-            players[data.id]['sprite_text'] = GameState.add.text(data.location.x, data.location.y - 50, data.id, { fontFamily: 'Georgia, "Goudy Bookletter 1911", Times, serif' });
-            players[data.id]['sprite'].setScale(0.1);
-        }
-    });
-
-});
-
-socket.on('player_join', function(data) {
-    if (data !== player_id) {
-        connections[data] = peer.connect(data);
-        players[data] = {};
-    }
-});
-
-socket.on('player_leave', function(data) {
-    remove_player(data);
-});
-
-socket.on('player_list', function(data) {
-    for (var i = 0; i < data.length; i++) {
-        if (data[i] !== player_id) {
-            connections[data[i]] = peer.connect(data[i]);
-        }
-    }
-});
-
-function sendPlayerData(data) {
-    // id, location(x,y)
-    for (var key in connections) {
-        if (key === player_id) {
-            continue;
-        }
-       
-        connections[key].send(data);
-    }
-}
-
-$(window).on('focus', function() {
-    console.log("Window focused")
-    socket.emit('join', player_id);
-});
-
-$(window).on('blur', function() {
-    console.log("Window blurred")
-    socket.emit('player_leave', player_id);
-});

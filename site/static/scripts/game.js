@@ -3,6 +3,7 @@
 var players = {};
 var player_id = ""
 var connections = {};
+var own_sprite = false;
 
 // Game code
 
@@ -16,6 +17,7 @@ var GameState = {
     
         // Create the player sprite
         this.player = this.physics.add.sprite(0, 0, 'player');
+        this.own_sprite = true;
         this.user_id = this.add.text(0, -50, player_id, { fontFamily: 'Georgia, "Goudy Bookletter 1911", Times, serif' });
         this.player.setScale(0.1);
         this.cameras.main.startFollow(this.player); // Enable camera follow
@@ -55,7 +57,7 @@ var GameState = {
                     players[data.id]['location'] = data['location']
                     players[data.id]['last_update'] = new Date().getTime();
                 }
-                if (Object.keys(players[data.id]).includes('sprite') === false) {
+                if (Object.keys(players[data.id]).includes('sprite') === false && this.own_sprite) {
                     players[data.id]['sprite'] = this.physics.add.sprite(data.location.x, data.location.y, 'player');
                     players[data.id]['sprite_text'] = this.add.text(data.location.x, data.location.y - 50, data.id, { fontFamily: 'Georgia, "Goudy Bookletter 1911", Times, serif' });
                     players[data.id]['sprite'].setScale(0.1);

@@ -133,7 +133,7 @@ var GameState = {
         this.load.image('other_player', enemy_sprite);
     },
 
-    update: async function() {
+    update: function() {
         this.frame += 1;
     
         // Player movement
@@ -170,12 +170,10 @@ var GameState = {
                 }
             }
         }
-        if (playersToAdd.length > 0) {
-        console.log("Players to add: ", playersToAdd)
-        console.log("Players: ", players)
-        }
+
         for (var i = 0; i < playersToAdd.length; i++) {
-            await add_player(playersToAdd[i], this);
+            add_player(playersToAdd[i], this);
+            added_sprites.push(playersToAdd[i]);
         }
 
         // remove inactive players
@@ -201,7 +199,7 @@ var GameState = {
     }
 };
 
-async function add_player(other_player_id, game_state) {
+function add_player(other_player_id, game_state) {
     console.log("player_id: ", player_id, "other_player_id: ", other_player_id)
     if (player_id === "") {
         console.log("Player not connected yet")

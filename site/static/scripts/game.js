@@ -76,6 +76,7 @@ function sendPlayerData(data) {
 }
 
 $(window).on('focus', function() {
+    console.log("Window focused")
     socket.emit('join', player_id);
 });
 

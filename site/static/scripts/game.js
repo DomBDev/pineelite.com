@@ -70,9 +70,6 @@ function sendPlayerData(data) {
         if (key === player_id) {
             continue;
         }
-        if (Object.keys(players[key]).includes('last_update') === false) {
-            continue;
-        }
        
         connections[key].send(data);
     }
@@ -138,6 +135,17 @@ var GameState = {
                     players[player]['sprite'].y = players[player]['location']['y'];
                     players[player]['sprite_text'].x = players[player]['location']['x'];
                     players[player]['sprite_text'].y = players[player]['location']['y'] - 50;
+                }
+            }
+        }
+
+        // remove inactive players
+        for (var player in players) {
+            if (player !== player_id) {
+                if (new Date().getTime() - players[player]['last_update'] > 5000) {
+                    players[player]['sprite'].destroy();
+                    players[player]['sprite_text'].destroy();
+                    delete players[player];
                 }
             }
         }

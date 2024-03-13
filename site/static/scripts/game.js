@@ -20,7 +20,6 @@ peer.on('connection', function(conn) {
     players[conn.peer]['last_update'] = new Date().getTime();
 
     conn.on('data', function(data) {
-        console.log("Data received from: ", conn.peer , "Data: ", data);
         players[data.id]['location'] = data['location']
         players[data.id]['last_update'] = new Date().getTime();
         if (data.id !== player_id && Object.keys(players[data.id]).includes('sprite')) {
@@ -85,7 +84,6 @@ function sendPlayerData(data) {
             continue;
         }
         connections[key].send(data);
-        console.log("Sending player data: ", data, "to: ", key);
     }
 }
 
@@ -101,6 +99,7 @@ var GameState = {
     
         // Create the player sprite
         this.player = this.physics.add.sprite(0, 0, 'player');
+        this.user_id = this.add.text(0, -50, player_id, { fontFamily: 'Georgia, "Goudy Bookletter 1911", Times, serif' });
         this.player.setScale(0.1);
         this.cameras.main.startFollow(this.player); // Enable camera follow
     
@@ -109,6 +108,7 @@ var GameState = {
     
         // Set the player anchor to the center of the sprite
         this.player.setOrigin(0.5, 0.5);
+
     },
 
     preload: function() {
@@ -134,6 +134,8 @@ var GameState = {
         } else {
             this.player.setVelocityY(0);
         }
+        this.user_id.x = this.player.x;
+        this.user_id.y = this.player.y - 50;
         for (var player in players) {
             if (Object.keys(players[player]).includes('sprite') === false && player != player_id) {
                 add_player(player, this);

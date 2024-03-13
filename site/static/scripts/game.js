@@ -83,7 +83,7 @@ var GameState = {
         this.physics.world.setBounds(0, 0, 1800, 1200);
     
         // Create the background sprites
-        this.background1 = this.add.tileSprite(0, 0, 1800, 1200, 'background');
+        this.background = this.add.image(0, 0, 'background');
     
         // Create the player sprite
         this.player = this.physics.add.sprite(0, 0, 'player');
@@ -97,6 +97,8 @@ var GameState = {
         // Set the player anchor to the center of the sprite
         this.player.setOrigin(0.5, 0.5);
 
+        this.frame = 0;
+
     },
 
     preload: function() {
@@ -106,6 +108,7 @@ var GameState = {
     },
 
     update: function() {
+        this.frame += 1;
     
         // Player movement
         if (this.cursors.left.isDown) {
@@ -122,6 +125,12 @@ var GameState = {
         } else {
             this.player.setVelocityY(0);
         }
+
+        //update player gif frame
+        if (this.player.body.velocity.x !== 0 || this.player.body.velocity.y !== 0) {
+            this.player.setFrame(Math.floor(this.frame / 10) % 4);
+        }
+
         this.user_id.x = this.player.x;
         this.user_id.y = this.player.y - 50;
         this.user_id.text = player_id;

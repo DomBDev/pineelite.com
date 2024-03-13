@@ -204,7 +204,7 @@ function add_player(other_player_id, game_state) {
             players[other_player_id]['sprite_text'] = game_state.add.text(0, -50, other_player_id, { fontFamily: 'Georgia, "Goudy Bookletter 1911", Times, serif' });
             players[other_player_id]['sprite'].setScale(0.1);
             players[other_player_id]['sprite'].setOrigin(0.5, 0.5);
-            players[other_player_id]['sprite'].tint = 0xff0000;
+            players[other_player_id]['sprite'].tint = 0xcc0000;
         }
 
     }

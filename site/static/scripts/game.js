@@ -131,7 +131,7 @@ var GameState = {
 
         // Render New Players and Update Existing Players
         for (var player in players) {
-            if (player !== player_id && frame % 10 === 0) {
+            if (player !== player_id && this.frame % 10 === 0) {
                 if (Object.keys(players[player]).includes('sprite') === false) {
                     players[player]['sprite'] = this.physics.add.sprite(0, 0, 'other_player');
                     players[player]['sprite_text'] = this.add.text(0, -50, player, { fontFamily: 'Georgia, "Goudy Bookletter 1911", Times, serif' });

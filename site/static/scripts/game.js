@@ -139,6 +139,10 @@ var GameState = {
         for (var player in players) {
             if (Object.keys(players[player]).includes('sprite') === false && player != player_id) {
                 console.log("Player: ", players[player])
+                console.log("players[player] = " + players[player])
+                console.log("players[player]['sprite'] = " + players[player]['sprite'])
+                console.log("players[player].sprite")
+
                 add_player(player, this);
             } else if (Object.keys(players[player]).includes('sprite') === true && player != player_id) {
                 // If player location data exists, update the player sprite location
@@ -153,7 +157,7 @@ var GameState = {
 
         // remove inactive players
         for (var player in connections) {
-            if (player !== player_id) {
+            if (player !== player_id && Object.keys(players).includes(player) === true) {
                 if (new Date().getTime() - players[player]['last_update'] > 5000) {
                     console.log("Removing player due to innactivity: ", player)
                     players[player]['sprite'].destroy();

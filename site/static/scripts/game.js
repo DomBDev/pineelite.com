@@ -58,6 +58,14 @@ function sendPlayerData(data) {
     console.log("Sending player data: ", data)
     // id, location(x,y)
     for (var key in connections) {
+        if (connections[key].open === false) {
+            delete connections[key];
+            delete players[key];
+            continue;
+        }
+        if (key === player_id) {
+            continue;
+        }
         connections[key].send(data);
     }
 }

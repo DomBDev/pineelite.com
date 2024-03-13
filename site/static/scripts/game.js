@@ -80,7 +80,7 @@ $(window).on('focus', function() {
 
 $(window).on('blur', function() {
     console.log("Window blurred")
-    player_leave(player_id);
+    socket.emit('player_leave', player_id);
 });
 
 // Game code

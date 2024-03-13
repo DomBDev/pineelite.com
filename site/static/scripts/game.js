@@ -55,7 +55,6 @@ socket.on('player_list', function(data) {
 });
 
 function sendPlayerData(data) {
-    console.log("Sending player data: ", data)
     // id, location(x,y)
     for (var key in connections) {
         if (connections[key].open === false) {
@@ -67,6 +66,7 @@ function sendPlayerData(data) {
             continue;
         }
         connections[key].send(data);
+        console.log("Sending player data to "+key+": ", data)
     }
 }
 

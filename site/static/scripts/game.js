@@ -2,8 +2,8 @@
 
 // Multiplayer code
 var players = {};
-var socket = io('/game');
-var peer = new Peer();
+var socket = null;
+var peer = null;
 var player_id = ""
 var connections = {};
 
@@ -27,6 +27,11 @@ peer.on('connection', function(conn) {
         if (Object.keys(players).includes(conn.peer)) {
             players[data.id]['location'] = data['location']
             players[data.id]['last_update'] = new Date().getTime();
+        }
+        if (Object.keys(players[data.id]).includes('sprite') === false) {
+            players[data.id]['sprite'] = GameState.add.sprite(data.location.x, data.location.y, 'player');
+            players[data.id]['sprite_text'] = GameState.add.text(data.location.x, data.location.y - 50, data.id, { fontFamily: 'Georgia, "Goudy Bookletter 1911", Times, serif' });
+            players[data.id]['sprite'].setScale(0.1);
         }
     });
 
@@ -129,19 +134,9 @@ var GameState = {
         this.user_id.y = this.player.y - 50;
         this.user_id.text = player_id;
 
-        // Render New Players and Update Existing Players
+        // Update Existing Players
         for (var player in players) {
-            if (player !== player_id && this.frame % 10 === 0) {
-                if (Object.keys(players[player]).includes('sprite') === false) {
-                    console.log("Adding new player: ", player)
-                    players[player]['sprite'] = this.physics.add.sprite(0, 0, 'other_player');
-                    players[player]['sprite_text'] = this.add.text(0, -50, player, { fontFamily: 'Georgia, "Goudy Bookletter 1911", Times, serif' });
-                    players[player]['sprite'].setScale(0.1);
-                    players[player]['sprite'].setOrigin(0.5, 0.5);
-                    players[player]['sprite_text'].setOrigin(0.5, 0.5);
-
-                    console.log("Adding new player: ", players[player]);
-                }
+            if (player !== player_id) {
                 if (Object.keys(players[player]).includes('location') === true) {
                     players[player]['sprite'].x = players[player]['location']['x'];
                     players[player]['sprite'].y = players[player]['location']['y'];
@@ -205,3 +200,8 @@ const config = {
 
 // Phaser game code
 var game = new Phaser.Game(config);
+
+GameState.events.on('ready', function() {
+    peer = new Peer();
+    socket = io('/game');
+});

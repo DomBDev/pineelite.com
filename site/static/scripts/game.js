@@ -80,7 +80,7 @@ function sendPlayerData(data) {
 var GameState = {
     create: function() {
         // Create the game world
-        this.physics.world.setBounds(0, 0, 1800, 1200);
+        this.physics.world.setBounds(0, 0, 800, 600);
     
         // Create the background sprites
         this.background = this.add.image(0, 0, 'background');

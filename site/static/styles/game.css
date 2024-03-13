@@ -19,6 +19,8 @@ body {
 
 canvas {
     flex: 1;
+    max-width: 800px;
+    max-height: 800px;
 }
 
 footer {

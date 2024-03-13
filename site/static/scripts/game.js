@@ -19,6 +19,10 @@ peer.on('connection', function(conn) {
     }
     players[conn.peer]['last_update'] = new Date().getTime();
 
+    if (Object.keys(players).includes(conn.peer) === false) {
+        players[conn.peer] = {};
+    }
+
     conn.on('data', function(data) {
         players[data.id]['location'] = data['location']
         players[data.id]['last_update'] = new Date().getTime();

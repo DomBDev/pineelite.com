@@ -75,10 +75,9 @@ function sendPlayerData(data) {
     }
 }
 
-// On Window Refocus
-window.onfocus = function() {
+$(window).on('focus', function() {
     socket.emit('join', player_id);
-}
+});
 
 // Game code
 

@@ -13,9 +13,10 @@ peer.on('open', function(id) {
 });
 
 peer.on('connection', function(conn) {
+    console.log("Connection established with: ", conn.peer);
 
     conn.on('data', function(data) {
-        console.log(data);
+        console.log("Data received from: ", conn.peer , "Data: ", data);
         if (Object.keys(players).includes(data.id) === false) {
             players[data.id] = {};
         }
@@ -71,6 +72,7 @@ function sendPlayerData(data) {
             continue;
         }
         connections[key].send(data);
+        console.log("Sending player data: ", data, "to: ", key);
     }
 }
 

@@ -33,7 +33,6 @@ peer.on('connection', function(conn) {
 socket.on('player_join', function(data) {
     if (data !== player_id) {
         connections[data] = peer.connect(data);
-        players[data] = {};
     }
 });
 
@@ -138,7 +137,7 @@ var GameState = {
         this.user_id.text = player_id;
         for (var player in players) {
             if (Object.keys(players[player]).includes('sprite') === false && player != player_id) {
-                console.log("Player: ", Object.keys(players[player]))
+                console.log("Player: ", players[player])
                 console.log("players[player] = " + players[player])
                 console.log("players[player]['sprite'] = " + players[player]['sprite'])
                 console.log("players[player].sprite = " + players[player].sprite)

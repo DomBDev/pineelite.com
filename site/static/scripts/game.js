@@ -76,13 +76,10 @@ function sendPlayerData(data) {
 var GameState = {
     create: function() {
         // Create the game world
-        this.physics.world.setBounds(0, 0, 1920, 1920);
+        this.physics.world.setBounds(0, 0, 1800, 1200);
     
         // Create the background sprites
-        this.background1 = this.add.tileSprite(0, 0, 1920, 1920, 'background');
-        this.background2 = this.add.tileSprite(0, 0, 1920, 1920, 'background');
-        this.background1.setScale(0.5);
-        this.background2.setScale(0.5);
+        this.background1 = this.add.tileSprite(0, 0, 1800, 1200, 'background');
     
         // Create the player sprite
         this.player = this.physics.add.sprite(0, 0, 'player');
@@ -94,8 +91,6 @@ var GameState = {
     
         // Set the player anchor to the center of the sprite
         this.player.setOrigin(0.5, 0.5);
-        this.player.offsetX = 0;
-        this.player.offsetY = 0;
     },
 
     preload: function() {
@@ -105,14 +100,6 @@ var GameState = {
     },
 
     update: function() {
-
-        this.player.offsetX += this.player.body.velocity.x / 100;
-        this.player.offsetY += this.player.body.velocity.y / 100;
-        // Move the background images based on the player's velocity
-        this.background1.tilePositionX = this.player.offsetX
-        this.background1.tilePositionY = this.player.offsetY
-        this.background2.tilePositionX = this.player.offsetX
-        this.background2.tilePositionY = this.player.offsetY
     
         // Player movement
         if (this.cursors.left.isDown) {
@@ -135,8 +122,8 @@ var GameState = {
             } else if (Object.keys(players[player]).includes('sprite') === true && player != player_id) {
                 // If player location data exists, update the player sprite location
                 if (Object.keys(players[player]).includes('location') && players[player]['sprite'].x != players[player]['location']['x'] && players[player]['sprite'].y != players[player]['location']['y']) {
-                    players[player]['sprite'].x = players[player]['location']['x'] - this.player.offsetX;
-                    players[player]['sprite'].y = players[player]['location']['y'] - this.player.offsetY;
+                    players[player]['sprite'].x = players[player]['location']['x'];
+                    players[player]['sprite'].y = players[player]['location']['y'];
                 }
             }
         }

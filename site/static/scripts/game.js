@@ -55,6 +55,7 @@ socket.on('player_list', function(data) {
 });
 
 function sendPlayerData(data) {
+    console.log("Sending player data: ", data)
     // id, location(x,y)
     for (var key in connections) {
         connections[key].send(data);

@@ -15,6 +15,7 @@ peer.on('open', function(id) {
 peer.on('connection', function(conn) {
 
     conn.on('data', function(data) {
+        console.log(data);
         players[data.id]['location'] = data.location;
         if (data.id !== player_id && Object.keys(players[data.id]).includes('sprite')) {
             players[data.id]['sprite'].x = data.x;
@@ -66,7 +67,6 @@ function sendPlayerData(data) {
             continue;
         }
         connections[key].send(data);
-        console.log("Sending player data to "+key+": ", data)
     }
 }
 

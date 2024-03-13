@@ -45,8 +45,10 @@ function remove_player(player_id) {
         added_sprites.splice(added_sprites.indexOf(player_id), 1);
     }
     if (Object.keys(players).includes(player_id) === true) {
-        players[player_id]['sprite'].destroy();
-        players[player_id]['sprite_text'].destroy();
+        if (Object.keys(players[player_id]).includes('sprite') === true) {
+            players[player_id]['sprite'].destroy();
+            players[player_id]['sprite_text'].destroy();
+        }
         delete players[player_id];
     }
     if (Object.keys(connections).includes(player_id) === true){
@@ -56,20 +58,7 @@ function remove_player(player_id) {
 }
 
 socket.on('player_leave', function(data) {
-    if (data === player_id) {
-        peer.disconnect();
-        return;
-    }
-    if (Object.keys(players).includes(data) === true) {
-        console.log("Removing player due to leaving: ", data)
-        players[data]['sprite'].destroy();
-        players[data]['sprite_text'].destroy();
-        delete players[data];
-    }
-    if (Object.keys(connections).includes(data) === true){
-        connections[data].close();
-        delete connections[data];
-    }
+    remove_player(data);
 });
 
 socket.on('player_list', function(data) {
@@ -181,9 +170,7 @@ var GameState = {
             if (player !== player_id) {
                 if (new Date().getTime() - players[player]['last_update'] > 5000) {
                     console.log("Removing player due to innactivity: ", player)
-                    players[player]['sprite'].destroy();
-                    players[player]['sprite_text'].destroy();
-                    delete players[player];
+                    remove_player(player);
                 }
             }
         }

@@ -96,6 +96,8 @@ var GameState = {
 
         this.frame = 0;
 
+        this.player_index = {};
+
     },
 
     preload: function() {
@@ -132,6 +134,7 @@ var GameState = {
             if (player !== player_id) {
                 if (Object.keys(players[player]).includes('sprite') === false) {
                     players[player]['sprite'] = this.physics.add.sprite(0, 0, 'other_player');
+                    this.player_index[players[player]['sprite']] = {player: player, created: new Date().getTime()}
                     players[player]['sprite_text'] = this.add.text(0, -50, player, { fontFamily: 'Georgia, "Goudy Bookletter 1911", Times, serif' });
                     players[player]['sprite'].setScale(0.1);
                     players[player]['sprite'].setOrigin(0.5, 0.5);
@@ -143,6 +146,14 @@ var GameState = {
                     players[player]['sprite_text'].y = players[player]['location']['y'] - 50;
                     players[player]['sprite_text'].text = player;
                 }
+            }
+        }
+
+        for (var sprite in this.player_index) {
+            // if there are sprited with duplicate player ids, remove the oldest one
+            if (Object.keys(players).includes(this.player_index[sprite]['player']) === false) {
+                sprite.destroy();
+                this.player_index[sprite] = null;
             }
         }
 

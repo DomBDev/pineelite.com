@@ -58,13 +58,15 @@ var GameState = {
                 if (!this.players) {
                     this.players = {};
                 }
-                if (Object.keys(this.players).includes(conn.peer) === false) {
-                    this.players[conn.peer] = {};
-                }
                 if (Object.keys(this.players).includes(conn.peer)) {
                     this.players[data.id]['location'] = data['location']
                     this.players[data.id]['last_update'] = new Date().getTime();
+                } else {
+                    this.players[data.id] = {};
+                    this.players[data.id]['location'] = data['location']
+                    this.players[data.id]['last_update'] = new Date().getTime();
                 }
+                console.log("Player Sprite Generated?" + Object.keys(this.players[data.id]).includes('sprite') + " Own Sprite: " + this.own_sprite);
                 if (Object.keys(this.players[data.id]).includes('sprite') === false && this.own_sprite) {
                     console.log("Creating sprite for: ", data.id)
                     this.players[data.id]['sprite'] = this.physics.add.sprite(data.location.x, data.location.y, 'player');

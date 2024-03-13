@@ -158,11 +158,13 @@ var GameState = {
         // remove inactive players
         for (var player in connections) {
             if (player !== player_id && Object.keys(players).includes(player) === true) {
-                if (new Date().getTime() - players[player]['last_update'] > 5000) {
+                if (new Date().getTime() - players[player]['last_update'] > 1000) {
                     console.log("Removing player due to innactivity: ", player)
                     players[player]['sprite'].destroy();
                     players[player]['sprite_text'].destroy();
                     delete players[player];
+                    connections[player].close();
+                    delete connections[player];
                 }
             }
         }

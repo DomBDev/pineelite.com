@@ -186,6 +186,7 @@ function add_player(other_player_id, game_state) {
             players[other_player_id] = {};
         }
         console.log(players[other_player_id])
+        console.log(players[other_player_id]['sprite'])
         if (players[other_player_id]['sprite'] === undefined) {
             for (var key in players) {
                 console.log("Player Data for " + key + ": ", players[key])

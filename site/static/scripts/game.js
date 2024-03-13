@@ -41,6 +41,7 @@ socket.on('player_join', function(data) {
 });
 
 function remove_player(player_id) {
+    console.log("Removing player: ", player_id)
     if (added_sprites.includes(player_id) === true) {
         added_sprites.splice(added_sprites.indexOf(player_id), 1);
     }

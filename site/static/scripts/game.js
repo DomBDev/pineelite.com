@@ -26,10 +26,6 @@ peer.on('connection', function(conn) {
     conn.on('data', function(data) {
         players[data.id]['location'] = data['location']
         players[data.id]['last_update'] = new Date().getTime();
-        if (data.id !== player_id && Object.keys(players[data.id]).includes('sprite')) {
-            players[data.id]['sprite'].x = data.x;
-            players[data.id]['sprite'].y = data.y;
-        }
     });
 
 });
@@ -203,7 +199,7 @@ function add_player(other_player_id, game_state) {
 
 // Config
 const config = {
-    type: Phaser.CANVAS,
+    type: Phaser.AUTO,
     width: 800,
     height: 600,
     parent: 'gameCanvas',

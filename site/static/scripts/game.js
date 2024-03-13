@@ -159,7 +159,7 @@ var GameState = {
         console.log("Players: ", players)
         }
         for (var i = 0; i < playersToAdd.length; i++) {
-            add_player(playersToAdd[i], this);
+            players = add_player(players, playersToAdd[i], this);
         }
 
         // remove inactive players
@@ -185,7 +185,7 @@ var GameState = {
     }
 };
 
-function add_player(other_player_id, game_state) {
+function add_player(player_data, other_player_id, game_state) {
     console.log("player_id: ", player_id, "other_player_id: ", other_player_id)
     if (player_id === "") {
         console.log("Player not connected yet")
@@ -195,19 +195,20 @@ function add_player(other_player_id, game_state) {
         console.log("Not adding player: ", other_player_id)
         return;
     } else {
-        if (Object.keys(players).includes(other_player_id) === false) {
+        if (Object.keys(player_data).includes(other_player_id) === false) {
             players[other_player_id] = {};
         }
-        if (Object.keys(players[other_player_id]).includes('sprite') === false) {
+        if (Object.keys(player_data[other_player_id]).includes('sprite') === false) {
             console.log("Player Data: ", Object.keys(players[other_player_id]));
-            console.log("Sprite: " + players[other_player_id]['sprite'])
+            console.log("Sprite: " + player_data[other_player_id]['sprite'])
             console.log("Adding player: ", other_player_id)
-            players[other_player_id]['sprite'] = game_state.physics.add.sprite(0, 0, 'player');
-            players[other_player_id]['sprite_text'] = game_state.add.text(0, -50, other_player_id, { fontFamily: 'Georgia, "Goudy Bookletter 1911", Times, serif' });
-            players[other_player_id]['sprite'].setScale(0.1);
-            players[other_player_id]['sprite'].setOrigin(0.5, 0.5);
-            players[other_player_id]['sprite'].tint = 0xff0000;
+            player_data[other_player_id]['sprite'] = game_state.physics.add.sprite(0, 0, 'player');
+            player_data[other_player_id]['sprite_text'] = game_state.add.text(0, -50, other_player_id, { fontFamily: 'Georgia, "Goudy Bookletter 1911", Times, serif' });
+            player_data[other_player_id]['sprite'].setScale(0.1);
+            player_data[other_player_id]['sprite'].setOrigin(0.5, 0.5);
+            player_data[other_player_id]['sprite'].tint = 0xff0000;
         }
+        return player_data;
 
     }
 }

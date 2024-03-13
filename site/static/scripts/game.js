@@ -203,7 +203,7 @@ function add_player(other_player_id, game_state) {
 
 // Config
 const config = {
-    type: Phaser.AUTO,
+    type: Phaser.CANVAS,
     width: 800,
     height: 600,
     parent: 'gameCanvas',

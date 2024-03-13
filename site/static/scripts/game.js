@@ -156,6 +156,7 @@ var GameState = {
         }
         if (playersToAdd.length > 0) {
         console.log("Players to add: ", playersToAdd)
+        console.log("Players: ", Object.keys(players))
         }
         for (var i = 0; i < playersToAdd.length; i++) {
             add_player(playersToAdd[i], this);

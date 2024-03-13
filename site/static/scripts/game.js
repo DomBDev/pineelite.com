@@ -1,6 +1,3 @@
-
-
-var players = {};
 var player_id = ""
 var connections = {};
 var own_sprite = false;
@@ -9,6 +6,7 @@ var own_sprite = false;
 
 var GameState = {
     create: function() {
+        var players = {};
         // Create the game world
         this.physics.world.setBounds(0, 0, 800, 600);
     

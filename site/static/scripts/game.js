@@ -140,6 +140,7 @@ var GameState = {
         }
     
         // Send player data to other players
+        console.log("Sending player data")
         sendPlayerData({
             id: player_id,
             location: {
@@ -151,6 +152,7 @@ var GameState = {
 };
 
 function add_player(other_player_id, game_state) {
+    console.log("player_id: ", player_id, "other_player_id: ", other_player_id)
     if (player_id == other_player_id) {
         console.log("Not adding player: ", other_player_id)
         return;

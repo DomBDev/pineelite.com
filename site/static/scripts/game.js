@@ -144,7 +144,7 @@ var GameState = {
                 add_player(player, this);
             } else if (Object.keys(players[player]).includes('sprite') === true && player != player_id) {
                 // If player location data exists, update the player sprite location
-                if (Object.keys(players[player]).includes('location')) {
+                if (Object.keys(players[player]).includes('location') && this.frame % 10 === 0) {
                     players[player]['sprite'].x = players[player]['location']['x'];
                     players[player]['sprite'].y = players[player]['location']['y'];
                     players[player]['sprite_text'].x = players[player]['location']['x'];

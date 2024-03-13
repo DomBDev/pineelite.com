@@ -140,14 +140,17 @@ var GameState = {
         }
         this.user_id.x = this.player.x;
         this.user_id.y = this.player.y - 50;
+        this.user_id.text = player_id;
         for (var player in players) {
             if (Object.keys(players[player]).includes('sprite') === false && player != player_id) {
                 add_player(player, this);
             } else if (Object.keys(players[player]).includes('sprite') === true && player != player_id) {
                 // If player location data exists, update the player sprite location
-                if (Object.keys(players[player]).includes('location') && players[player]['sprite'].x != players[player]['location']['x'] && players[player]['sprite'].y != players[player]['location']['y']) {
+                if (Object.keys(players[player]).includes('location')) {
                     players[player]['sprite'].x = players[player]['location']['x'];
                     players[player]['sprite'].y = players[player]['location']['y'];
+                    players[player]['sprite_text'].x = players[player]['location']['x'];
+                    players[player]['sprite_text'].y = players[player]['location']['y'] - 50;
                 }
             }
         }
@@ -180,6 +183,7 @@ function add_player(other_player_id, game_state) {
         if (Object.keys(players[other_player_id]).includes('sprite') === false) {
             console.log("Adding player: ", other_player_id)
             players[other_player_id]['sprite'] = game_state.physics.add.sprite(0, 0, 'other_player');
+            players[other_player_id]['sprite_text'] = game_state.add.text(0, -50, other_player_id, { fontFamily: 'Georgia, "Goudy Bookletter 1911", Times, serif' });
             players[other_player_id]['sprite'].setScale(0.1);
             players[other_player_id]['sprite'].setOrigin(0.5, 0.5);
         }

@@ -135,20 +135,12 @@ var GameState = {
             }
         }
 
-        // Calculate the player's movement delta
-        var deltaX = this.player.x - this.player.prevPosition.x;
-        var deltaY = this.player.y - this.player.prevPosition.y;
-
-        // Update the position of the other players' sprites
         for (var player in players) {
-            if (player != player_id) {
-                players[player]['sprite'].x += deltaX;
-                players[player]['sprite'].y += deltaY;
+            if (Object.keys(players[player]).includes('sprite') === true && player != player_id) {
+                players[player]['sprite'].x += this.player.body.velocity.x / 100;
+                players[player]['sprite'].y += this.player.body.velocity.y / 100;
             }
         }
-
-        // Update the player's previous position
-        this.player.prevPosition = { x: this.player.x, y: this.player.y };
 
     
         // Send player data to other players

@@ -190,7 +190,7 @@ function add_player(other_player_id, game_state) {
             players[other_player_id] = {};
         }
         if (Object.keys(players[other_player_id]).includes('sprite') === false) {
-            console.log("Player Data: ", players)
+            console.log("Player Data: ", Object.keys(players[other_player_id]));
             console.log("Sprite: " + players[other_player_id]['sprite'])
             console.log("Adding player: ", other_player_id)
             players[other_player_id]['sprite'] = game_state.physics.add.sprite(0, 0, 'player');

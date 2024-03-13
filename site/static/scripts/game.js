@@ -77,7 +77,7 @@ $(window).on('focus', function() {
 
 $(window).on('blur', function() {
     console.log("Window blurred")
-    socket.emit('disconnect');
+    socket.emit('leave_game');
 });
 
 // Game code

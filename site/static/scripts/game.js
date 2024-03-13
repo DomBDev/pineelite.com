@@ -186,7 +186,7 @@ function add_player(other_player_id, game_state) {
             players[other_player_id] = {};
         }
         if (Object.keys(players[other_player_id]).includes('sprite') === false) {
-            for (var key in connections) {
+            for (var key in players) {
                 console.log("Player Data for " + key + ": ", players[key])
             }
             console.log("Adding player: ", other_player_id)

@@ -201,7 +201,7 @@ const config = {
 // Phaser game code
 var game = new Phaser.Game(config);
 
-GameState.events.on('ready', function() {
+game.events.on('ready', function() {
     peer = new Peer();
     socket = io('/game');
 });

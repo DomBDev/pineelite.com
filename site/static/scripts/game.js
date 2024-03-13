@@ -80,6 +80,11 @@ $(window).on('focus', function() {
     socket.emit('join', player_id);
 });
 
+$(window).on('blur', function() {
+    console.log("Window blurred")
+    player_leave(player_id);
+});
+
 // Game code
 
 var GameState = {

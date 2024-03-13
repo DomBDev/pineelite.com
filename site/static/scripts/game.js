@@ -53,11 +53,12 @@ var GameState = {
             }
 
             conn.on('data', function(data) {
-                console.log("Received data from: ", conn.peer, data)
                 if (Object.keys(players).includes(conn.peer)) {
                     players[data.id]['location'] = data['location']
                     players[data.id]['last_update'] = new Date().getTime();
                 }
+                console.log(players)
+                console.log(this.own_sprite)
                 if (Object.keys(players[data.id]).includes('sprite') === false && this.own_sprite) {
                     console.log("Creating sprite for: ", data.id)
                     players[data.id]['sprite'] = this.physics.add.sprite(data.location.x, data.location.y, 'player');
@@ -184,9 +185,11 @@ function sendPlayerData(data) {
         if (key === player_id) {
             continue;
         }
+        if (key === "" || key === undefined) {
+            continue;
+        }
     
         connections[key].send(data);
-        console.log("Sending data to: ", key, data)
     }
 }
 

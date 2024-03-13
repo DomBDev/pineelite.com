@@ -55,6 +55,9 @@ var GameState = {
             }
 
             conn.on('data', function(data) {
+                if (!this.players) {
+                    this.players = {};
+                }
                 if (Object.keys(this.players).includes(conn.peer)) {
                     this.players[data.id]['location'] = data['location']
                     this.players[data.id]['last_update'] = new Date().getTime();

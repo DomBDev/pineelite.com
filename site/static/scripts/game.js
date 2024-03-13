@@ -53,6 +53,7 @@ var GameState = {
             }
 
             conn.on('data', function(data) {
+                console.log("Received data from: ", conn.peer, data)
                 if (Object.keys(players).includes(conn.peer)) {
                     players[data.id]['location'] = data['location']
                     players[data.id]['last_update'] = new Date().getTime();
@@ -184,6 +185,7 @@ function sendPlayerData(data) {
         }
     
         connections[key].send(data);
+        console.log("Sending data to: ", key, data)
     }
 }
 

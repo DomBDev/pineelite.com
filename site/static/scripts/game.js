@@ -31,7 +31,7 @@ peer.on('connection', function(conn) {
 });
 
 socket.on('player_join', function(data) {
-    if (data !== player_id) {
+    if (data !== player_id && Object.keys(connections).includes(data) === false) {
         connections[data] = peer.connect(data);
     }
 });
@@ -132,8 +132,8 @@ var GameState = {
             this.player.setVelocityY(0);
         }
 
-        this.user_id.x = this.player.x;
-        this.user_id.y = this.player.y - 50;
+        this.user_id.setX(this.player.x);
+        this.user_id.setY(this.player.y - 50);
         this.user_id.text = player_id;
         for (var player in players) {
             if (Object.keys(players[player]).includes('sprite') === false && player != player_id) {

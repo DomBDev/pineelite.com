@@ -37,6 +37,7 @@ socket.on('player_join', function(data) {
 });
 
 socket.on('player_leave', function(data) {
+    console.log("Player leaving: ", data, "Player id: ", player_id)
     if (data === player_id) {
         peer.disconnect();
         return;

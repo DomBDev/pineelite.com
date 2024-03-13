@@ -138,10 +138,10 @@ var GameState = {
         this.user_id.text = player_id;
         for (var player in players) {
             if (Object.keys(players[player]).includes('sprite') === false && player != player_id) {
-                console.log("Player: ", players[player])
+                console.log("Player: ", Object.keys(players[player]))
                 console.log("players[player] = " + players[player])
                 console.log("players[player]['sprite'] = " + players[player]['sprite'])
-                console.log("players[player].sprite")
+                console.log("players[player].sprite = " + players[player].sprite)
 
                 add_player(player, this);
             } else if (Object.keys(players[player]).includes('sprite') === true && player != player_id) {

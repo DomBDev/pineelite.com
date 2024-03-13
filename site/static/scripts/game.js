@@ -40,7 +40,8 @@ socket.on('player_leave', function(data) {
         peer.disconnect();
         return;
     }
-    if (Object.keys(players).includes(data) === true){
+    if (Object.keys(players).includes(data) === true) {
+        players[data]['sprite'].destroy();
         delete players[data];
     }
     if (Object.keys(connections).includes(data) === true){
@@ -152,6 +153,13 @@ function add_player(other_player_id, game_state) {
         console.log("Not adding player: ", other_player_id)
         return;
     } else {
+        if (Object.keys(players).includes(other_player_id) === false) {
+            players[other_player_id] = {};
+        }
+        if (Object.keys(players[other_player_id]).includes('sprite') === true) {
+            console.log("Not adding player: ", other_player_id)
+            return;
+        }
         console.log("Adding player: ", player_id)
         players[other_player_id]['sprite'] = game_state.physics.add.sprite(0, 0, 'other_player');
         players[other_player_id]['sprite'].setScale(0.1);

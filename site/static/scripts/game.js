@@ -92,6 +92,7 @@ var GameState = {
     
         // Set the player anchor to the center of the sprite
         this.player.setOrigin(0.5, 0.5);
+        this.player.prevPosition = { x: this.player.x, y: this.player.y };
     },
 
     preload: function() {
@@ -133,6 +134,22 @@ var GameState = {
                 }
             }
         }
+
+        // Calculate the player's movement delta
+        var deltaX = this.player.x - this.player.prevPosition.x;
+        var deltaY = this.player.y - this.player.prevPosition.y;
+
+        // Update the position of the other players' sprites
+        for (var player in players) {
+            if (player != player_id) {
+                players[player]['sprite'].x += deltaX;
+                players[player]['sprite'].y += deltaY;
+            }
+        }
+
+        // Update the player's previous position
+        this.player.prevPosition = { x: this.player.x, y: this.player.y };
+
     
         // Send player data to other players
         sendPlayerData({

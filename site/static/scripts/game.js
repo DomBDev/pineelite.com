@@ -75,7 +75,12 @@ function sendPlayerData(data) {
     }
 }
 
+// On Window Refocus
+window.onfocus = function() {
+    socket.emit('join', player_id);
+}
 
+// Game code
 
 var GameState = {
     create: function() {

@@ -70,8 +70,14 @@ var GameState = {
         });
 
         socket.on('player_join', function(data) {
+            if (this.players) {
             connections[data] = peer.connect(data);
             this.players[data] = {};
+            } else {
+                this.players = {};
+                connections[data] = peer.connect(data);
+                this.players[data] = {};
+            }
         });
 
         socket.on('player_leave', function(data) {

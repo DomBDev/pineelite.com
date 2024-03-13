@@ -41,12 +41,10 @@ socket.on('player_leave', function(data) {
         peer.disconnect();
         return;
     }
-    if (Object.keys(players).includes(data) === true) {
         console.log("Removing player due to leaving: ", data)
         players[data]['sprite'].destroy();
         players[data]['sprite_text'].destroy();
         delete players[data];
-    }
     if (Object.keys(connections).includes(data) === true){
         connections[data].close();
         delete connections[data];
@@ -95,6 +93,7 @@ var GameState = {
         // Create the player sprite
         this.player = this.physics.add.sprite(0, 0, 'player');
         this.user_id = this.add.text(0, -50, player_id, { fontFamily: 'Georgia, "Goudy Bookletter 1911", Times, serif' });
+        this.user_id.setOrigin(0.5, 0.5);
         this.player.setScale(0.1);
         this.cameras.main.startFollow(this.player); // Enable camera follow
     

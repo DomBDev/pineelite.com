@@ -56,8 +56,8 @@ var GameState = {
                     players[data.id]['last_update'] = new Date().getTime();
                 }
                 if (Object.keys(players[data.id]).includes('sprite') === false) {
-                    players[data.id]['sprite'] = GameState.add.sprite(data.location.x, data.location.y, 'player');
-                    players[data.id]['sprite_text'] = GameState.add.text(data.location.x, data.location.y - 50, data.id, { fontFamily: 'Georgia, "Goudy Bookletter 1911", Times, serif' });
+                    players[data.id]['sprite'] = GameSthistate.add.sprite(data.location.x, data.location.y, 'player');
+                    players[data.id]['sprite_text'] = this.add.text(data.location.x, data.location.y - 50, data.id, { fontFamily: 'Georgia, "Goudy Bookletter 1911", Times, serif' });
                     players[data.id]['sprite'].setScale(0.1);
                 }
             });

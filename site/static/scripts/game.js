@@ -154,7 +154,9 @@ var GameState = {
                 }
             }
         }
-    
+        if (playersToAdd.length > 0) {
+        console.log("Players to add: ", playersToAdd)
+        }
         for (var i = 0; i < playersToAdd.length; i++) {
             add_player(playersToAdd[i], this);
         }

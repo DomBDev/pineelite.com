@@ -6,7 +6,6 @@ var socket = io('/game');
 var peer = new Peer();
 var player_id = ""
 var connections = {};
-var added_sprites = [];
 
 peer.on('open', function(id) {
     player_id = id;
@@ -39,24 +38,6 @@ socket.on('player_join', function(data) {
         players[data] = {};
     }
 });
-
-function remove_player(player_id) {
-    console.log("Removing player: ", player_id)
-    if (added_sprites.includes(player_id) === true) {
-        added_sprites.splice(added_sprites.indexOf(player_id), 1);
-    }
-    if (Object.keys(players).includes(player_id) === true) {
-        if (Object.keys(players[player_id]).includes('sprite') === true) {
-            players[player_id]['sprite'].destroy();
-            players[player_id]['sprite_text'].destroy();
-        }
-        delete players[player_id];
-    }
-    if (Object.keys(connections).includes(player_id) === true){
-        connections[player_id].close();
-        delete connections[player_id];
-    }
-}
 
 socket.on('player_leave', function(data) {
     remove_player(data);
@@ -115,6 +96,8 @@ var GameState = {
 
         this.frame = 0;
 
+        this.added_sprites = [];
+
     },
 
     preload: function() {
@@ -163,7 +146,7 @@ var GameState = {
 
         for (var i = 0; i < playersToAdd.length; i++) {
             add_player(playersToAdd[i], this);
-            added_sprites.push(playersToAdd[i]);
+            this.added_sprites.push(playersToAdd[i]);
         }
 
         // remove inactive players
@@ -211,6 +194,27 @@ function add_player(other_player_id, game_state) {
             players[other_player_id]['sprite'].tint = 0xff0000;
         }
 
+    }
+}
+
+
+function remove_player(player_id) {
+    console.log("Removing player: ", player_id)
+    if (GameState) {
+        if (GameState.added_sprites.includes(player_id) === true) {
+            GameState.added_sprites.splice(added_sprites.indexOf(player_id), 1);
+        }
+    }
+    if (Object.keys(players).includes(player_id) === true) {
+        if (Object.keys(players[player_id]).includes('sprite') === true) {
+            players[player_id]['sprite'].destroy();
+            players[player_id]['sprite_text'].destroy();
+        }
+        delete players[player_id];
+    }
+    if (Object.keys(connections).includes(player_id) === true){
+        connections[player_id].close();
+        delete connections[player_id];
     }
 }
 

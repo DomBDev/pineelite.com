@@ -92,7 +92,8 @@ var GameState = {
     
         // Set the player anchor to the center of the sprite
         this.player.setOrigin(0.5, 0.5);
-        this.player.prevPosition = { x: this.player.x, y: this.player.y };
+        this.player.offsetX = 0;
+        this.player.offsetY = 0;
     },
 
     preload: function() {
@@ -102,11 +103,14 @@ var GameState = {
     },
 
     update: function() {
+
+        this.player.offsetX += this.player.body.velocity.x / 100;
+        this.player.offsetY += this.player.body.velocity.y / 100;
         // Move the background images based on the player's velocity
-        this.background1.tilePositionX += this.player.body.velocity.x / 100;
-        this.background1.tilePositionY += this.player.body.velocity.y / 100;
-        this.background2.tilePositionX += this.player.body.velocity.x / 100;
-        this.background2.tilePositionY += this.player.body.velocity.y / 100;
+        this.background1.tilePositionX = this.background1.tilePositionX + this.player.offsetX
+        this.background1.tilePositionY = this.background1.tilePositionY + this.player.offsetY
+        this.background2.tilePositionX = this.background2.tilePositionX + this.player.offsetX
+        this.background2.tilePositionY = this.background2.tilePositionY + this.player.offsetY
     
         // Player movement
         if (this.cursors.left.isDown) {
@@ -129,16 +133,9 @@ var GameState = {
             } else if (Object.keys(players[player]).includes('sprite') === true && player != player_id) {
                 // If player location data exists, update the player sprite location
                 if (Object.keys(players[player]).includes('location') && players[player]['sprite'].x != players[player]['location']['x'] && players[player]['sprite'].y != players[player]['location']['y']) {
-                    players[player]['sprite'].x = players[player]['location']['x'];
-                    players[player]['sprite'].y = players[player]['location']['y'];
+                    players[player]['sprite'].x = players[player]['location']['x'] + this.player.offsetX;
+                    players[player]['sprite'].y = players[player]['location']['y'] + this.player.offsetY;
                 }
-            }
-        }
-
-        for (var player in players) {
-            if (Object.keys(players[player]).includes('sprite') === true && player != player_id) {
-                players[player]['sprite'].x += this.player.body.velocity.x / 100;
-                players[player]['sprite'].y += this.player.body.velocity.y / 100;
             }
         }
 

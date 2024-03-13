@@ -126,9 +126,6 @@ var GameState = {
             this.player.setVelocityY(0);
         }
 
-        //update player gif frame
-        this.player.setFrame(this.frame % 4);
-
         this.user_id.x = this.player.x;
         this.user_id.y = this.player.y - 50;
         this.user_id.text = player_id;

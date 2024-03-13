@@ -69,8 +69,10 @@ var GameState = {
 
         socket.on('player_join', function(data) {
             if (data !== player_id) {
-                connections[data] = peer.connect(data);
-                this.players[data] = {};
+                if (this.players) {
+                    connections[data] = peer.connect(data);
+                    this.players[data] = {};
+                }
             }
         });
 
@@ -152,13 +154,15 @@ var GameState = {
         }
     
         // Send player data to other this.players
-        sendPlayerData({
-            id: player_id,
-            location: {
-                x: this.player.x,
-                y: this.player.y
-            }
-        });
+        if (this.player) {
+            sendPlayerData({
+                id: player_id,
+                location: {
+                    x: this.player.x,
+                    y: this.player.y
+                }
+            });
+        }
     }
 };
 

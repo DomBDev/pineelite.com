@@ -6,6 +6,7 @@ var socket = io('/game');
 var peer = new Peer();
 var player_id = ""
 var connections = {};
+var added_sprites = [];
 
 peer.on('open', function(id) {
     player_id = id;
@@ -198,7 +199,7 @@ async function add_player(other_player_id, game_state) {
         if (Object.keys(players).includes(other_player_id) === false) {
             players[other_player_id] = {};
         }
-        if (Object.keys(players[other_player_id]).includes('sprite') === false) {
+        if (Object.keys(players[other_player_id]).includes('sprite') === false && added_sprites.includes(other_player_id) === false){
             console.log("Player Data: ", Object.keys(players[other_player_id]));
             console.log("Sprite: " + players[other_player_id]['sprite'])
             console.log("Adding player: ", other_player_id)

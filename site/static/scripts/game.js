@@ -130,7 +130,7 @@ var GameState = {
         // Update Existing Players
         for (var player in players) {
             if (player !== player_id) {
-                if (Object.keys(players[player]).includes('location') === true) {
+                if (Object.keys(players[player]).includes('sprite') === true && Object.keys(players[player]).includes('location') === true) {
                     players[player]['sprite'].x = players[player]['location']['x'];
                     players[player]['sprite'].y = players[player]['location']['y'];
                     players[player]['sprite_text'].x = players[player]['location']['x'];

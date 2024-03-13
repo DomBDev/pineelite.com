@@ -127,9 +127,7 @@ var GameState = {
         }
 
         //update player gif frame
-        if (this.player.body.velocity.x !== 0 || this.player.body.velocity.y !== 0) {
-            this.player.setFrame(Math.floor(this.frame / 10) % 4);
-        }
+        this.player.setFrame(this.frame % 4);
 
         this.user_id.x = this.player.x;
         this.user_id.y = this.player.y - 50;

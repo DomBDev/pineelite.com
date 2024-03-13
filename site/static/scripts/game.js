@@ -45,6 +45,7 @@ socket.on('player_leave', function(data) {
         console.log("Removing player due to leaving: ", data)
         players[data]['sprite'].destroy();
         players[data]['sprite_text'].destroy();
+        delete players[data];
     }
     if (Object.keys(connections).includes(data) === true){
         connections[data].close();

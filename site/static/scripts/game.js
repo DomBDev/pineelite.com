@@ -177,14 +177,13 @@ function add_player(other_player_id, game_state) {
         if (Object.keys(players).includes(other_player_id) === false) {
             players[other_player_id] = {};
         }
-        if (Object.keys(players[other_player_id]).includes('sprite') === true) {
-            console.log("Not adding player: ", other_player_id)
-            return;
+        if (Object.keys(players[other_player_id]).includes('sprite') === false) {
+            console.log("Adding player: ", other_player_id)
+            players[other_player_id]['sprite'] = game_state.physics.add.sprite(0, 0, 'other_player');
+            players[other_player_id]['sprite'].setScale(0.1);
+            players[other_player_id]['sprite'].setOrigin(0.5, 0.5);
         }
-        console.log("Adding player: ", other_player_id)
-        players[other_player_id]['sprite'] = game_state.physics.add.sprite(0, 0, 'other_player');
-        players[other_player_id]['sprite'].setScale(0.1);
-        players[other_player_id]['sprite'].setOrigin(0.5, 0.5);
+
     }
 }
 

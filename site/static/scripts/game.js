@@ -66,7 +66,7 @@ var GameState = {
                     this.players[data.id]['last_update'] = new Date().getTime();
                 }
                 
-                if (Object.keys(this.players[data.id]).includes('sprite') === false) {
+                if (Object.keys(this.players[data.id]).includes('sprite') === false && this !== undefined) {
                     console.log("Creating sprite for: ", data.id)
                     this.players[data.id]['sprite'] = this.physics.add.sprite(data.location.x, data.location.y, 'player');
                     this.players[data.id]['sprite_text'] = this.add.text(data.location.x, data.location.y - 50, data.id, { fontFamily: 'Georgia, "Goudy Bookletter 1911", Times, serif' });

@@ -6,7 +6,7 @@ var own_sprite = false;
 
 var GameState = {
     create: function() {
-        var players = {};
+        this.players = {};
         // Create the game world
         this.physics.world.setBounds(0, 0, 800, 600);
     
@@ -41,27 +41,27 @@ var GameState = {
 
         peer.on('connection', function(conn) {
             console.log("Connection established with: ", conn.peer);
-            if (Object.keys(players).includes(conn.peer) === false) {
-                players[conn.peer] = {};
+            if (Object.keys(this.players).includes(conn.peer) === false) {
+                this.players[conn.peer] = {};
             }
-            players[conn.peer]['last_update'] = new Date().getTime();
+            this.players[conn.peer]['last_update'] = new Date().getTime();
 
-            if (Object.keys(players).includes(conn.peer) === false) {
-                players[conn.peer] = {};
+            if (Object.keys(this.players).includes(conn.peer) === false) {
+                this.players[conn.peer] = {};
             }
 
             conn.on('data', function(data) {
-                if (Object.keys(players).includes(conn.peer)) {
-                    players[data.id]['location'] = data['location']
-                    players[data.id]['last_update'] = new Date().getTime();
+                if (Object.keys(this.players).includes(conn.peer)) {
+                    this.players[data.id]['location'] = data['location']
+                    this.players[data.id]['last_update'] = new Date().getTime();
                 }
-                console.log(players)
+                console.log(this.players)
                 console.log(this.own_sprite)
-                if (Object.keys(players[data.id]).includes('sprite') === false && this.own_sprite) {
+                if (Object.keys(this.players[data.id]).includes('sprite') === false && this.own_sprite) {
                     console.log("Creating sprite for: ", data.id)
-                    players[data.id]['sprite'] = this.physics.add.sprite(data.location.x, data.location.y, 'player');
-                    players[data.id]['sprite_text'] = this.add.text(data.location.x, data.location.y - 50, data.id, { fontFamily: 'Georgia, "Goudy Bookletter 1911", Times, serif' });
-                    players[data.id]['sprite'].setScale(0.1);
+                    this.players[data.id]['sprite'] = this.physics.add.sprite(data.location.x, data.location.y, 'player');
+                    this.players[data.id]['sprite_text'] = this.add.text(data.location.x, data.location.y - 50, data.id, { fontFamily: 'Georgia, "Goudy Bookletter 1911", Times, serif' });
+                    this.players[data.id]['sprite'].setScale(0.1);
                 }
             });
 
@@ -70,7 +70,7 @@ var GameState = {
         socket.on('player_join', function(data) {
             if (data !== player_id) {
                 connections[data] = peer.connect(data);
-                players[data] = {};
+                this.players[data] = {};
             }
         });
 
@@ -128,30 +128,30 @@ var GameState = {
         this.user_id.y = this.player.y - 50;
         this.user_id.text = player_id;
 
-        // Update Existing Players
-        for (var player in players) {
+        // Update Existing this.players
+        for (var player in this.players) {
             if (player !== player_id) {
-                if (Object.keys(players[player]).includes('sprite') === true && Object.keys(players[player]).includes('location') === true) {
-                    players[player]['sprite'].x = players[player]['location']['x'];
-                    players[player]['sprite'].y = players[player]['location']['y'];
-                    players[player]['sprite_text'].x = players[player]['location']['x'];
-                    players[player]['sprite_text'].y = players[player]['location']['y'] - 50;
-                    players[player]['sprite_text'].text = player;
+                if (Object.keys(this.players[player]).includes('sprite') === true && Object.keys(this.players[player]).includes('location') === true) {
+                    this.players[player]['sprite'].x = this.players[player]['location']['x'];
+                    this.players[player]['sprite'].y = this.players[player]['location']['y'];
+                    this.players[player]['sprite_text'].x = this.players[player]['location']['x'];
+                    this.players[player]['sprite_text'].y = this.players[player]['location']['y'] - 50;
+                    this.players[player]['sprite_text'].text = player;
                 }
             }
         }
 
-        // remove inactive players
-        for (var player in players) {
+        // remove inactive this.players
+        for (var player in this.players) {
             if (player !== player_id) {
-                if (new Date().getTime() - players[player]['last_update'] > 5000) {
+                if (new Date().getTime() - this.players[player]['last_update'] > 5000) {
                     console.log("Removing player due to innactivity: ", player)
                     remove_player(player);
                 }
             }
         }
     
-        // Send player data to other players
+        // Send player data to other this.players
         sendPlayerData({
             id: player_id,
             location: {
@@ -164,12 +164,12 @@ var GameState = {
 
 function remove_player(player_id) {
     console.log("Removing player: ", player_id)
-    if (Object.keys(players).includes(player_id) === true) {
-        if (Object.keys(players[player_id]).includes('sprite') === true) {
-            players[player_id]['sprite'].destroy();
-            players[player_id]['sprite_text'].destroy();
+    if (Object.keys(this.players).includes(player_id) === true) {
+        if (Object.keys(this.players[player_id]).includes('sprite') === true) {
+            this.players[player_id]['sprite'].destroy();
+            this.players[player_id]['sprite_text'].destroy();
         }
-        delete players[player_id];
+        delete this.players[player_id];
     }
     if (Object.keys(connections).includes(player_id) === true){
         connections[player_id].close();

@@ -229,6 +229,7 @@ session_player_map = {}
 
 @socketio.on('join', namespace='/game')
 def handle_join(player_id):
+    print('Player joined:', player_id)
     # Add the player to the session-player map
     session_player_map[request.sid] = player_id
 

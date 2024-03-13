@@ -77,7 +77,7 @@ $(window).on('focus', function() {
 
 $(window).on('blur', function() {
     console.log("Window blurred")
-    socket.emit('player_leave', player_id);
+    emit('disconnect');
 });
 
 // Game code
@@ -161,6 +161,7 @@ var GameState = {
                     console.log("Removing player due to innactivity: ", player)
                     players[player]['sprite'].destroy();
                     players[player]['sprite_text'].destroy();
+                    delete players[player];
                 }
             }
         }

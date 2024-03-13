@@ -83,16 +83,6 @@ var GameState = {
             }
         });
 
-        function sendPlayerData(data) {
-            // id, location(x,y)
-            for (var key in connections) {
-                if (key === player_id) {
-                    continue;
-                }
-            
-                connections[key].send(data);
-            }
-        }
 
         $(window).on('focus', function() {
             console.log("Window focused")
@@ -181,6 +171,17 @@ function remove_player(player_id) {
     if (Object.keys(connections).includes(player_id) === true){
         connections[player_id].close();
         delete connections[player_id];
+    }
+}
+
+function sendPlayerData(data) {
+    // id, location(x,y)
+    for (var key in connections) {
+        if (key === player_id) {
+            continue;
+        }
+    
+        connections[key].send(data);
     }
 }
 

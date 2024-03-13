@@ -60,7 +60,6 @@ socket.on('player_list', function(data) {
     for (var i = 0; i < data.length; i++) {
         if (data[i] !== player_id) {
             connections[data[i]] = peer.connect(data[i]);
-            players[data[i]] = {};
         }
     }
 });
@@ -74,22 +73,7 @@ function sendPlayerData(data) {
         if (players[key]['last_update'] === undefined) {
             continue;
         }
-        if (new Date().getTime() - players[key]['last_update'] > 1000) {
-            console.log("Player: ", key, "has disconnected");
-            if (Object.keys(players).includes(key) === true) {
-                if (Object.keys(players[key]).includes('sprite') === true) {
-                    players[key]['sprite'].destroy();
-                }
-                if (Object.keys(players[key]).includes('sprite_text') === true) {
-                    players[key]['sprite_text'].destroy();
-                }
-            }
-
-            delete players[key];
-            delete connections[key];
-            socket.emit('player_leave', key);
-            continue;
-        }
+       
         connections[key].send(data);
     }
 }
@@ -157,7 +141,6 @@ var GameState = {
                 }
             }
         }
-
     
         // Send player data to other players
         sendPlayerData({

@@ -81,6 +81,8 @@ var GameState = {
         // Create the background sprites
         this.background1 = this.add.tileSprite(0, 0, 1920, 1920, 'background');
         this.background2 = this.add.tileSprite(0, 0, 1920, 1920, 'background');
+        this.background1.setScale(0.5);
+        this.background2.setScale(0.5);
     
         // Create the player sprite
         this.player = this.physics.add.sprite(0, 0, 'player');

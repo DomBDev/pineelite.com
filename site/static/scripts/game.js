@@ -37,6 +37,10 @@ var GameState = {
         peer.on('open', function(id) {
             player_id = id;
             socket.emit('join', player_id);
+            if (!this.players) {
+                this.players = {};
+            }
+            this.players[player_id] = {};
         });
 
         peer.on('connection', function(conn) {
@@ -55,8 +59,6 @@ var GameState = {
                     this.players[data.id]['location'] = data['location']
                     this.players[data.id]['last_update'] = new Date().getTime();
                 }
-                console.log(this.players)
-                console.log(this.own_sprite)
                 if (Object.keys(this.players[data.id]).includes('sprite') === false && this.own_sprite) {
                     console.log("Creating sprite for: ", data.id)
                     this.players[data.id]['sprite'] = this.physics.add.sprite(data.location.x, data.location.y, 'player');
@@ -68,12 +70,8 @@ var GameState = {
         });
 
         socket.on('player_join', function(data) {
-            if (data !== player_id) {
-                if (this.players) {
-                    connections[data] = peer.connect(data);
-                    this.players[data] = {};
-                }
-            }
+            connections[data] = peer.connect(data);
+            this.players[data] = {};
         });
 
         socket.on('player_leave', function(data) {

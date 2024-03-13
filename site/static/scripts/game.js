@@ -40,7 +40,11 @@ socket.on('player_join', function(data) {
 });
 
 socket.on('player_leave', function(data) {
-    remove_player(data);
+    if (GameState !== undefined) {
+        remove_player(data, GameState);
+    } else {
+        remove_player(data);
+    }
 });
 
 socket.on('player_list', function(data) {
@@ -154,7 +158,7 @@ var GameState = {
             if (player !== player_id) {
                 if (new Date().getTime() - players[player]['last_update'] > 5000) {
                     console.log("Removing player due to innactivity: ", player)
-                    remove_player(player);
+                    remove_player(player, this);
                 }
             }
         }
@@ -183,7 +187,7 @@ function add_player(other_player_id, game_state) {
         if (Object.keys(players).includes(other_player_id) === false) {
             players[other_player_id] = {};
         }
-        if (Object.keys(players[other_player_id]).includes('sprite') === false && added_sprites.includes(other_player_id) === false){
+        if (Object.keys(players[other_player_id]).includes('sprite') === false && game_state.added_sprites.includes(other_player_id) === false){
             console.log("Player Data: ", Object.keys(players[other_player_id]));
             console.log("Sprite: " + players[other_player_id]['sprite'])
             console.log("Adding player: ", other_player_id)
@@ -198,11 +202,11 @@ function add_player(other_player_id, game_state) {
 }
 
 
-function remove_player(player_id) {
+function remove_player(player_id, game_state=undefined) {
     console.log("Removing player: ", player_id)
-    if (GameState) {
-        if (GameState.added_sprites.includes(player_id) === true) {
-            GameState.added_sprites.splice(added_sprites.indexOf(player_id), 1);
+    if (game_state) {
+        if (game_state.added_sprites.includes(player_id) === true) {
+            game_state.added_sprites.splice(game_state.added_sprites.indexOf(player_id), 1);
         }
     }
     if (Object.keys(players).includes(player_id) === true) {

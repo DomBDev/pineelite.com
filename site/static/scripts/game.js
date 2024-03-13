@@ -139,9 +139,11 @@ var GameState = {
         this.user_id.x = this.player.x;
         this.user_id.y = this.player.y - 50;
         this.user_id.text = player_id;
+        var playersToAdd = [];
+
         for (var player in players) {
             if (Object.keys(players[player]).includes('sprite') === false && player != player_id) {
-                add_player(player, this);
+                playersToAdd.push(player);
             } else if (Object.keys(players[player]).includes('sprite') === true && player != player_id) {
                 // If player location data exists, update the player sprite location
                 if (Object.keys(players[player]).includes('location')) {
@@ -151,6 +153,10 @@ var GameState = {
                     players[player]['sprite_text'].setY(players[player]['location']['y'] - 50);
                 }
             }
+        }
+    
+        for (var i = 0; i < playersToAdd.length; i++) {
+            add_player(playersToAdd[i], this);
         }
 
         // remove inactive players

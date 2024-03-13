@@ -107,10 +107,10 @@ var GameState = {
         this.player.offsetX += this.player.body.velocity.x / 100;
         this.player.offsetY += this.player.body.velocity.y / 100;
         // Move the background images based on the player's velocity
-        this.background1.tilePositionX = this.background1.tilePositionX + this.player.offsetX
-        this.background1.tilePositionY = this.background1.tilePositionY + this.player.offsetY
-        this.background2.tilePositionX = this.background2.tilePositionX + this.player.offsetX
-        this.background2.tilePositionY = this.background2.tilePositionY + this.player.offsetY
+        this.background1.tilePositionX = this.player.offsetX
+        this.background1.tilePositionY = this.player.offsetY
+        this.background2.tilePositionX = this.player.offsetX
+        this.background2.tilePositionY = this.player.offsetY
     
         // Player movement
         if (this.cursors.left.isDown) {

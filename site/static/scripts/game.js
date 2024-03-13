@@ -40,11 +40,7 @@ socket.on('player_join', function(data) {
 });
 
 socket.on('player_leave', function(data) {
-    if (GameState !== undefined) {
-        remove_player(data, GameState);
-    } else {
-        remove_player(data);
-    }
+    remove_player(data);
 });
 
 socket.on('player_list', function(data) {
@@ -100,8 +96,6 @@ var GameState = {
 
         this.frame = 0;
 
-        this.added_sprites = [];
-
     },
 
     preload: function() {
@@ -132,25 +126,24 @@ var GameState = {
         this.user_id.x = this.player.x;
         this.user_id.y = this.player.y - 50;
         this.user_id.text = player_id;
-        var playersToAdd = [];
 
+        // Render New Players and Update Existing Players
         for (var player in players) {
-            if (Object.keys(players[player]).includes('sprite') === false && player != player_id) {
-                playersToAdd.push(player);
-            } else if (Object.keys(players[player]).includes('sprite') === true && player != player_id) {
-                // If player location data exists, update the player sprite location
-                if (Object.keys(players[player]).includes('location')) {
-                    players[player]['sprite'].setX(players[player]['location']['x']);
-                    players[player]['sprite'].setY(players[player]['location']['y']);
-                    players[player]['sprite_text'].setX(players[player]['location']['x']);
-                    players[player]['sprite_text'].setY(players[player]['location']['y'] - 50);
+            if (player !== player_id) {
+                if (Object.keys(players[player]).includes('sprite') === false) {
+                    players[player]['sprite'] = this.physics.add.sprite(0, 0, 'other_player');
+                    players[player]['sprite_text'] = this.add.text(0, -50, player, { fontFamily: 'Georgia, "Goudy Bookletter 1911", Times, serif' });
+                    players[player]['sprite'].setScale(0.1);
+                    players[player]['sprite'].setOrigin(0.5, 0.5);
+                }
+                if (Object.keys(players[player]).includes('location') === true) {
+                    players[player]['sprite'].x = players[player]['location']['x'];
+                    players[player]['sprite'].y = players[player]['location']['y'];
+                    players[player]['sprite_text'].x = players[player]['location']['x'];
+                    players[player]['sprite_text'].y = players[player]['location']['y'] - 50;
+                    players[player]['sprite_text'].text = player;
                 }
             }
-        }
-
-        for (var i = 0; i < playersToAdd.length; i++) {
-            add_player(playersToAdd[i], this);
-            this.added_sprites.push(playersToAdd[i]);
         }
 
         // remove inactive players
@@ -158,7 +151,7 @@ var GameState = {
             if (player !== player_id) {
                 if (new Date().getTime() - players[player]['last_update'] > 5000) {
                     console.log("Removing player due to innactivity: ", player)
-                    remove_player(player, this);
+                    remove_player(player);
                 }
             }
         }
@@ -174,41 +167,8 @@ var GameState = {
     }
 };
 
-function add_player(other_player_id, game_state) {
-    console.log("player_id: ", player_id, "other_player_id: ", other_player_id)
-    if (player_id === "") {
-        console.log("Player not connected yet")
-        return;
-    }
-    if (player_id == other_player_id) {
-        console.log("Not adding player: ", other_player_id)
-        return;
-    } else {
-        if (Object.keys(players).includes(other_player_id) === false) {
-            players[other_player_id] = {};
-        }
-        if (Object.keys(players[other_player_id]).includes('sprite') === false && game_state.added_sprites.includes(other_player_id) === false){
-            console.log("Player Data: ", Object.keys(players[other_player_id]));
-            console.log("Sprite: " + players[other_player_id]['sprite'])
-            console.log("Adding player: ", other_player_id)
-            players[other_player_id]['sprite'] = game_state.physics.add.sprite(0, 0, 'player');
-            players[other_player_id]['sprite_text'] = game_state.add.text(0, -50, other_player_id, { fontFamily: 'Georgia, "Goudy Bookletter 1911", Times, serif' });
-            players[other_player_id]['sprite'].setScale(0.1);
-            players[other_player_id]['sprite'].setOrigin(0.5, 0.5);
-            players[other_player_id]['sprite'].tint = 0xff0000;
-        }
-
-    }
-}
-
-
-function remove_player(player_id, game_state=undefined) {
+function remove_player(player_id) {
     console.log("Removing player: ", player_id)
-    if (game_state) {
-        if (game_state.added_sprites.includes(player_id) === true) {
-            game_state.added_sprites.splice(game_state.added_sprites.indexOf(player_id), 1);
-        }
-    }
     if (Object.keys(players).includes(player_id) === true) {
         if (Object.keys(players[player_id]).includes('sprite') === true) {
             players[player_id]['sprite'].destroy();

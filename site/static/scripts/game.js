@@ -133,10 +133,14 @@ var GameState = {
         for (var player in players) {
             if (player !== player_id && this.frame % 10 === 0) {
                 if (Object.keys(players[player]).includes('sprite') === false) {
+                    console.log("Adding new player: ", player)
                     players[player]['sprite'] = this.physics.add.sprite(0, 0, 'other_player');
                     players[player]['sprite_text'] = this.add.text(0, -50, player, { fontFamily: 'Georgia, "Goudy Bookletter 1911", Times, serif' });
                     players[player]['sprite'].setScale(0.1);
                     players[player]['sprite'].setOrigin(0.5, 0.5);
+                    players[player]['sprite_text'].setOrigin(0.5, 0.5);
+
+                    console.log("Adding new player: ", players[player]);
                 }
                 if (Object.keys(players[player]).includes('location') === true) {
                     players[player]['sprite'].x = players[player]['location']['x'];

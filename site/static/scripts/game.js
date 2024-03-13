@@ -14,6 +14,7 @@ peer.on('open', function(id) {
 
 peer.on('connection', function(conn) {
     console.log("Connection established with: ", conn.peer);
+    players[data.id]['last_update'] = new Date().getTime();
 
     conn.on('data', function(data) {
         console.log("Data received from: ", conn.peer , "Data: ", data);
@@ -21,6 +22,7 @@ peer.on('connection', function(conn) {
             players[data.id] = {};
         }
         players[data.id]['location'] = data['location']
+        players[data.id]['last_update'] = new Date().getTime();
         if (data.id !== player_id && Object.keys(players[data.id]).includes('sprite')) {
             players[data.id]['sprite'].x = data.x;
             players[data.id]['sprite'].y = data.y;
@@ -64,6 +66,22 @@ function sendPlayerData(data) {
     // id, location(x,y)
     for (var key in connections) {
         if (key === player_id) {
+            continue;
+        }
+        if (players[key]['last_update'] === undefined) {
+            continue;
+        }
+        if (new Date().getTime() - players[key]['last_update'] > 1000) {
+            console.log("Player: ", key, "has disconnected");
+            if (Object.keys(players).includes(key) === true) {
+                if (Object.keys(players[key]).includes('sprite') === true) {
+                    players[key]['sprite'].destroy();
+                }
+            }
+
+            delete players[key];
+            delete connections[key];
+            socket.emit('player_leave', key);
             continue;
         }
         connections[key].send(data);

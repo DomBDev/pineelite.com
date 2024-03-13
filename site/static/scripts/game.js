@@ -43,7 +43,9 @@ socket.on('player_leave', function(data) {
         return;
     }
     if (Object.keys(players).includes(data) === true) {
+        console.log("Removing player due to leaving: ", data)
         players[data]['sprite'].destroy();
+        players[data]['sprite_text'].destroy();
         delete players[data];
     }
     if (Object.keys(connections).includes(data) === true){
@@ -153,6 +155,7 @@ var GameState = {
         for (var player in players) {
             if (player !== player_id) {
                 if (new Date().getTime() - players[player]['last_update'] > 5000) {
+                    console.log("Removing player due to innactivity: ", player)
                     players[player]['sprite'].destroy();
                     players[player]['sprite_text'].destroy();
                     delete players[player];

@@ -241,6 +241,7 @@ def handle_join(player_id):
 def handle_disconnect():
     try:
         player_id = session_player_map[request.sid]
+        print(f'Player disconnected: {player_id}')
         players.remove(player_id)
         session_player_map.pop(request.sid)
         emit('player_leave', player_id, broadcast=True)

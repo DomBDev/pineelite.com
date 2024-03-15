@@ -1,28 +1,15 @@
 // Multiplayer code
-function start_connect() {
-    let socket, peer;
-    var retry_count = 0;
-    function connect() {
-        try {
-            socket = io('/game');
-            peer = new Peer();
-        } catch (error) {
-            console.error("Error connecting to server: ", error);
-            if (retry_count < 5) {
-                retry_count += 1;
-                let [socket, peer] = setTimeout(connect, 250);
-            } else {
-                console.error("Failed to connect to server after 5 attempts. Please refresh the page to try again.");
-            }
-        }
-    }
-    connect();
-    return [socket, peer];
-}
 var players = {};
-let [socket, peer] = start_connect();
+let socket = io('/game');
+var peer = new Peer();
 var player_id = ""
 var connections = {};
+
+peer.on('error', function(err) {
+    console.error("Peer error: ", err);
+    peer.destroy();
+    peer = new Peer();
+});
 
 peer.on('open', function(id) {
     player_id = id;

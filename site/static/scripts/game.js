@@ -77,7 +77,9 @@ function sendPlayerData(data) {
         if (key === player_id) {
             continue;
         }
-       
+        if (connectioms[key] === undefined) {
+            continue;
+        }
         connections[key].send(data);
     }
 }

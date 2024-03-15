@@ -197,7 +197,7 @@ var GameState = {
                 });
             }
 
-        } else {
+        } else if (this.frame % 10 === 0) {
             sendPlayerData({
                 id: player_id
             });

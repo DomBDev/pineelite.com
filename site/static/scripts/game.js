@@ -11,8 +11,9 @@ function start_connect() {
                 retry_count += 1;
                 setTimeout(connect, 500);
             }
+        } finally {
+            return [socket, peer];
         }
-        return [socket, peer];
     }
     return connect();
 }

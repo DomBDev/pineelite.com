@@ -12,7 +12,6 @@ var retries = 0;
 function createPeer() {
     try {
         peer = new Peer();
-        retries = 0; // Reset retries count on successful connection
 
         peer.on('error', function(err) {
             console.error("Peer error: ", err);

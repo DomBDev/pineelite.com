@@ -45,13 +45,22 @@ socket.on('player_join', function(data) {
 socket.on('player_leave', function(data) {
     console.log("Player leaving: ", data, "Player id: ", player_id)
     if (data === player_id) {
-        peer.disconnect();
-        return;
+        for (var player in players) {
+            if (player !== player_id) {
+                players[player]['sprite'].destroy();
+                players[player]['sprite_text'].destroy();
+                delete players[player];
+                connections[player].close();
+                delete connections[player];
+            }
+        }
     }
-        console.log("Removing player due to leaving: ", data)
+    console.log("Removing player due to leaving: ", data)
+    if (players[data] !== undefined) {
         players[data]['sprite'].destroy();
         players[data]['sprite_text'].destroy();
         delete players[data];
+    }
     if (Object.keys(connections).includes(data) === true){
         connections[data].close();
         delete connections[data];

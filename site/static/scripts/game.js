@@ -1,7 +1,11 @@
 // Multiplayer code
 var players = {};
 let socket = io('/game');
-var peer = new Peer();
+try {
+    var peer = new Peer();
+} catch (error) {
+    console.error("Peer error: ", error);
+}
 var player_id = ""
 var connections = {};
 

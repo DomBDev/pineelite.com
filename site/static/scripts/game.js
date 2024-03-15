@@ -7,6 +7,11 @@ var peer = new Peer();
 var player_id = ""
 var connections = {};
 
+peer.on('error', function(err) {
+    console.error(err);
+    location.reload();
+});
+
 peer.on('open', function(id) {
     player_id = id;
     socket.emit('join', player_id);

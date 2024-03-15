@@ -14,10 +14,10 @@ function start_connect() {
         }
         return [socket, peer];
     }
-    connect();
+    return connect();
 }
 var players = {};
-let [socket, peer] = connect();
+let [socket, peer] = start_connect();
 var player_id = ""
 var connections = {};
 

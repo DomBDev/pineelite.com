@@ -55,13 +55,13 @@ peer.on('connection', function(conn) {
     }
 
     conn.on('data', function(data) {
-        if (Object.keys(data).includes('location')) {
-            if (players !== undefined && Object.keys(players).includes(data.id) === true) {
-        players[data.id]['location'] = data['location']
-        }
-        players[data.id]['last_update'] = new Date().getTime();
-    }
-});
+        if (players !== undefined && Object.keys(players).includes(data.id) === true) {
+            if (Object.keys(data).includes('location')) {
+                players[data.id]['location'] = data['location']
+            }
+            players[data.id]['last_update'] = new Date().getTime();
+            }
+    });
 });
 
 socket.on('player_join', function(data) {

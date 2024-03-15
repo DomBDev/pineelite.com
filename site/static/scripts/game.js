@@ -6,6 +6,7 @@ var socket = io('/game');
 var peer = new Peer();
 var player_id = ""
 var connections = {};
+var user_active = false;
 
 peer.on('error', function(err) {
     console.log("Error: ", err);
@@ -37,7 +38,7 @@ peer.on('connection', function(conn) {
 });
 
 socket.on('player_join', function(data) {
-    if (data !== player_id && Object.keys(connections).includes(data) === false) {
+    if (data !== player_id && Object.keys(connections).includes(data) === false && user_active === true) {
         connections[data] = peer.connect(data);
     }
 });
@@ -45,6 +46,7 @@ socket.on('player_join', function(data) {
 socket.on('player_leave', function(data) {
     console.log("Player leaving: ", data, "Player id: ", player_id)
     if (data === player_id) {
+        user_active = false;
         for (var player in players) {
             if (player !== player_id) {
                 players[player]['sprite'].destroy();
@@ -70,6 +72,7 @@ socket.on('player_leave', function(data) {
 });
 
 socket.on('player_list', function(data) {
+    user_active = true;
     for (var i = 0; i < data.length; i++) {
         if (data[i] !== player_id) {
             for (let attempt = 0; attempt < 5; attempt++) {

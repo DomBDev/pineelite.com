@@ -50,8 +50,10 @@ socket.on('player_leave', function(data) {
                 players[player]['sprite'].destroy();
                 players[player]['sprite_text'].destroy();
                 delete players[player];
-                connections[player].close();
-                delete connections[player];
+                if (connections[player] !== undefined) {
+                    connections[player].close();
+                    delete connections[player];
+                }
             }
         }
     }

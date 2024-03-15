@@ -234,6 +234,7 @@ def handle_join(player_id):
     session_player_map[request.sid] = player_id
 
     # Send the new player the current list of players
+    print(list(session_player_map.values()))
     emit('player_list', list(session_player_map.values()), broadcast=False)
     emit('player_join', player_id, broadcast=True)
 
@@ -243,8 +244,10 @@ def handle_disconnect():
         player_id = session_player_map[request.sid]
         print(f'Player disconnected: {player_id}')
         session_player_map.pop(request.sid)
+        print(list(session_player_map.values()))
         emit('player_leave', player_id, broadcast=True)
-    except: pass
+    except Exception as e:
+        print(e)
 
 @socketio.on('leave_game', namespace='/game')
 def handle_disconnect():
@@ -252,6 +255,7 @@ def handle_disconnect():
         player_id = session_player_map[request.sid]
         print(f'Player disconnected: {player_id}')
         session_player_map.pop(request.sid)
+        print(list(session_player_map.values()))
         emit('player_leave', player_id, broadcast=True)
     except Exception as e:
         print(e)

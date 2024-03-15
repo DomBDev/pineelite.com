@@ -1,19 +1,39 @@
 // Multiplayer code
 var players = {};
 let socket = io('/game');
-try {
-    var peer = new Peer();
-} catch (error) {
-    console.error("Peer error: ", error);
-}
+var peer;
 var player_id = ""
 var connections = {};
 
-peer.on('error', function(err) {
-    console.error("Peer error: ", err);
-    peer.destroy();
-    peer = new Peer();
-});
+// Define a maximum number of retries
+const MAX_RETRIES = 5;
+var retries = 0;
+
+function createPeer() {
+    try {
+        peer = new Peer();
+        retries = 0; // Reset retries count on successful connection
+
+        peer.on('error', function(err) {
+            console.error("Peer error: ", err);
+            peer.destroy();
+            if (retries < MAX_RETRIES) {
+                retries++;
+                console.log(`Retrying connection (${retries}/${MAX_RETRIES})...`);
+                createPeer();
+            } else {
+                console.error("Max retries exceeded. Could not connect to PeerJS server.");
+            }
+        });
+
+        // Rest of your peer event handlers...
+    } catch (error) {
+        console.error("Peer error: ", error);
+    }
+}
+
+// Call the function to initiate the connection
+createPeer();
 
 peer.on('open', function(id) {
     player_id = id;

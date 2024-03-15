@@ -119,6 +119,11 @@ var GameState = {
 
         this.frame = 0;
 
+        this.oldPosition = {
+            x: this.player.x,
+            y: this.player.y
+        };
+
     },
 
     preload: function() {
@@ -176,15 +181,24 @@ var GameState = {
                 }
             }
         }
-    
-        // Send player data to other players
-        sendPlayerData({
-            id: player_id,
-            location: {
+
+        // check if player position is defined yet
+        if (this.player.x !== undefined && this.player.y !== undefined) {
+            // Send player data to other players
+            if (this.player.x !== this.player.oldPosition.x || this.player.y !== this.player.oldPosition.y) {
+                sendPlayerData({
+                    id: player_id,
+                    location: {
+                        x: this.player.x,
+                        y: this.player.y
+                    }
+                });
+            }
+            this.player.oldPosition = {
                 x: this.player.x,
                 y: this.player.y
-            }
-        });
+            };
+        }
     }
 };
 

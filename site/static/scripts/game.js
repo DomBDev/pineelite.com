@@ -8,8 +8,7 @@ var player_id = ""
 var connections = {};
 
 peer.on('error', function(err) {
-    console.error(err);
-    location.reload();
+    console.log("Error: ", err);
 });
 
 peer.on('open', function(id) {

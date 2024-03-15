@@ -166,6 +166,10 @@ var GameState = {
                     players[player]['sprite'].setY(players[player]['location']['y']);
                     players[player]['sprite_text'].setX(players[player]['location']['x']);
                     players[player]['sprite_text'].setY(players[player]['location']['y'] - 50);
+                    if (players[player]['sprite'].visible === false) {
+                        players[player]['sprite'].visible = true;
+                        players[player]['sprite_text'].visible = true;
+                    }
                 }
             }
         }
@@ -235,6 +239,15 @@ function add_player(other_player_id, game_state) {
             players[other_player_id]['sprite'].setOrigin(0.5, 0.5);
             players[other_player_id]['sprite_text'].setOrigin(0.5, 0.5);
             players[other_player_id]['sprite'].tint = 0xfa736e;
+            if (Object.keys(players[other_player_id]).includes('location')) {
+                players[other_player_id]['sprite'].setX(players[other_player_id]['location']['x']);
+                players[other_player_id]['sprite'].setY(players[other_player_id]['location']['y']);
+                players[other_player_id]['sprite_text'].setX(players[other_player_id]['location']['x']);
+                players[other_player_id]['sprite_text'].setY(players[other_player_id]['location']['y'] - 50);
+            } else {
+                players[other_player_id]['sprite'].visible = false;
+                players[other_player_id]['sprite_text'].visible = false;
+            }
         }
 
     }

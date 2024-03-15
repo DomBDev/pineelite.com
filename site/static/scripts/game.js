@@ -55,7 +55,18 @@ socket.on('player_leave', function(data) {
 socket.on('player_list', function(data) {
     for (var i = 0; i < data.length; i++) {
         if (data[i] !== player_id) {
-            connections[data[i]] = peer.connect(data[i]);
+            for (let attempt = 0; attempt < 5; attempt++) {
+                try {
+                    if (data[i] !== player_id) {
+                        connections[data[i]] = peer.connect(data[i]);
+                        if (connections[data[i]]) {
+                            break;
+                        }
+                    }
+                } catch (error) {
+                    console.error(`Attempt ${attempt + 1} failed. Retrying...`);
+                }
+            }
         }
     }
 });

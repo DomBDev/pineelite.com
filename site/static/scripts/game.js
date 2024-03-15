@@ -196,11 +196,16 @@ var GameState = {
                     }
                 });
             }
-            this.player.oldPosition = {
-                x: this.player.x,
-                y: this.player.y
-            };
+
+        } else {
+            sendPlayerData({
+                id: player_id
+            });
         }
+        this.player.oldPosition = {
+            x: this.player.x,
+            y: this.player.y
+        };
     }
 };
 

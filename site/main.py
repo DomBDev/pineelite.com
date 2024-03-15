@@ -255,7 +255,8 @@ def handle_disconnect():
         players.remove(player_id)
         session_player_map.pop(request.sid)
         emit('player_leave', player_id, broadcast=True)
-    except: pass
+    except Exception as e:
+        print(e)
 
 
 

@@ -55,7 +55,7 @@ peer.on('connection', function(conn) {
     }
 
     conn.on('data', function(data) {
-        if (Object.keys(data).includes('location')) {
+        if (Object.keys(data).includes('location') && Object.keys(players).includes(conn.peer)) {
         players[data.id]['location'] = data['location']
         }
         players[data.id]['last_update'] = new Date().getTime();
@@ -65,7 +65,13 @@ peer.on('connection', function(conn) {
 
 socket.on('player_join', function(data) {
     if (data !== player_id && Object.keys(connections).includes(data) === false) {
-        connections[data] = peer.connect(data);
+        if (peer !== undefined) {
+            connections[data] = peer.connect(data);
+        } else {
+            setTimeout(function() {
+                connections[data] = peer.connect(data);
+            }, 1000);
+        }
     }
 });
 

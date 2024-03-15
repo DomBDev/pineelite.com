@@ -38,6 +38,7 @@ peer.on('open', function(id) {
     player_id = id;
     if (player_id !== "") {
         console.log('My peer ID is: ' + player_id);
+        retries = 0;
         socket.emit('join', player_id);
     }
 });

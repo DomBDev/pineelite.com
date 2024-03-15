@@ -24,7 +24,9 @@ peer.on('connection', function(conn) {
     }
 
     conn.on('data', function(data) {
+        if (Object.keys(data).includes('location')) {
         players[data.id]['location'] = data['location']
+        }
         players[data.id]['last_update'] = new Date().getTime();
     });
 
@@ -192,6 +194,10 @@ var GameState = {
                         x: this.player.x,
                         y: this.player.y
                     }
+                });
+            } else if (this.frame % 15 === 0) {
+                sendPlayerData({
+                    id: player_id
                 });
             }
             this.player.oldPosition = {

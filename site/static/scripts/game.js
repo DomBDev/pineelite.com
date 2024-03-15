@@ -199,6 +199,7 @@ var GameState = {
                 sendPlayerData({
                     id: player_id
                 });
+                console.log("updating latest update")
             }
             this.player.oldPosition = {
                 x: this.player.x,

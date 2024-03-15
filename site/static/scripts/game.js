@@ -14,8 +14,8 @@ function createPeer() {
         peer = new Peer();
 
         peer.on('error', function(err) {
+            peer = undefined;
             console.error("Peer error: ", err);
-            peer.destroy();
             if (retries < MAX_RETRIES) {
                 retries++;
                 console.log(`Retrying connection (${retries}/${MAX_RETRIES})...`);
@@ -36,7 +36,10 @@ createPeer();
 
 peer.on('open', function(id) {
     player_id = id;
-    socket.emit('join', player_id);
+    if (player_id !== "") {
+        console.log('My peer ID is: ' + player_id);
+        socket.emit('join', player_id);
+    }
 });
 
 peer.on('connection', function(conn) {

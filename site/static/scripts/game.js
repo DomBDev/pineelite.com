@@ -183,7 +183,7 @@ var GameState = {
         }
 
         // check if player position is defined yet
-        if (this.player.x !== undefined && this.player.y !== undefined) {
+        if (this.player.x !== undefined && this.player.y !== undefined && this.player.oldPosition !== undefined) {
             // Send player data to other players
             if (this.player.x !== this.player.oldPosition.x || this.player.y !== this.player.oldPosition.y) {
                 sendPlayerData({

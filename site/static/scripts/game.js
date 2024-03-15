@@ -187,7 +187,7 @@ var GameState = {
         // check if player position is defined yet
         if (this.player.x !== undefined && this.player.y !== undefined && this.player.oldPosition !== undefined) {
             // Send player data to other players
-            if (this.player.x !== this.player.oldPosition.x || this.player.y !== this.player.oldPosition.y) {
+            if (this.player.x !== this.player.oldPosition.x || this.player.y !== this.player.oldPosition.y || this.frame % 10 === 0) {
                 sendPlayerData({
                     id: player_id,
                     location: {
@@ -195,11 +195,6 @@ var GameState = {
                         y: this.player.y
                     }
                 });
-            } else if (this.frame % 15 === 0) {
-                sendPlayerData({
-                    id: player_id
-                });
-                console.log("updating latest update")
             }
             this.player.oldPosition = {
                 x: this.player.x,

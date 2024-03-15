@@ -1,46 +1,15 @@
+
+
 // Multiplayer code
 var players = {};
-let socket = io('/game');
-var peer;
+var socket = io('/game');
+var peer = new Peer();
 var player_id = ""
 var connections = {};
 
-// Define a maximum number of retries
-const MAX_RETRIES = 5;
-var retries = 0;
-
-function createPeer() {
-    try {
-        peer = new Peer();
-
-        peer.on('error', function(err) {
-            peer = undefined;
-            console.error("Peer error: ", err);
-            if (retries < MAX_RETRIES) {
-                retries++;
-                console.log(`Retrying connection (${retries}/${MAX_RETRIES})...`);
-                createPeer();
-            } else {
-                console.error("Max retries exceeded. Could not connect to PeerJS server.");
-            }
-        });
-
-        // Rest of your peer event handlers...
-    } catch (error) {
-        console.error("Peer error: ", error);
-    }
-}
-
-// Call the function to initiate the connection
-createPeer();
-
 peer.on('open', function(id) {
     player_id = id;
-    if (player_id !== "") {
-        console.log('My peer ID is: ' + player_id);
-        retries = 0;
-        socket.emit('join', player_id);
-    }
+    socket.emit('join', player_id);
 });
 
 peer.on('connection', function(conn) {
@@ -55,24 +24,17 @@ peer.on('connection', function(conn) {
     }
 
     conn.on('data', function(data) {
-        if (players !== undefined && Object.keys(players).includes(data.id) === true) {
-            if (Object.keys(data).includes('location')) {
-                players[data.id]['location'] = data['location']
-            }
-            players[data.id]['last_update'] = new Date().getTime();
-            }
+        if (Object.keys(data).includes('location')) {
+        players[data.id]['location'] = data['location']
+        }
+        players[data.id]['last_update'] = new Date().getTime();
     });
+
 });
 
 socket.on('player_join', function(data) {
     if (data !== player_id && Object.keys(connections).includes(data) === false) {
-        if (peer !== undefined) {
-            connections[data] = peer.connect(data);
-        } else {
-            setTimeout(function() {
-                connections[data] = peer.connect(data);
-            }, 1000);
-        }
+        connections[data] = peer.connect(data);
     }
 });
 

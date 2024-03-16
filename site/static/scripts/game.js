@@ -169,6 +169,8 @@ var GameState = new Phaser.Class({
             this.add.text(150, 50, '3', { fontFamily: 'Arial', fontSize: 24, color: '#ffffff' }) // Change the coordinates as needed
         ];
 
+        this.inventory.selectItem(0);
+
         var inv_gui_size = 75;
 
         // Set the origin of the slot numbers and scale them by setting their width and height
@@ -372,6 +374,9 @@ var GameState = new Phaser.Class({
         // Click to activate inventory item
         if (this.input.activePointer.isDown) {
             // shoot item direction player is facing
+            console.log("Active slot: ", this.inventory.getActiveSlot());
+            console.log("Current Slot Item: ", this.inventory.slots[this.inventory.getActiveSlot()]);
+            console.log("Current Slot Cooldown: ", this.inventory.cooldowns[this.inventory.getActiveSlot()]);
             if (this.inventory.slots[this.inventory.getActiveSlot()] !== null && this.inventory.cooldowns[this.inventory.getActiveSlot()] === 0) {
                 // shoot item
                 console.log("Shooting item: ", this.inventory.slots[0]);

@@ -118,6 +118,7 @@ var GameState = new Phaser.Class({
         this.username.setFontStyle('bold');
         this.username.setStroke('#000000', 6);
         this.username.setOrigin(0.5, 0.5);
+        this.username.setScrollFactor(0);
         this.player.displayHeight = player_size;
         this.player.displayWidth = player_size;
         this.cameras.main.startFollow(this.player); // Enable camera follow
@@ -175,10 +176,12 @@ var GameState = new Phaser.Class({
             this.slotNumbers[i].setOrigin(1, 1);
             this.slotNumbers[i].displayWidth = inv_gui_size/4;
             this.slotNumbers[i].displayHeight = inv_gui_size/4;
+            this.slotNumbers[i].setScrollFactor(0);
 
             this.inventoryItems[i].setOrigin(0.5, 0.5);
             this.inventoryItems[i].displayWidth = inv_gui_size/2;
             this.inventoryItems[i].displayHeight = inv_gui_size/2;
+            this.inventoryItems[i].setScrollFactor(0);
             if (this.inventorySlots[i] === null) {
                 this.inventoryItems[i].visible = false;
             } else {
@@ -188,6 +191,7 @@ var GameState = new Phaser.Class({
             this.inventorySlots[i].setOrigin(0.5, 0.5);
             this.inventorySlots[i].displayWidth = inv_gui_size;
             this.inventorySlots[i].displayHeight = inv_gui_size;
+            this.inventorySlots[i].setScrollFactor(0);
         }
         
         players = {};
@@ -305,19 +309,15 @@ var GameState = new Phaser.Class({
         // Player movement arrow keys + wasd
         if (this.cursors.left.isDown || this.cursors.a.isDown) {
             this.player.setVelocityX(-160);
-            this.username.setX(this.cameras.main.centerX);
         } else if (this.cursors.right.isDown || this.cursors.d.isDown) {
             this.player.setVelocityX(160);
-            this.username.setX(this.cameras.main.centerX);
         } else {
             this.player.setVelocityX(0);
         }
         if (this.cursors.up.isDown || this.cursors.w.isDown) {
             this.player.setVelocityY(-160);
-            this.username.setY(this.cameras.main.centerY - (player_size/2)-5);
         } else if (this.cursors.down.isDown || this.cursors.s.isDown) {
             this.player.setVelocityY(160);
-            this.username.setY(this.cameras.main.centerY- (player_size/2)-5);
         } else {
             this.player.setVelocityY(0);
         }
@@ -360,8 +360,8 @@ var GameState = new Phaser.Class({
         for (var item in this.inventoryItems) {
             c_count += 1;
             // Calculate the position
-            var x = this.cameras.main.centerX + (c_count * 78) + 122;
-            var y = this.cameras.main.centerY + 250;
+            var x = this.player.x + (c_count * 78) + 122;
+            var y = this.player.y + 250;
         
             // Set the position
             this.inventoryItems[item].setX(x);

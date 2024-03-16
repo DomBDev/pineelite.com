@@ -108,6 +108,8 @@ var GameState = new Phaser.Class({
     create: function() {
         // Create the game world
         this.physics.world.setBounds(0, 0, 800, 600);
+
+        this.cameras.main.setBackgroundColor('#adbc3a');
     
         // Create the background sprites
         this.background = this.make.tilemap({ key: 'map' });
@@ -130,8 +132,18 @@ var GameState = new Phaser.Class({
         vegetationLayer.setCollisionByProperty({ collides: true });
         natureLayer.setCollisionByProperty({ collides: true });
 
+        // set background height and width
+        bgLayer.displayHeight = 1875;
+        bgLayer.displayWidth = 1875;
+        pathsLayer.displayHeight = 1875;
+        pathsLayer.displayWidth = 1875;
+        vegetationLayer.displayHeight = 1875;
+        vegetationLayer.displayWidth = 1875;
+        natureLayer.displayHeight = 1875;
+        natureLayer.displayWidth = 1875;
+
         // Create the player sprite
-        this.player = this.physics.add.sprite(0, 0, 'player');
+        this.player = this.physics.add.sprite(bgLayer.displayWidth/2, bgLayer.displayHeight/2, 'player');
         this.username = this.add.text(0, ((player_size/2)+5)*-1, player_id, { fontFamily: 'Georgia, "Goudy Bookletter 1911", Times, serif' });
         this.username.setFontStyle('bold');
         this.username.setStroke('#000000', 6);
@@ -337,16 +349,16 @@ var GameState = new Phaser.Class({
         this.username.setY(this.player.y - ((player_size/2)+5));
     
         // Player movement arrow keys + wasd
-        if (this.cursors.left.isDown || this.cursors.a.isDown) {
+        if ((this.cursors.left.isDown || this.cursors.a.isDown) && this.player.x > 0) {
             this.player.setVelocityX(-160);
-        } else if (this.cursors.right.isDown || this.cursors.d.isDown) {
+        } else if ((this.cursors.right.isDown || this.cursors.d.isDown) && this.player.x < 1875) {
             this.player.setVelocityX(160);
         } else {
             this.player.setVelocityX(0);
         }
-        if (this.cursors.up.isDown || this.cursors.w.isDown) {
+        if ((this.cursors.up.isDown || this.cursors.w.isDown) && this.player.y > 0){
             this.player.setVelocityY(-160);
-        } else if (this.cursors.down.isDown || this.cursors.s.isDown) {
+        } else if ((this.cursors.down.isDown || this.cursors.s.isDown) && this.player.y < 1875){
             this.player.setVelocityY(160);
         } else {
             this.player.setVelocityY(0);

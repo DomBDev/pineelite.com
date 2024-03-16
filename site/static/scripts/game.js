@@ -197,13 +197,12 @@ var GameState = new Phaser.Class({
                     players[player]['sprite_text'].setX(players[player]['location']['x']);
                     players[player]['sprite_text'].setY(players[player]['location']['y'] - 50);
                     if (players[player]['sprite'].visible === false) {
-                        players[player]['sprite_text'] = players[player]['username']
+                        if (Object.keys(players[player]).includes('username')) {
+                            players[player]['sprite_text'].text = players[player]['username'];
+                        }
                         players[player]['sprite'].visible = true;
                         players[player]['sprite_text'].visible = true;
                     }
-                }
-                if (Object.keys(players[player]).includes('username')) {
-                    players[player]['sprite_text'].text = players[player]['username'];
                 }
             }
         }

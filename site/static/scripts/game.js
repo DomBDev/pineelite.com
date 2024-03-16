@@ -351,8 +351,8 @@ var GameState = new Phaser.Class({
             this.username.setY(this.player.y - (player_size/2)+5);
             this.username.text = this.registry.get('username');
             this.username_set = true;
-            console.log(this.player.x, this.player.y- (player_size/2)+5);
             this.username.setScrollFactor(0, 0);
+            console.log(this.username.text.x, this.username.text.y)
         }
     
         // Player movement arrow keys + wasd

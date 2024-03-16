@@ -41,7 +41,7 @@ class Inventory {
 
     selectItem(slot) {
         this.activated = {
-            0: true,
+            0: false,
             1: false,
             2: false
         };
@@ -99,7 +99,7 @@ class Inventory {
     }
 
 }
-var player_size = 50;
+var player_size = 75;
 
 var GameState = new Phaser.Class({
     Extends: Phaser.Scene,

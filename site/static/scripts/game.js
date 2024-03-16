@@ -8,89 +8,6 @@ var player_id;
 var connections;
 var user_active;
 
-peer.on('error', function(err) {
-    console.log("Error: ", err);
-});
-
-peer.on('open', function(id) {
-    player_id = id;
-    socket.emit('join', player_id);
-});
-
-peer.on('connection', function(conn) {
-    console.log("Connection established with: ", conn.peer);
-    if (Object.keys(players).includes(conn.peer) === false) {
-        players[conn.peer] = {};
-    }
-    players[conn.peer]['last_update'] = new Date().getTime();
-
-    if (Object.keys(players).includes(conn.peer) === false) {
-        players[conn.peer] = {};
-    }
-
-    conn.on('data', function(data) {
-        if (Object.keys(data).includes('location')) {
-        players[data.id]['location'] = data['location']
-        }
-        players[data.id]['last_update'] = new Date().getTime();
-    });
-
-});
-
-socket.on('player_join', function(data) {
-    if (data !== player_id && Object.keys(connections).includes(data) === false && user_active === true) {
-        connections[data] = peer.connect(data);
-    }
-});
-
-socket.on('player_leave', function(data) {
-    console.log("Player leaving: ", data, "Player id: ", player_id)
-    if (data === player_id) {
-        user_active = false;
-        for (var player in players) {
-            if (player !== player_id) {
-                players[player]['sprite'].destroy();
-                players[player]['sprite_text'].destroy();
-                delete players[player];
-                if (connections[player] !== undefined) {
-                    connections[player].close();
-                    delete connections[player];
-                }
-            }
-        }
-    }
-    console.log("Removing player due to leaving: ", data)
-    if (players[data] !== undefined) {
-        players[data]['sprite'].destroy();
-        players[data]['sprite_text'].destroy();
-        delete players[data];
-    }
-    if (Object.keys(connections).includes(data) === true){
-        connections[data].close();
-        delete connections[data];
-    }
-});
-
-socket.on('player_list', function(data) {
-    user_active = true;
-    for (var i = 0; i < data.length; i++) {
-        if (data[i] !== player_id) {
-            for (let attempt = 0; attempt < 5; attempt++) {
-                try {
-                    if (data[i] !== player_id) {
-                        connections[data[i]] = peer.connect(data[i]);
-                        if (connections[data[i]]) {
-                            break;
-                        }
-                    }
-                } catch (error) {
-                    console.error(`Attempt ${attempt + 1} failed. Retrying...`);
-                }
-            }
-        }
-    }
-});
-
 function sendPlayerData(data) {
     // id, location(x,y)
     for (var key in connections) {
@@ -103,13 +20,6 @@ function sendPlayerData(data) {
         connections[key].send(data);
     }
 }
-
-$(window).on('focus', function() {
-    console.log("Window focused")
-    if (player_id !== undefined) {
-        socket.emit('join', player_id);
-    }
-});
 
 
 // Game code
@@ -148,6 +58,95 @@ var GameState = {
         player_id = ""
         connections = {};
         user_active = false;
+
+        peer.on('error', function(err) {
+            console.log("Error: ", err);
+        });
+        
+        peer.on('open', function(id) {
+            player_id = id;
+            socket.emit('join', player_id);
+        });
+        
+        peer.on('connection', function(conn) {
+            console.log("Connection established with: ", conn.peer);
+            if (Object.keys(players).includes(conn.peer) === false) {
+                players[conn.peer] = {};
+            }
+            players[conn.peer]['last_update'] = new Date().getTime();
+        
+            if (Object.keys(players).includes(conn.peer) === false) {
+                players[conn.peer] = {};
+            }
+        
+            conn.on('data', function(data) {
+                if (Object.keys(data).includes('location')) {
+                players[data.id]['location'] = data['location']
+                }
+                players[data.id]['last_update'] = new Date().getTime();
+            });
+        
+        });
+        
+        socket.on('player_join', function(data) {
+            if (data !== player_id && Object.keys(connections).includes(data) === false && user_active === true) {
+                connections[data] = peer.connect(data);
+            }
+        });
+        
+        socket.on('player_leave', function(data) {
+            console.log("Player leaving: ", data, "Player id: ", player_id)
+            if (data === player_id) {
+                user_active = false;
+                for (var player in players) {
+                    if (player !== player_id) {
+                        players[player]['sprite'].destroy();
+                        players[player]['sprite_text'].destroy();
+                        delete players[player];
+                        if (connections[player] !== undefined) {
+                            connections[player].close();
+                            delete connections[player];
+                        }
+                    }
+                }
+            }
+            console.log("Removing player due to leaving: ", data)
+            if (players[data] !== undefined) {
+                players[data]['sprite'].destroy();
+                players[data]['sprite_text'].destroy();
+                delete players[data];
+            }
+            if (Object.keys(connections).includes(data) === true){
+                connections[data].close();
+                delete connections[data];
+            }
+        });
+        
+        socket.on('player_list', function(data) {
+            user_active = true;
+            for (var i = 0; i < data.length; i++) {
+                if (data[i] !== player_id) {
+                    for (let attempt = 0; attempt < 5; attempt++) {
+                        try {
+                            if (data[i] !== player_id) {
+                                connections[data[i]] = peer.connect(data[i]);
+                                if (connections[data[i]]) {
+                                    break;
+                                }
+                            }
+                        } catch (error) {
+                            console.error(`Attempt ${attempt + 1} failed. Retrying...`);
+                        }
+                    }
+                }
+            }
+        });
+        $(window).on('focus', function() {
+            console.log("Window focused")
+            if (player_id !== undefined) {
+                socket.emit('join', player_id);
+            }
+        });
     },
 
     preload: function() {

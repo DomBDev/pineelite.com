@@ -345,8 +345,10 @@ var GameState = new Phaser.Class({
         this.frame += 1;
 
         this.inventory.updateCooldowns();
-        this.username.setX(this.player.x);
-        this.username.setY(this.player.y - ((player_size/2)+5));
+        if (this.frame % 3 === 0) {
+            this.username.setX(this.player.x);
+            this.username.setY(this.player.y - ((player_size/2)+5));
+        }
     
         // Player movement arrow keys + wasd
         if ((this.cursors.left.isDown || this.cursors.a.isDown) && this.player.x > 0) {

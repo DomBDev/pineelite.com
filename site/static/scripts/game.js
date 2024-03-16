@@ -347,12 +347,12 @@ var GameState = new Phaser.Class({
 
         this.inventory.updateCooldowns();
         if (this.username_set === false && this.player.x !== undefined && this.player.y !== undefined) {
+            this.username.setScrollFactor(0, 0);
             this.username.setX(this.player.x);
             this.username.setY(this.player.y - (player_size/2)+5);
             this.username.text = this.registry.get('username');
             this.username_set = true;
-            this.username.setScrollFactor(0, 0);
-            console.log(this.username.text.x, this.username.text.y)
+            console.log(this.username.text.getX(), this.username.text.getY());
         }
     
         // Player movement arrow keys + wasd

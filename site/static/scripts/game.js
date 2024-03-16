@@ -291,40 +291,34 @@ var TitleScene = new Phaser.Class({
     create: function() {
         this.cameras.main.setBackgroundColor('#ffffff');
         const element = this.add.dom(0, 0).createFromCache('nameform');
-
+    
         element.setOrigin(0.5);
-        element.setPosition(this.sys.game.config.width / 4, this.sys.game.config.height / 2);
-
+        element.setPosition(this.sys.game.config.width / 2, this.sys.game.config.height / 2);
+    
         element.node.style.width = this.sys.game.config.width + 'px';
         element.node.style.height = this.sys.game.config.height + 'px';
-
+    
         element.addListener('click');
-
-        element.on('click', function (event)
-        {
-
-            if (event.target.name === 'playButton')
-            {
+    
+        element.on('click', function (event) {
+            if (event.target.name === 'playButton') {
                 const inputText = this.getChildByName('nameField');
-
+    
                 //  Have they entered anything?
-                if (inputText.value !== '')
-                {
+                if (inputText.value !== '') {
                     //  Ok, the Play Button was clicked or touched, so let's stop the form from doing anything
                     event.stopPropagation();
-
+    
                     //  Hide the form
                     this.setVisible(false);
-
+    
                     this.scene.registry.set('username', inputText.value);
-
+    
                     //  Populate the text with whatever they typed in
                     this.scene.scene.start('GameState');
                 }
             }
-
         });
-    
     }
 });
 

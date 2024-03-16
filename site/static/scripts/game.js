@@ -126,6 +126,27 @@ var GameState = new Phaser.Class({
             this.add.text(100, 50, '2', { fontFamily: 'Arial', fontSize: 24, color: '#ffffff' }), // Change the coordinates as needed
             this.add.text(150, 50, '3', { fontFamily: 'Arial', fontSize: 24, color: '#ffffff' }) // Change the coordinates as needed
         ];
+
+        // Set the origin of the slot numbers and scale them by setting their width and height
+        for (let i = 0; i < this.slotNumbers.length; i++) {
+            this.slotNumbers[i].setOrigin(0.5, 0.5);
+            this.slotNumbers[i].displayWidth = 50;
+            this.slotNumbers[i].displayHeight = 50;
+        }
+
+        // Set the origin of the item sprites
+        for (let i = 0; i < this.inventoryItems.length; i++) {
+            this.inventoryItems[i].setOrigin(0.5, 0.5);
+            this.inventoryItems[i].displayWidth = 50;
+            this.inventoryItems[i].displayHeight = 50;
+        }
+
+        // Set the origin of the inventory slots
+        for (let i = 0; i < this.inventorySlots.length; i++) {
+            this.inventorySlots[i].setOrigin(0.5, 0.5);
+            this.inventorySlots[i].displayWidth = 50;
+            this.inventorySlots[i].displayHeight = 50;
+        }
         
         players = {};
         socket = io('/game');
@@ -277,6 +298,18 @@ var GameState = new Phaser.Class({
             } else {
                 this.inventorySlots[i].tint = 0xffffff;
             }
+        }
+
+        for (var item in this.inventoryItems) {
+            // Calculate the position
+            var x = this.cameras.main.width - (this.inventoryItems.length - item) * 50; // Adjust the multiplier as needed
+            var y = this.cameras.main.height - 50; // Adjust as needed
+        
+            // Set the position
+            this.inventoryItems[item].setX(x);
+            this.inventoryItems[item].setY(y);
+            this.inventorySlots[item].setX(x);
+            this.inventorySlots[item].setY(y);
         }
 
         // Rotate player to face the mouse

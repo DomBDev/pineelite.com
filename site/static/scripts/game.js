@@ -294,9 +294,6 @@ var TitleScene = new Phaser.Class({
         this.cameras.main.setBackgroundColor('#ffffff');
         const element = this.add.dom(0, 0).createFromCache('nameform');
 
-        // get element from element
-        const tweenContainer = element.getChildByID('tweenContainer')
-
         element.setOrigin(0);
 
         element.node.style.width = this.sys.game.config.width + 'px';
@@ -328,13 +325,7 @@ var TitleScene = new Phaser.Class({
             }
 
         });
-     
-        this.tweens.add({
-            targets: tweenContainer,
-            y: 300,
-            duration: 3000,
-            ease: 'Power3'
-        });
+    
     }
 });
 

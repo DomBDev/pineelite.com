@@ -24,6 +24,48 @@ function sendPlayerData(data) {
 
 // Game code
 
+class Inventory {
+    constructor() {
+        this.slots = ['fist', null, null]; // Fist in the first slot, two empty slots
+        this.activated = {
+            0: false,
+            1: false,
+            2: false
+        };
+    }
+
+    selectItem(slot) {
+        this.activated = {
+            0: false,
+            1: false,
+            2: false
+        };
+        activated[slot] = true;
+        return activated;
+    }
+
+    // Method to add an item to the inventory
+    addItem(item) {
+        for (let i = 0; i < this.slots.length; i++) {
+            if (this.slots[i] === null) {
+                this.slots[i] = item;
+                return true; // Item was added
+            }
+        }
+        return false; // Inventory is full
+    }
+
+    // Method to remove an item from the inventory
+    removeItem(item) {
+        const index = this.slots.indexOf(item);
+        if (index !== -1) {
+            this.slots[index] = null;
+            return true; // Item was removed
+        }
+        return false; // Item was not found
+    }
+}
+
 var GameState = new Phaser.Class({
     Extends: Phaser.Scene,
     initialize:
@@ -81,48 +123,6 @@ var GameState = new Phaser.Class({
             this.add.text(100, 50, '2', { fontFamily: 'Arial', fontSize: 24, color: '#ffffff' }), // Change the coordinates as needed
             this.add.text(150, 50, '3', { fontFamily: 'Arial', fontSize: 24, color: '#ffffff' }) // Change the coordinates as needed
         ];
-
-        class Inventory {
-            constructor() {
-                this.slots = ['fist', null, null]; // Fist in the first slot, two empty slots
-                this.activated = {
-                    0: false,
-                    1: false,
-                    2: false
-                };
-            }
-
-            selectItem(slot) {
-                this.activated = {
-                    0: false,
-                    1: false,
-                    2: false
-                };
-                activated[slot] = true;
-                return activated;
-            }
-        
-            // Method to add an item to the inventory
-            addItem(item) {
-                for (let i = 0; i < this.slots.length; i++) {
-                    if (this.slots[i] === null) {
-                        this.slots[i] = item;
-                        return true; // Item was added
-                    }
-                }
-                return false; // Inventory is full
-            }
-        
-            // Method to remove an item from the inventory
-            removeItem(item) {
-                const index = this.slots.indexOf(item);
-                if (index !== -1) {
-                    this.slots[index] = null;
-                    return true; // Item was removed
-                }
-                return false; // Item was not found
-            }
-        }
         
         players = {};
         socket = io('/game');

@@ -301,6 +301,8 @@ var GameState = new Phaser.Class({
 
     update: function() {
         this.frame += 1;
+
+        this.inventory.updateCooldowns();
     
         // Player movement arrow keys + wasd
         if (this.cursors.left.isDown || this.cursors.a.isDown) {

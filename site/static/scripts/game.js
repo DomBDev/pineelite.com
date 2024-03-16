@@ -161,25 +161,27 @@ var GameState = new Phaser.Class({
             this.add.text(150, 50, '3', { fontFamily: 'Arial', fontSize: 24, color: '#ffffff' }) // Change the coordinates as needed
         ];
 
+        var inv_gui_size = 200;
+
         // Set the origin of the slot numbers and scale them by setting their width and height
         for (let i = 0; i < this.slotNumbers.length; i++) {
             this.slotNumbers[i].setOrigin(0.5, 0.5);
-            this.slotNumbers[i].displayWidth = 50;
-            this.slotNumbers[i].displayHeight = 50;
+            this.slotNumbers[i].displayWidth = inv_gui_size;
+            this.slotNumbers[i].displayHeight = inv_gui_size;
         }
 
         // Set the origin of the item sprites
         for (let i = 0; i < this.inventoryItems.length; i++) {
             this.inventoryItems[i].setOrigin(0.5, 0.5);
-            this.inventoryItems[i].displayWidth = 50;
-            this.inventoryItems[i].displayHeight = 50;
+            this.inventoryItems[i].displayWidth = inv_gui_size;
+            this.inventoryItems[i].displayHeight = inv_gui_size;
         }
 
         // Set the origin of the inventory slots
         for (let i = 0; i < this.inventorySlots.length; i++) {
             this.inventorySlots[i].setOrigin(0.5, 0.5);
-            this.inventorySlots[i].displayWidth = 50;
-            this.inventorySlots[i].displayHeight = 50;
+            this.inventorySlots[i].displayWidth = inv_gui_size;
+            this.inventorySlots[i].displayHeight = inv_gui_size;
         }
         
         players = {};

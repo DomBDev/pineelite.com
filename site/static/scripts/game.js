@@ -77,7 +77,6 @@ class Inventory {
                 this.cooldowns[key] -= 1;
             }
         }
-        console.log(this.cooldowns)
     }
 
     setCooldown(slot, cooldown) {
@@ -284,7 +283,6 @@ var GameState = new Phaser.Class({
             }
         });
         $(window).on('focus', function() {
-            console.log("Window focused")
             if (player_id !== undefined) {
                 socket.emit('join', player_id);
             }
@@ -307,19 +305,19 @@ var GameState = new Phaser.Class({
         // Player movement arrow keys + wasd
         if (this.cursors.left.isDown || this.cursors.a.isDown) {
             this.player.setVelocityX(-160);
-            this.username.setX(this.player.x);
+            this.username.setX(this.cameras.main.centerX);
         } else if (this.cursors.right.isDown || this.cursors.d.isDown) {
             this.player.setVelocityX(160);
-            this.username.setX(this.player.x);
+            this.username.setX(this.cameras.main.centerX);
         } else {
             this.player.setVelocityX(0);
         }
         if (this.cursors.up.isDown || this.cursors.w.isDown) {
             this.player.setVelocityY(-160);
-            this.username.setY(this.player.y - player_size/2 - 5);
+            this.username.setY(this.cameras.main.centerY - (player_size/2)-5);
         } else if (this.cursors.down.isDown || this.cursors.s.isDown) {
             this.player.setVelocityY(160);
-            this.username.setY(this.player.y - player_size/2 - 5);
+            this.username.setY(this.cameras.main.centerY- (player_size/2)-5);
         } else {
             this.player.setVelocityY(0);
         }
@@ -362,8 +360,8 @@ var GameState = new Phaser.Class({
         for (var item in this.inventoryItems) {
             c_count += 1;
             // Calculate the position
-            var x = this.player.x + (c_count * 78) + 122;
-            var y = this.player.y + 250;
+            var x = this.cameras.main.centerX + (c_count * 78) + 122;
+            var y = this.cameras.main.centerY + 250;
         
             // Set the position
             this.inventoryItems[item].setX(x);
@@ -382,7 +380,6 @@ var GameState = new Phaser.Class({
             // shoot item direction player is facing
             var active_slot = this.inventory.getActiveSlot();
             var active_item = this.inventory.slots[active_slot]
-            console.log(this.inventory.cooldowns[active_slot])
             if (active_item !== null && this.inventory.cooldowns[active_slot] === 0) {
                 this.inventory.setCooldown(active_slot, 60);
                 console.log("Item: ", active_item, "Slot: ", active_slot);

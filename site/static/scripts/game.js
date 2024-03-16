@@ -91,7 +91,7 @@ var GameState = new Phaser.Class({
                 }
                 if (Object.keys(data).includes('username')) {
                     players[data.id]['username'] = data['username']
-                    
+                }
                 players[data.id]['last_update'] = new Date().getTime();
             });
         

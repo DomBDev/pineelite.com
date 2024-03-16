@@ -170,9 +170,13 @@ var GameState = new Phaser.Class({
             this.slotNumbers[i].displayHeight = inv_gui_size/4
 
             this.inventoryItems[i].setOrigin(0.5, 0.5);
-            this.inventoryItems[i].displayWidth = inv_gui_size/2;
-            this.inventoryItems[i].displayHeight = inv_gui_size/2;
-            this.inventoryItems[i].visible = false;
+            this.inventoryItems[i].displayWidth = inv_gui_size
+            this.inventoryItems[i].displayHeight = inv_gui_size
+            if (this.inventoryItems[i].texture === null) {
+                this.inventoryItems[i].visible = false;
+            } else {
+                this.inventoryItems[i].visible = true;
+            }
 
             this.inventorySlots[i].setOrigin(0.5, 0.5);
             this.inventorySlots[i].displayWidth = inv_gui_size;
@@ -342,7 +346,7 @@ var GameState = new Phaser.Class({
         for (var item in this.inventoryItems) {
             c_count += 1;
             // Calculate the position
-            var x = this.player.x + (c_count * 55) + 150;
+            var x = this.player.x + (c_count * 80) + 150;
             var y = this.player.y + 250;
         
             // Set the position
@@ -350,8 +354,8 @@ var GameState = new Phaser.Class({
             this.inventoryItems[item].setY(y);
             this.inventorySlots[item].setX(x);
             this.inventorySlots[item].setY(y);
-            this.slotNumbers[item].setX(x-5);
-            this.slotNumbers[item].setY(y-5);
+            this.slotNumbers[item].setX(x-4);
+            this.slotNumbers[item].setY(y-4);
         }
 
         // Rotate player to face the mouse

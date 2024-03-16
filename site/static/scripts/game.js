@@ -161,7 +161,7 @@ var GameState = new Phaser.Class({
             this.add.text(150, 50, '3', { fontFamily: 'Arial', fontSize: 24, color: '#ffffff' }) // Change the coordinates as needed
         ];
 
-        var inv_gui_size = 200;
+        var inv_gui_size = 60;
 
         // Set the origin of the slot numbers and scale them by setting their width and height
         for (let i = 0; i < this.slotNumbers.length; i++) {
@@ -339,8 +339,8 @@ var GameState = new Phaser.Class({
         for (var item in this.inventoryItems) {
             c_count += 1;
             // Calculate the position
-            var x = (this.cameras.main.width-25) - (c_count * 40); // Adjust as needed
-            var y = this.cameras.main.height - 50; // Adjust as needed
+            var x = this.player.x - (c_count * 50) + 50;
+            var y = this.player.y + 50;
         
             // Set the position
             this.inventoryItems[item].setX(x);

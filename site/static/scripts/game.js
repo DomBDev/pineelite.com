@@ -384,6 +384,7 @@ var GameState = new Phaser.Class({
                     players[player]['sprite'].setY(players[player]['location']['y']);
                     players[player]['sprite_text'].setX(players[player]['location']['x']);
                     players[player]['sprite_text'].setY(players[player]['location']['y'] - 30);
+                    players[player]['sprite'].rotation = players[player]['location']['rotation'];
                     if (players[player]['sprite'].visible === false) {
                         if (Object.keys(players[player]).includes('username')) {
                             players[player]['sprite_text'].text = players[player]['username'];
@@ -403,7 +404,8 @@ var GameState = new Phaser.Class({
                     id: player_id,
                     location: {
                         x: this.player.x,
-                        y: this.player.y
+                        y: this.player.y,
+                        rotation: this.player.rotation
                     },
                     username: this.registry.get('username')
                 });

@@ -2,7 +2,7 @@
 <html>
 <head>
     <style>
-        body {
+        #titleScreen {
             display: flex;
             flex-direction: column;
             justify-content: center;
@@ -10,11 +10,13 @@
             height: 100vh;
             margin: 0;
             background-color: #000;
-            color: #fff;
-            font-family: Arial, sans-serif;
+            color: #000000;
+            font-family: "Rubik Moonrocks", sans-serif;
+            font-weight: 400;
+            font-style: normal;
         }
-        h1 {
-            font-size: 2em;
+        #titleScreen h1 {
+            font-size: 3em;
             margin-bottom: 20px;
         }
         input[type="text"] {
@@ -41,18 +43,13 @@
             color: white;
         }
         @media (max-width: 600px) {
-            h1 {
-                font-size: 1.5em;
-            }
             input[type="text"], input[type="button"] {
                 font-size: 1em;
             }
         }
     </style>
-</head>
-<body>
-    <h1>Multiplayer Game</h1>
-    <input type="text" name="nameField" autocomplete="off" placeholder="Enter your name">
-    <input type="button" name="playButton" value="Let's Play"><br />
-</body>
-</html>
+    <div id="titleScreen">
+        <h1>Multiplayer Game</h1>
+        <input type="text" name="nameField" autocomplete="off" placeholder="Enter your name">
+        <input type="button" name="playButton" value="Join Game"><br />
+    </div>

@@ -71,11 +71,10 @@ class Inventory {
         return false; // Item was not found
     }
 
-    // update the cooldowns
     updateCooldowns() {
-        for (let i = 0; i < this.cooldowns.length; i++) {
-            if (this.cooldowns[i] > 0) {
-                this.cooldowns[i] -= 1;
+        for (let key in this.cooldowns) {
+            if (this.cooldowns[key] > 0) {
+                this.cooldowns[key] -= 1;
             }
         }
         console.log(this.cooldowns)

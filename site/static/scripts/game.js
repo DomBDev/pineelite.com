@@ -110,19 +110,19 @@ var GameState = new Phaser.Class({
         this.physics.world.setBounds(0, 0, 800, 600);
     
         // Create the background sprites
-        this.background = this.add.tilemap('map');
+        this.background = this.make.tilemap({ key: 'map' });
         // add all tilesets
-        this.background.addTilesetImage('map', 'TilesetField');
-        this.background.addTilesetImage('map', 'TilesetFloor');
-        this.background.addTilesetImage('map', 'TilesetFloorDetail');
-        this.background.addTilesetImage('map', 'TilesetNature');
-        this.background.addTilesetImage('map', 'TilesetVillageAbandoned');
+        var tilesetField = this.background.addTilesetImage('TilesetField');
+        var tilesetFloor = this.background.addTilesetImage('TilesetFloor');
+        var tilesetFloorDetail = this.background.addTilesetImage('TilesetFloorDetail');
+        var tilesetNature = this.background.addTilesetImage('TilesetNature');
+        var tilesetVillageAbandoned = this.background.addTilesetImage('TilesetVillageAbandoned');
 
-        this.background.createStaticLayer('BG', ['TilesetField', 'TilesetFloor', 'TilesetFloorDetail', 'TilesetNature', 'TilesetVillageAbandoned'], 0, 0);
-        this.background.createStaticLayer('Paths', ['TilesetField', 'TilesetFloor', 'TilesetFloorDetail', 'TilesetNature', 'TilesetVillageAbandoned'], 0, 0);
-        this.background.createStaticLayer('Vegetation', ['TilesetField', 'TilesetFloor', 'TilesetFloorDetail', 'TilesetNature', 'TilesetVillageAbandoned'], 0, 0);
-        this.background.createStaticLayer('Nature', ['TilesetField', 'TilesetFloor', 'TilesetFloorDetail', 'TilesetNature', 'TilesetVillageAbandoned'], 0, 0);
-    
+        this.background.createStaticLayer('BG', [tilesetField, tilesetFloor, tilesetFloorDetail, tilesetNature, tilesetVillageAbandoned], 0, 0);
+        this.background.createStaticLayer('Paths', [tilesetField, tilesetFloor, tilesetFloorDetail, tilesetNature, tilesetVillageAbandoned], 0, 0);
+        this.background.createStaticLayer('Vegetation', [tilesetField, tilesetFloor, tilesetFloorDetail, tilesetNature, tilesetVillageAbandoned], 0, 0);
+        this.background.createStaticLayer('Nature', [tilesetField, tilesetFloor, tilesetFloorDetail, tilesetNature, tilesetVillageAbandoned], 0, 0);
+        
         // Create the player sprite
         this.player = this.physics.add.sprite(0, 0, 'player');
         this.username = this.add.text(0, ((player_size/2)+5)*-1, player_id, { fontFamily: 'Georgia, "Goudy Bookletter 1911", Times, serif' });
@@ -304,7 +304,7 @@ var GameState = new Phaser.Class({
         this.load.image('TilesetField', tilesetField);
         this.load.image('TilesetFloor', tilesetFloor);
         this.load.image('TilesetFloorDetail', tilesetFloorDetail);
-        this.load.image('TilsetNature', tilesetNature);
+        this.load.image('TilesetNature', tilesetNature);
         this.load.image('TilesetVillageAbandoned', tilesetVillageAbandoned);
         this.load.tilemapTiledJSON('map', map);
         this.load.image('player', player_sprite);

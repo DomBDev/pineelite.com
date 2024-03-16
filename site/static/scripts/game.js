@@ -114,7 +114,7 @@ var GameState = new Phaser.Class({
         this.background.addTilesetImage('TilesetField', tilesetField);
         this.background.addTilesetImage('TilesetFloor', tilesetFloor);
         this.background.addTilesetImage('TilesetFloorDetail', tilesetFloorDetail);
-        this.background.addTilesetImage('TilesetNature', TilesetNature);
+        this.background.addTilesetImage('TilesetNature', tilesetNature);
         this.background.addTilesetImage('TilesetVillageAbandoned', tilesetVillageAbandoned);
 
         this.background.createStaticLayer('BG', ['TilesetField', 'TilesetFloor', 'TilesetFloorDetail', 'TilesetNature', 'TilesetVillageAbandoned'], 0, 0);

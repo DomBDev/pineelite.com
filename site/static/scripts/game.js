@@ -117,7 +117,7 @@ var GameState = new Phaser.Class({
     
         // Create the player sprite
         this.player = this.physics.add.sprite(0, 0, 'player');
-        this.username = this.add.text(0, (player_size/2)-5, player_id, { fontFamily: 'Georgia, "Goudy Bookletter 1911", Times, serif' });
+        this.username = this.add.text(0, ((player_size/2)-10)*-1, player_id, { fontFamily: 'Georgia, "Goudy Bookletter 1911", Times, serif' });
         this.username.setFontStyle('bold');
         this.username.setStroke('#000000', 6);
         this.username.setOrigin(0.5, 0.5);
@@ -374,14 +374,14 @@ var GameState = new Phaser.Class({
         // Click to activate inventory item
         if (this.input.activePointer.isDown) {
             // shoot item direction player is facing
-            console.log("Active slot: ", this.inventory.getActiveSlot());
-            console.log("Current Slot Item: ", this.inventory.slots[this.inventory.getActiveSlot()]);
-            console.log("Current Slot Cooldown: ", this.inventory.cooldowns[this.inventory.getActiveSlot()]);
-            if (this.inventory.slots[this.inventory.getActiveSlot()] !== null && this.inventory.cooldowns[this.inventory.getActiveSlot()] === 0) {
-                // shoot item
-                console.log("Shooting item: ", this.inventory.slots[0]);
-                this.inventory.setCooldown(this.inventory.getActiveSlot(), 60);
+            var active_item = this.inventory.getActiveItem();
+            var active_slot = this.inventory.getActiveSlot();
+            if (active_item !== null && this.inventory.cooldowns[active_slot] === 0) {
+                this.inventory.setCooldown(active_slot, 60);
+                console.log("Item: ", active_item, "Slot: ", active_slot);
             }
+            console.log("Active item: ", active_item);
+            console.log("Active slot: ", active_slot);
         }
             
 

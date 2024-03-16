@@ -78,6 +78,7 @@ class Inventory {
                 this.cooldowns[i] -= 1;
             }
         }
+        print(this.cooldowns)
     }
 
     setCooldown(slot, cooldown) {

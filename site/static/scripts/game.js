@@ -89,9 +89,12 @@ var GameState = new Phaser.Class({
         this.player.setScale(0.1);
         this.cameras.main.startFollow(this.player); // Enable camera follow
         this.inventory = new Inventory();
-    
+
         // Create the player controls
         this.cursors = this.input.keyboard.createCursorKeys();
+        this.cursors.one = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.ONE);
+        this.cursors.two = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.TWO);
+        this.cursors.three = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.THREE);
     
         // Set the player anchor to the center of the sprite
         this.player.setOrigin(0.5, 0.5);

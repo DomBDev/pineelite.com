@@ -1,12 +1,12 @@
 
 
 // Multiplayer code
-var players = {};
-var socket = io('/game');
-var peer = new Peer();
-var player_id = ""
-var connections = {};
-var user_active = false;
+var players;
+var socket;
+var peer;
+var player_id;
+var connections;
+var user_active;
 
 peer.on('error', function(err) {
     console.log("Error: ", err);
@@ -106,13 +106,11 @@ function sendPlayerData(data) {
 
 $(window).on('focus', function() {
     console.log("Window focused")
-    socket.emit('join', player_id);
+    if (player_id !== undefined) {
+        socket.emit('join', player_id);
+    }
 });
 
-$(window).on('blur', function() {
-    console.log("Window blurred")
-    socket.emit('leave_game');
-});
 
 // Game code
 
@@ -143,7 +141,13 @@ var GameState = {
             x: this.player.x,
             y: this.player.y
         };
-
+        
+        players = {};
+        socket = io('/game');
+        peer = new Peer();
+        player_id = ""
+        connections = {};
+        user_active = false;
     },
 
     preload: function() {
@@ -217,8 +221,6 @@ var GameState = {
     }
 };
 
-
-
 function add_player(other_player_id, game_state) {
     console.log("player_id: ", player_id, "other_player_id: ", other_player_id)
     if (player_id === "") {
@@ -257,6 +259,41 @@ function add_player(other_player_id, game_state) {
     }
 }
 
+var TitleScene = new Phaser.Class({
+    Extends: Phaser.Scene,
+    initialize:
+    function TitleScene() {
+        Phaser.Scene.call(this, { key: 'TitleScene' });
+    },
+    preload: function() {
+        this.load.image('background', background_sprite);
+        this.load.image('player', player_sprite);
+        this.load.image('enemy', enemy_sprite);
+        this.load.html('usernameForm', username_form);
+    },
+    create: function() {
+        this.add.text(150, 200, 'Multiplayer Game', { fontFamily: 'Georgia, "Goudy Bookletter 1911", Times, serif' });
+
+        // Add the username form
+        var usernameForm = this.add.dom(400, 300).createFromCache('usernameForm');
+
+        // When the play button is clicked, start the game
+        usernameForm.addListener('click');
+        usernameForm.on('click', function(event) {
+            if (event.target.name === 'playButton') {
+                var username = usernameForm.getChildByName('usernameField').value;
+                if (username !== '') {
+                    // Store the username in the game registry
+                    this.registry.set('username', username);
+
+                    // Start the game
+                    this.scene.start('GameState');
+                }
+            }
+        }, this);
+    }
+});
+
 // Config
 const config = {
     type: Phaser.AUTO,
@@ -269,8 +306,11 @@ const config = {
             gravity: { y: 0 }
         }
     },
-    scene: GameState
+    scene: [TitleScene, GameState]
 };
 
 // Phaser game code
 var game = new Phaser.Game(config);
+
+// set the scene to the title scene
+game.scene.start('TitleScene');

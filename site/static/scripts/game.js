@@ -161,7 +161,7 @@ var GameState = new Phaser.Class({
             this.add.text(150, 50, '3', { fontFamily: 'Arial', fontSize: 24, color: '#ffffff' }) // Change the coordinates as needed
         ];
 
-        var inv_gui_size = 50;
+        var inv_gui_size = 75;
 
         // Set the origin of the slot numbers and scale them by setting their width and height
         for (let i = 0; i < this.slotNumbers.length; i++) {
@@ -170,8 +170,8 @@ var GameState = new Phaser.Class({
             this.slotNumbers[i].displayHeight = inv_gui_size/4
 
             this.inventoryItems[i].setOrigin(0.5, 0.5);
-            this.inventoryItems[i].displayWidth = inv_gui_size/2*3;
-            this.inventoryItems[i].displayHeight = inv_gui_size/2*3;
+            this.inventoryItems[i].displayWidth = inv_gui_size/2;
+            this.inventoryItems[i].displayHeight = inv_gui_size/2;
             this.inventoryItems[i].visible = false;
 
             this.inventorySlots[i].setOrigin(0.5, 0.5);
@@ -350,8 +350,8 @@ var GameState = new Phaser.Class({
             this.inventoryItems[item].setY(y);
             this.inventorySlots[item].setX(x);
             this.inventorySlots[item].setY(y);
-            this.slotNumbers[item].setX(x-20);
-            this.slotNumbers[item].setY(y-20);
+            this.slotNumbers[item].setX(x-5);
+            this.slotNumbers[item].setY(y-5);
         }
 
         // Rotate player to face the mouse

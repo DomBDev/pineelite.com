@@ -128,9 +128,15 @@ var GameState = new Phaser.Class({
 
         // Create the player controls
         this.cursors = this.input.keyboard.createCursorKeys();
+
         this.cursors.one = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.ONE);
         this.cursors.two = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.TWO);
         this.cursors.three = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.THREE);
+
+        this.cursors.w = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.W);
+        this.cursors.a = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A);
+        this.cursors.s = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.S);
+        this.cursors.d = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D);
     
         // Set the player anchor to the center of the sprite
         this.player.setOrigin(0.5, 0.5);
@@ -296,20 +302,20 @@ var GameState = new Phaser.Class({
     update: function() {
         this.frame += 1;
     
-        // Player movement
-        if (this.cursors.left.isDown) {
+        // Player movement arrow keys + wasd
+        if (this.cursors.left.isDown || this.cursors.a.isDown) {
             this.player.setVelocityX(-160);
             this.username.setX(this.player.x);
-        } else if (this.cursors.right.isDown) {
+        } else if (this.cursors.right.isDown || this.cursors.d.isDown) {
             this.player.setVelocityX(160);
             this.username.setX(this.player.x);
         } else {
             this.player.setVelocityX(0);
         }
-        if (this.cursors.up.isDown) {
+        if (this.cursors.up.isDown || this.cursors.w.isDown) {
             this.player.setVelocityY(-160);
             this.username.setY(this.player.y - 30);
-        } else if (this.cursors.down.isDown) {
+        } else if (this.cursors.down.isDown || this.cursors.s.isDown) {
             this.player.setVelocityY(160);
             this.username.setY(this.player.y - 30);
         } else {
@@ -450,7 +456,7 @@ function add_player(other_player_id, game_state) {
         if (players[other_player_id]['sprite'] === undefined) {
 
             console.log("Adding player: ", other_player_id)
-            players[other_player_id]['sprite'] = game_state.physics.add.sprite(0, 0, 'enemy_sprite');
+            players[other_player_id]['sprite'] = game_state.physics.add.sprite(0, 0, 'other_player');
             players[other_player_id]['sprite_text'] = game_state.add.text(0, -50, other_player_id, { fontFamily: 'Georgia, "Goudy Bookletter 1911", Times, serif' });
             players[other_player_id]['sprite_text'].setFontStyle('bold');
             players[other_player_id]['sprite_text'].setStroke('#000000', 6);
@@ -458,13 +464,13 @@ function add_player(other_player_id, game_state) {
             players[other_player_id]['sprite'].displayWidth = player_size;
             players[other_player_id]['sprite'].setOrigin(0.5, 0.5);
             players[other_player_id]['sprite_text'].setOrigin(0.5, 0.5);
-            players[other_player_id]['sprite'].tint = 0xffa1a1;
             players[other_player_id]['sprite_text'].tint = 0xfa736e;
             if (Object.keys(players[other_player_id]).includes('location')) {
                 players[other_player_id]['sprite'].setX(players[other_player_id]['location']['x']);
                 players[other_player_id]['sprite'].setY(players[other_player_id]['location']['y']);
                 players[other_player_id]['sprite_text'].setX(players[other_player_id]['location']['x']);
                 players[other_player_id]['sprite_text'].setY(players[other_player_id]['location']['y'] - 30);
+                players[other_player_id]['sprite'].rotation = players[other_player_id]['location']['rotation'];
             } else {
                 players[other_player_id]['sprite'].visible = false;
                 players[other_player_id]['sprite_text'].visible = false;

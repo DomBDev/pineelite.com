@@ -258,6 +258,7 @@ function add_player(other_player_id, game_state) {
     }
 }
 
+
 var TitleScene = new Phaser.Class({
     Extends: Phaser.Scene,
     initialize:
@@ -267,46 +268,56 @@ var TitleScene = new Phaser.Class({
     preload: function() {
         this.load.image('background', background_sprite);
         this.load.image('player', player_sprite);
-        this.load.image('enemy', enemy_sprite);
+        this.load.image('other_player', enemy_sprite);
     },
     create: function() {
-        this.add.text(400, 200, 'Multiplayer Game', { 
-            fontFamily: 'Georgia, "Goudy Bookletter 1911", Times, serif', 
-            fontSize: '48px', 
-            color: '#ffffff', 
-            align: 'center' 
-        }).setOrigin(0.5);
+        const element = this.add.dom(400, 0).createFromCache('nameform');
 
-        // Create the form util
-        this.formUtil = new FormUtil({
-            scene: this,
-            rows: 11,
-            cols: 11
-        });
+        element.addListener('click');
 
-        // Add the username input field
-        this.formUtil.addInputField(5, 'usernameField', {
-            placeHolder: 'Enter your username'
-        });
+        element.on('click', function (event)
+        {
 
-        // Add the play button
-        this.formUtil.addButton(6, 'playButton', {
-            text: 'Play'
-        });
+            if (event.target.name === 'playButton')
+            {
+                const inputText = this.getChildByName('nameField');
 
-        // When the play button is clicked, start the game
-        this.formUtil.setButtonCallback('playButton', function() {
-            var username = this.formUtil.getTextAreaValue('usernameField');
-            if (username !== '') {
-                // Store the username in the game registry
-                this.registry.set('username', username);
+                //  Have they entered anything?
+                if (inputText.value !== '')
+                {
+                    //  Turn off the click events
+                    this.removeListener('click');
 
-                // Start the game
-                this.scene.start('GameState');
+                    //  Hide the login element
+                    this.setVisible(false);
+
+                    //  Populate the text with whatever they typed in
+                    text.setText(`Welcome ${inputText.value}`);
+                }
+                else
+                {
+                    //  Flash the prompt
+                    this.scene.tweens.add({
+                        targets: text,
+                        alpha: 0.2,
+                        duration: 250,
+                        ease: 'Power3',
+                        yoyo: true
+                    });
+                }
             }
-        }, this);
+
+        });
+     
+        this.tweens.add({
+            targets: element,
+            y: 300,
+            duration: 3000,
+            ease: 'Power3'
+        });
     }
 });
+
 
 // Config
 const config = {

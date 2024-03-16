@@ -268,26 +268,41 @@ var TitleScene = new Phaser.Class({
         this.load.image('background', background_sprite);
         this.load.image('player', player_sprite);
         this.load.image('enemy', enemy_sprite);
-        this.load.html('usernameForm', username_form);
     },
     create: function() {
-        this.add.text(150, 200, 'Multiplayer Game', { fontFamily: 'Georgia, "Goudy Bookletter 1911", Times, serif' });
+        this.add.text(400, 200, 'Multiplayer Game', { 
+            fontFamily: 'Georgia, "Goudy Bookletter 1911", Times, serif', 
+            fontSize: '48px', 
+            color: '#ffffff', 
+            align: 'center' 
+        }).setOrigin(0.5);
 
-        // Add the username form
-        var usernameForm = this.add.dom(400, 300).createFromCache('usernameForm');
+        // Create the form util
+        this.formUtil = new FormUtil({
+            scene: this,
+            rows: 11,
+            cols: 11
+        });
+
+        // Add the username input field
+        this.formUtil.addInputField(5, 'usernameField', {
+            placeHolder: 'Enter your username'
+        });
+
+        // Add the play button
+        this.formUtil.addButton(6, 'playButton', {
+            text: 'Play'
+        });
 
         // When the play button is clicked, start the game
-        usernameForm.addListener('click');
-        usernameForm.on('click', function(event) {
-            if (event.target.name === 'playButton') {
-                var username = usernameForm.getChildByName('usernameField').value;
-                if (username !== '') {
-                    // Store the username in the game registry
-                    this.registry.set('username', username);
+        this.formUtil.setButtonCallback('playButton', function() {
+            var username = this.formUtil.getTextAreaValue('usernameField');
+            if (username !== '') {
+                // Store the username in the game registry
+                this.registry.set('username', username);
 
-                    // Start the game
-                    this.scene.start('GameState');
-                }
+                // Start the game
+                this.scene.start('GameState');
             }
         }, this);
     }

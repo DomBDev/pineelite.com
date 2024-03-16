@@ -172,23 +172,21 @@ var GameState = new Phaser.Class({
         // Player movement
         if (this.cursors.left.isDown) {
             this.player.setVelocityX(-160);
-            this.username.setVelocityX(-160);
+            this.username.setX(this.player.x);
         } else if (this.cursors.right.isDown) {
             this.player.setVelocityX(160);
-            this.username.setVelocityX(160);
+            this.username.setX(this.player.x);
         } else {
             this.player.setVelocityX(0);
-            this.username.setVelocityX(0);
         }
         if (this.cursors.up.isDown) {
             this.player.setVelocityY(-160);
-            this.username.setVelocityY(-160);
+            this.username.setY(this.player.y - 30);
         } else if (this.cursors.down.isDown) {
             this.player.setVelocityY(160);
-            this.username.setVelocityY(160);
+            this.username.setY(this.player.y - 30);
         } else {
             this.player.setVelocityY(0);
-            this.username.setVelocityY(0);
         }
 
         this.username.text = this.registry.get('username');

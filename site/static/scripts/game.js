@@ -266,7 +266,7 @@ var TitleScene = new Phaser.Class({
         Phaser.Scene.call(this, { key: 'TitleScene' });
     },
     preload: function() {
-        this.load.html('nameform', 'nameform.html');
+        this.load.html('nameform', username_form);
     },
     create: function() {
         this.cameras.main.setBackgroundColor('#ffffff');

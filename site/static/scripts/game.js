@@ -380,8 +380,9 @@ var GameState = new Phaser.Class({
         // Click to activate inventory item
         if (this.input.activePointer.isDown) {
             // shoot item direction player is facing
-            var active_item = this.inventory.getActiveItem();
             var active_slot = this.inventory.getActiveSlot();
+            var active_item = this.inventory.slots[active_slot]
+            console.log(this.inventory.cooldowns[active_slot])
             if (active_item !== null && this.inventory.cooldowns[active_slot] === 0) {
                 this.inventory.setCooldown(active_slot, 60);
                 console.log("Item: ", active_item, "Slot: ", active_slot);

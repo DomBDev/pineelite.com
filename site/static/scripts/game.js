@@ -40,7 +40,7 @@ class Inventory {
             1: false,
             2: false
         };
-        activated[slot] = true;
+        this.activated[slot] = true;
         return activated;
     }
 

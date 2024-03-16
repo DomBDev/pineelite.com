@@ -339,13 +339,19 @@ var GameState = new Phaser.Class({
         // set border to active item
         for (let i = 0; i < this.inventory.slots.length; i++) {
             if (this.inventory.activated[i] === true) {
-                this.inventorySlots[i].tint = 0x00ff00;
+                if (this.inventory.cooldowns[i] > 0) {
+                    this.inventorySlots[i].tint = 0xff0000;
+                } else {
+                    this.inventorySlots[i].tint = 0x00ff00;
+                }
             } else {
-                this.inventorySlots[i].tint = 0xffffff;
+                if (this.inventory.cooldowns[i] > 0) {
+                    this.inventorySlots[i].tint = 0xff0000;
+                } else {
+                    this.inventorySlots[i].tint = 0xffffff;
+                }
             }
-            if (this.inventory.cooldowns[i] > 0) {
-                this.inventorySlots[i].tint = 0xff0000;
-            }
+
             if (this.inventory.slots[i] === null) {
                 this.inventoryItems[i].visible = false;
             } else {
@@ -380,8 +386,6 @@ var GameState = new Phaser.Class({
                 this.inventory.setCooldown(active_slot, 60);
                 console.log("Item: ", active_item, "Slot: ", active_slot);
             }
-            console.log("Active item: ", active_item);
-            console.log("Active slot: ", active_slot);
         }
             
 

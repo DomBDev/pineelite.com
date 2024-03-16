@@ -32,6 +32,11 @@ class Inventory {
             1: false,
             2: false
         };
+        this.cooldowns = {
+            0: 0,
+            1: 0,
+            2: 0
+        };
     }
 
     selectItem(slot) {
@@ -62,6 +67,35 @@ class Inventory {
             return true; // Item was removed
         }
         return false; // Item was not found
+    }
+
+    // update the cooldowns
+    updateCooldowns() {
+        for (let i = 0; i < this.cooldowns.length; i++) {
+            if (this.cooldowns[i] > 0) {
+                this.cooldowns[i] -= 1;
+            }
+        }
+    }
+
+    setCooldown(slot, cooldown) {
+        this.cooldowns[slot] = cooldown;
+    }
+
+    getActiveItem() {
+        for (let i = 0; i < this.activated.length; i++) {
+            if (this.activated[i] === true) {
+                return this.slots[i];
+            }
+        }
+    }
+
+    getActiveSlot() {
+        for (let i = 0; i < this.activated.length; i++) {
+            if (this.activated[i] === true) {
+                return i;
+            }
+        }
     }
 
 }
@@ -299,10 +333,11 @@ var GameState = new Phaser.Class({
                 this.inventorySlots[i].tint = 0xffffff;
             }
         }
-
+        var c_count = 0;
         for (var item in this.inventoryItems) {
+            c_count += 1;
             // Calculate the position
-            var x = this.cameras.main.width - (this.inventoryItems.length - item) * 50; // Adjust the multiplier as needed
+            var x = (this.cameras.main.width-25) - (c_count * 40); // Adjust as needed
             var y = this.cameras.main.height - 50; // Adjust as needed
         
             // Set the position
@@ -310,6 +345,8 @@ var GameState = new Phaser.Class({
             this.inventoryItems[item].setY(y);
             this.inventorySlots[item].setX(x);
             this.inventorySlots[item].setY(y);
+            this.slotNumbers[item].setX(x);
+            this.slotNumbers[item].setY(y);
         }
 
         // Rotate player to face the mouse

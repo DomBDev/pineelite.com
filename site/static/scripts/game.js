@@ -24,7 +24,13 @@ function sendPlayerData(data) {
 
 // Game code
 
-var GameState = {
+var GameState = new Phaser.Class({
+    Extends: Phaser.Scene,
+    initialize:
+    function GameState() {
+        Phaser.Scene.call(this, { key: 'GameState' });
+    },
+
     create: function() {
         // Create the game world
         this.physics.world.setBounds(0, 0, 800, 600);
@@ -218,7 +224,7 @@ var GameState = {
             y: this.player.y
         };
     }
-};
+});
 
 function add_player(other_player_id, game_state) {
     console.log("player_id: ", player_id, "other_player_id: ", other_player_id)
@@ -294,17 +300,6 @@ var TitleScene = new Phaser.Class({
 
                     //  Populate the text with whatever they typed in
                     this.scene.scene.start('GameState');
-                }
-                else
-                {
-                    //  Flash the prompt
-                    this.scene.tweens.add({
-                        targets: text,
-                        alpha: 0.2,
-                        duration: 250,
-                        ease: 'Power3',
-                        yoyo: true
-                    });
                 }
             }
 

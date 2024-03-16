@@ -152,6 +152,7 @@ var GameState = new Phaser.Class({
         this.player.displayWidth = player_size;
         this.cameras.main.startFollow(this.player); // Enable camera follow
         this.inventory = new Inventory();
+        this.username_set = false;
 
         // Add collision between the player and the layers
         this.physics.add.collider(this.player, bgLayer);
@@ -345,9 +346,15 @@ var GameState = new Phaser.Class({
         this.frame += 1;
 
         this.inventory.updateCooldowns();
-        if (this.frame % 3 === 0) {
+        if (this.username_set === false && this.player.x !== undefined && this.player.y !== undefined) {
             this.username.setX(this.player.x);
-            this.username.setY(this.player.y - ((player_size/2)+5));
+            this.username.setY(this.player.y - (player_size/2)+5);
+            this.username.text = this.registry.get('username');
+            // make the username glued to the camera
+            this.username.setScrollFactor(0);
+            this.username_set = true;
+            console.log(this.player.x, this.player.y- (player_size/2)+5);
+            
         }
     
         // Player movement arrow keys + wasd
@@ -430,9 +437,6 @@ var GameState = new Phaser.Class({
             }
         }
             
-
-
-        this.username.text = this.registry.get('username');
         for (var player in players) {
             if (Object.keys(players[player]).includes('sprite') === false && player != player_id) {
                 add_player(player, this);

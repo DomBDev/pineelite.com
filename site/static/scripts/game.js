@@ -227,9 +227,9 @@ var GameState = new Phaser.Class({
         }
         
         players = {};
-        if (false) {
-            socket = io('/game');
-            peer = new Peer();
+        if (true) {
+        socket = io('/game');
+        peer = new Peer();
 
         player_id = ""
         connections = {};

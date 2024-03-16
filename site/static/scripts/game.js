@@ -284,14 +284,16 @@ var TitleScene = new Phaser.Class({
                 //  Have they entered anything?
                 if (inputText.value !== '')
                 {
-                    //  Turn off the click events
-                    this.removeListener('click');
+                    //  Ok, the Play Button was clicked or touched, so let's stop the form from doing anything
+                    event.stopPropagation();
 
-                    //  Hide the login element
+                    //  Hide the form
                     this.setVisible(false);
 
+                    this.scene.registry.set('username', inputText.value);
+
                     //  Populate the text with whatever they typed in
-                    text.setText(`Welcome ${inputText.value}`);
+                    this.scene.scene.start('GameState');
                 }
                 else
                 {

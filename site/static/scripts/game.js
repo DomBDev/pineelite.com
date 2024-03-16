@@ -271,6 +271,7 @@ var TitleScene = new Phaser.Class({
         this.load.image('other_player', enemy_sprite);
     },
     create: function() {
+        this.cameras.main.setBackgroundColor('#ffffff');
         const element = this.add.dom(400, 0).createFromCache('nameform');
 
         element.addListener('click');

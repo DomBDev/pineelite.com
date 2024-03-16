@@ -292,7 +292,7 @@ var TitleScene = new Phaser.Class({
         this.cameras.main.setBackgroundColor('#ffffff');
         const element = this.add.dom(0, 0).createFromCache('nameform');
 
-        element.setOrigin(0.5);
+        element.setOrigin(0.5, 0.5);
         element.setPosition(this.sys.game.config.width / 2, this.sys.game.config.height / 2);
 
         element.node.style.width = this.sys.game.config.width + 'px';

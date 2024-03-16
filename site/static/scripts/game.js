@@ -78,7 +78,7 @@ class Inventory {
                 this.cooldowns[i] -= 1;
             }
         }
-        print(this.cooldowns)
+        console.log(this.cooldowns)
     }
 
     setCooldown(slot, cooldown) {
@@ -116,7 +116,7 @@ var GameState = new Phaser.Class({
     
         // Create the player sprite
         this.player = this.physics.add.sprite(0, 0, 'player');
-        this.username = this.add.text(0, ((player_size/2)-10)*-1, player_id, { fontFamily: 'Georgia, "Goudy Bookletter 1911", Times, serif' });
+        this.username = this.add.text(0, ((player_size/2)+5)*-1, player_id, { fontFamily: 'Georgia, "Goudy Bookletter 1911", Times, serif' });
         this.username.setFontStyle('bold');
         this.username.setStroke('#000000', 6);
         this.username.setOrigin(0.5, 0.5);

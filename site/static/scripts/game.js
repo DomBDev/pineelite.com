@@ -350,8 +350,6 @@ var GameState = new Phaser.Class({
             this.username.setX(this.player.x);
             this.username.setY(this.player.y - (player_size/2)+5);
             this.username.text = this.registry.get('username');
-            // make the username glued to the camera
-            this.username.setScrollFactor(0);
             this.username_set = true;
             console.log(this.player.x, this.player.y- (player_size/2)+5);
             

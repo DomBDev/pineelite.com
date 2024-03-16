@@ -161,20 +161,20 @@ var GameState = new Phaser.Class({
             this.add.text(150, 50, '3', { fontFamily: 'Arial', fontSize: 24, color: '#ffffff' }) // Change the coordinates as needed
         ];
 
-        var inv_gui_size = 60;
+        var inv_gui_size = 50;
 
         // Set the origin of the slot numbers and scale them by setting their width and height
         for (let i = 0; i < this.slotNumbers.length; i++) {
-            this.slotNumbers[i].setOrigin(0.5, 0.5);
-            this.slotNumbers[i].displayWidth = inv_gui_size;
-            this.slotNumbers[i].displayHeight = inv_gui_size;
+            this.slotNumbers[i].setOrigin(1, 1);
+            this.slotNumbers[i].displayWidth = inv_gui_size/4;
+            this.slotNumbers[i].displayHeight = inv_gui_size/4
         }
 
         // Set the origin of the item sprites
         for (let i = 0; i < this.inventoryItems.length; i++) {
             this.inventoryItems[i].setOrigin(0.5, 0.5);
-            this.inventoryItems[i].displayWidth = inv_gui_size;
-            this.inventoryItems[i].displayHeight = inv_gui_size;
+            this.inventoryItems[i].displayWidth = inv_gui_size/2*3;
+            this.inventoryItems[i].displayHeight = inv_gui_size/2*3;
         }
 
         // Set the origin of the inventory slots
@@ -339,16 +339,16 @@ var GameState = new Phaser.Class({
         for (var item in this.inventoryItems) {
             c_count += 1;
             // Calculate the position
-            var x = this.player.x - (c_count * 50) + 50;
-            var y = this.player.y + 50;
+            var x = this.player.x + (c_count * 55) + 200;
+            var y = this.player.y + 325;
         
             // Set the position
             this.inventoryItems[item].setX(x);
             this.inventoryItems[item].setY(y);
             this.inventorySlots[item].setX(x);
             this.inventorySlots[item].setY(y);
-            this.slotNumbers[item].setX(x);
-            this.slotNumbers[item].setY(y);
+            this.slotNumbers[item].setX(x-20);
+            this.slotNumbers[item].setY(y-20);
         }
 
         // Rotate player to face the mouse

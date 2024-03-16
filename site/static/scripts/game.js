@@ -40,7 +40,8 @@ var GameState = new Phaser.Class({
     
         // Create the player sprite
         this.player = this.physics.add.sprite(0, 0, 'player');
-        this.username = this.add.text(0, -50, player_id, { fontFamily: 'Georgia, "Goudy Bookletter 1911", Times, serif' });
+        this.username = this.add.text(0, -30, player_id, { fontFamily: 'Georgia, "Goudy Bookletter 1911", Times, serif' });
+        this.username.setFontStyle('bold');
         this.username.setOrigin(0.5, 0.5);
         this.player.setScale(0.1);
         this.cameras.main.startFollow(this.player); // Enable camera follow
@@ -184,7 +185,7 @@ var GameState = new Phaser.Class({
         }
 
         this.username.setX(this.player.x);
-        this.username.setY(this.player.y - 50);
+        this.username.setY(this.player.y - 30);
         this.username.text = this.registry.get('username');
         for (var player in players) {
             if (Object.keys(players[player]).includes('sprite') === false && player != player_id) {
@@ -195,7 +196,7 @@ var GameState = new Phaser.Class({
                     players[player]['sprite'].setX(players[player]['location']['x']);
                     players[player]['sprite'].setY(players[player]['location']['y']);
                     players[player]['sprite_text'].setX(players[player]['location']['x']);
-                    players[player]['sprite_text'].setY(players[player]['location']['y'] - 50);
+                    players[player]['sprite_text'].setY(players[player]['location']['y'] - 30);
                     if (players[player]['sprite'].visible === false) {
                         if (Object.keys(players[player]).includes('username')) {
                             players[player]['sprite_text'].text = players[player]['username'];
@@ -253,15 +254,17 @@ function add_player(other_player_id, game_state) {
             console.log("Adding player: ", other_player_id)
             players[other_player_id]['sprite'] = game_state.physics.add.sprite(0, 0, 'player');
             players[other_player_id]['sprite_text'] = game_state.add.text(0, -50, other_player_id, { fontFamily: 'Georgia, "Goudy Bookletter 1911", Times, serif' });
+            players[other_player_id]['sprite_text'].setFontStyle('bold');
             players[other_player_id]['sprite'].setScale(0.1);
             players[other_player_id]['sprite'].setOrigin(0.5, 0.5);
             players[other_player_id]['sprite_text'].setOrigin(0.5, 0.5);
-            players[other_player_id]['sprite'].tint = 0xfa736e;
+            players[other_player_id]['sprite'].tint = 0xffa1a1;
+            players[other_player_id]['sprite_text'].tint = 0xffa1a1;
             if (Object.keys(players[other_player_id]).includes('location')) {
                 players[other_player_id]['sprite'].setX(players[other_player_id]['location']['x']);
                 players[other_player_id]['sprite'].setY(players[other_player_id]['location']['y']);
                 players[other_player_id]['sprite_text'].setX(players[other_player_id]['location']['x']);
-                players[other_player_id]['sprite_text'].setY(players[other_player_id]['location']['y'] - 50);
+                players[other_player_id]['sprite_text'].setY(players[other_player_id]['location']['y'] - 30);
             } else {
                 players[other_player_id]['sprite'].visible = false;
                 players[other_player_id]['sprite_text'].visible = false;

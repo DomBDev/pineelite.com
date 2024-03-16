@@ -167,11 +167,11 @@ var GameState = new Phaser.Class({
         for (let i = 0; i < this.slotNumbers.length; i++) {
             this.slotNumbers[i].setOrigin(1, 1);
             this.slotNumbers[i].displayWidth = inv_gui_size/4;
-            this.slotNumbers[i].displayHeight = inv_gui_size/4
+            this.slotNumbers[i].displayHeight = inv_gui_size/4;
 
             this.inventoryItems[i].setOrigin(0.5, 0.5);
-            this.inventoryItems[i].displayWidth = inv_gui_size
-            this.inventoryItems[i].displayHeight = inv_gui_size
+            this.inventoryItems[i].displayWidth = inv_gui_size/3;
+            this.inventoryItems[i].displayHeight = inv_gui_size/3;
             if (this.inventoryItems[i].texture === null) {
                 this.inventoryItems[i].visible = false;
             } else {
@@ -352,8 +352,8 @@ var GameState = new Phaser.Class({
             // Set the position
             this.inventoryItems[item].setX(x);
             this.inventoryItems[item].setY(y);
-            this.inventorySlots[item].setX(x);
-            this.inventorySlots[item].setY(y);
+            this.inventorySlots[item].setX(x+1);
+            this.inventorySlots[item].setY(y+1);
             this.slotNumbers[item].setX(x-4);
             this.slotNumbers[item].setY(y-4);
         }

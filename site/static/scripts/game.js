@@ -331,6 +331,9 @@ const config = {
             gravity: { y: 0 }
         }
     },
+    dom: {
+        createContainer: true
+    },
     scene: [TitleScene, GameState]
 };
 

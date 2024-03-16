@@ -185,7 +185,7 @@ var GameState = new Phaser.Class({
 
         this.username.setX(this.player.x);
         this.username.setY(this.player.y - 50);
-        this.username.text = player_id;
+        this.username.text = this.registry.get('username');
         for (var player in players) {
             if (Object.keys(players[player]).includes('sprite') === false && player != player_id) {
                 add_player(player, this);

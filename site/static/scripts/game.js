@@ -118,7 +118,6 @@ var GameState = new Phaser.Class({
         this.username.setFontStyle('bold');
         this.username.setStroke('#000000', 6);
         this.username.setOrigin(0.5, 0.5);
-        this.username.setScrollFactor(0);
         this.player.displayHeight = player_size;
         this.player.displayWidth = player_size;
         this.cameras.main.startFollow(this.player); // Enable camera follow
@@ -176,12 +175,10 @@ var GameState = new Phaser.Class({
             this.slotNumbers[i].setOrigin(1, 1);
             this.slotNumbers[i].displayWidth = inv_gui_size/4;
             this.slotNumbers[i].displayHeight = inv_gui_size/4;
-            this.slotNumbers[i].setScrollFactor(0);
 
             this.inventoryItems[i].setOrigin(0.5, 0.5);
             this.inventoryItems[i].displayWidth = inv_gui_size/2;
             this.inventoryItems[i].displayHeight = inv_gui_size/2;
-            this.inventoryItems[i].setScrollFactor(0);
             if (this.inventorySlots[i] === null) {
                 this.inventoryItems[i].visible = false;
             } else {
@@ -191,7 +188,6 @@ var GameState = new Phaser.Class({
             this.inventorySlots[i].setOrigin(0.5, 0.5);
             this.inventorySlots[i].displayWidth = inv_gui_size;
             this.inventorySlots[i].displayHeight = inv_gui_size;
-            this.inventorySlots[i].setScrollFactor(0);
         }
         
         players = {};
@@ -305,6 +301,8 @@ var GameState = new Phaser.Class({
         this.frame += 1;
 
         this.inventory.updateCooldowns();
+        this.username.setX(this.player.x);
+        this.username.setY(this.player.y - ((player_size/2)+5));
     
         // Player movement arrow keys + wasd
         if (this.cursors.left.isDown || this.cursors.a.isDown) {
@@ -398,7 +396,7 @@ var GameState = new Phaser.Class({
                     players[player]['sprite'].setX(players[player]['location']['x']);
                     players[player]['sprite'].setY(players[player]['location']['y']);
                     players[player]['sprite_text'].setX(players[player]['location']['x']);
-                    players[player]['sprite_text'].setY(players[player]['location']['y'] - (player_size/2)-5);
+                    players[player]['sprite_text'].setY(players[player]['location']['y'] - (player_size/2)+5);
                     players[player]['sprite'].rotation = players[player]['location']['rotation'];
                     if (players[player]['sprite'].visible === false) {
                         if (Object.keys(players[player]).includes('username')) {
@@ -464,7 +462,7 @@ function add_player(other_player_id, game_state) {
 
             console.log("Adding player: ", other_player_id)
             players[other_player_id]['sprite'] = game_state.physics.add.sprite(0, 0, 'other_player');
-            players[other_player_id]['sprite_text'] = game_state.add.text(0, (player_size/2)-5, other_player_id, { fontFamily: 'Georgia, "Goudy Bookletter 1911", Times, serif' });
+            players[other_player_id]['sprite_text'] = game_state.add.text(0, (player_size/2)+5, other_player_id, { fontFamily: 'Georgia, "Goudy Bookletter 1911", Times, serif' });
             players[other_player_id]['sprite_text'].setFontStyle('bold');
             players[other_player_id]['sprite_text'].setStroke('#000000', 6);
             players[other_player_id]['sprite'].displayHeight = player_size;
@@ -476,7 +474,7 @@ function add_player(other_player_id, game_state) {
                 players[other_player_id]['sprite'].setX(players[other_player_id]['location']['x']);
                 players[other_player_id]['sprite'].setY(players[other_player_id]['location']['y']);
                 players[other_player_id]['sprite_text'].setX(players[other_player_id]['location']['x']);
-                players[other_player_id]['sprite_text'].setY(players[other_player_id]['location']['y'] - (player_size/2)-5);
+                players[other_player_id]['sprite_text'].setY(players[other_player_id]['location']['y'] - (player_size/2)+5);
                 players[other_player_id]['sprite'].rotation = players[other_player_id]['location']['rotation'];
             } else {
                 players[other_player_id]['sprite'].visible = false;

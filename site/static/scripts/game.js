@@ -41,7 +41,6 @@ class Inventory {
             2: false
         };
         this.activated[slot] = true;
-        return activated;
     }
 
     // Method to add an item to the inventory
@@ -64,6 +63,7 @@ class Inventory {
         }
         return false; // Item was not found
     }
+
 }
 
 var GameState = new Phaser.Class({

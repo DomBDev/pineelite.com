@@ -293,7 +293,7 @@ var TitleScene = new Phaser.Class({
         const element = this.add.dom(0, 0).createFromCache('nameform');
 
         element.setOrigin(0.5);
-        element.setPosition(0, this.sys.game.config.height / 2);
+        element.setPosition(this.sys.game.config.width / 4, this.sys.game.config.height / 2);
 
         element.node.style.width = this.sys.game.config.width + 'px';
         element.node.style.height = this.sys.game.config.height + 'px';

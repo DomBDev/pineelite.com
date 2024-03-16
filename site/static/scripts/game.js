@@ -118,12 +118,17 @@ var GameState = new Phaser.Class({
         var tilesetNature = this.background.addTilesetImage('TilesetNature');
         var tilesetVillageAbandoned = this.background.addTilesetImage('TilesetVillageAbandoned');
 
-        console.log(this.background)
+        // Create the layers
+        let bgLayer = this.background.createLayer('BG', [tilesetField, tilesetFloor, tilesetFloorDetail, tilesetNature, tilesetVillageAbandoned], 0, 0);
+        let pathsLayer = this.background.createLayer('Paths', [tilesetField, tilesetFloor, tilesetFloorDetail, tilesetNature, tilesetVillageAbandoned], 0, 0);
+        let vegetationLayer = this.background.createLayer('Vegetation', [tilesetField, tilesetFloor, tilesetFloorDetail, tilesetNature, tilesetVillageAbandoned], 0, 0);
+        let natureLayer = this.background.createLayer('Nature', [tilesetField, tilesetFloor, tilesetFloorDetail, tilesetNature, tilesetVillageAbandoned], 0, 0);
 
-        this.background.createStaticLayer('BG', [tilesetField, tilesetFloor, tilesetFloorDetail, tilesetNature, tilesetVillageAbandoned], 0, 0);
-        this.background.createStaticLayer('Paths', [tilesetField, tilesetFloor, tilesetFloorDetail, tilesetNature, tilesetVillageAbandoned], 0, 0);
-        this.background.createStaticLayer('Vegetation', [tilesetField, tilesetFloor, tilesetFloorDetail, tilesetNature, tilesetVillageAbandoned], 0, 0);
-        this.background.createStaticLayer('Nature', [tilesetField, tilesetFloor, tilesetFloorDetail, tilesetNature, tilesetVillageAbandoned], 0, 0);
+        // add collision to all the tiles with a property called collides from Tiled
+        bgLayer.setCollisionByProperty({ collides: true });
+        pathsLayer.setCollisionByProperty({ collides: true });
+        vegetationLayer.setCollisionByProperty({ collides: true });
+        natureLayer.setCollisionByProperty({ collides: true });
 
         // Create the player sprite
         this.player = this.physics.add.sprite(0, 0, 'player');
@@ -135,6 +140,12 @@ var GameState = new Phaser.Class({
         this.player.displayWidth = player_size;
         this.cameras.main.startFollow(this.player); // Enable camera follow
         this.inventory = new Inventory();
+
+        // Add collision between the player and the layers
+        this.physics.add.collider(this.player, bgLayer);
+        this.physics.add.collider(this.player, pathsLayer);
+        this.physics.add.collider(this.player, vegetationLayer);
+        this.physics.add.collider(this.player, natureLayer);
 
         // Create the player controls
         this.cursors = this.input.keyboard.createCursorKeys();
@@ -204,8 +215,10 @@ var GameState = new Phaser.Class({
         }
         
         players = {};
-        socket = io('/game');
-        peer = new Peer();
+        if (false) {
+            socket = io('/game');
+            peer = new Peer();
+
         player_id = ""
         connections = {};
         user_active = false;
@@ -295,6 +308,7 @@ var GameState = new Phaser.Class({
                 }
             }
         });
+    }
         $(window).on('focus', function() {
             if (player_id !== undefined) {
                 socket.emit('join', player_id);

@@ -316,10 +316,10 @@ var GameState = new Phaser.Class({
         }
         if (this.cursors.up.isDown || this.cursors.w.isDown) {
             this.player.setVelocityY(-160);
-            this.username.setY(this.player.y - 30);
+            this.username.setY(this.player.y - player_size/2 - 5);
         } else if (this.cursors.down.isDown || this.cursors.s.isDown) {
             this.player.setVelocityY(160);
-            this.username.setY(this.player.y - 30);
+            this.username.setY(this.player.y - player_size/2 - 5);
         } else {
             this.player.setVelocityY(0);
         }

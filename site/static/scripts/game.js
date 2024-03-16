@@ -273,9 +273,9 @@ var GameState = new Phaser.Class({
         // set border to active item
         for (let i = 0; i < this.inventory.slots.length; i++) {
             if (this.inventory.activated[i] === true) {
-                this.inventorySlots[i].setStrokeStyle(10, 0x00ff00);
+                this.inventorySlots[i].tint = 0x00ff00;
             } else {
-                this.inventorySlots[i].setStrokeStyle(0, 0xffffff);
+                this.inventorySlots[i].tint = 0xffffff;
             }
         }
 

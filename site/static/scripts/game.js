@@ -89,6 +89,9 @@ var GameState = new Phaser.Class({
                 if (Object.keys(data).includes('location')) {
                 players[data.id]['location'] = data['location']
                 }
+                if (Object.keys(data).includes('username')) {
+                    players[data.id]['username'] = data['username']
+                    
                 players[data.id]['last_update'] = new Date().getTime();
             });
         
@@ -198,6 +201,9 @@ var GameState = new Phaser.Class({
                         players[player]['sprite_text'].visible = true;
                     }
                 }
+                if (Object.keys(players[player]).includes('username')) {
+                    players[player]['sprite_text'].text = players[player]['username'];
+                }
             }
         }
 
@@ -210,7 +216,8 @@ var GameState = new Phaser.Class({
                     location: {
                         x: this.player.x,
                         y: this.player.y
-                    }
+                    },
+                    username: this.registry.get('username')
                 });
             }
 

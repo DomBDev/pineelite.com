@@ -1,52 +1,50 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <style>
-        #titleScreen {
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            margin: 0;
-            background-color: #000;
-            color: #000000;
-            font-family: "Rubik Moonrocks", sans-serif;
-            font-weight: 400;
-            font-style: normal;
+
+<style>
+    #titleScreen {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        margin: 0;
+        background-color: #000;
+        color: #000000;
+        font-family: "Rubik Moonrocks", sans-serif;
+        font-weight: 400;
+        font-style: normal;
+    }
+    #titleScreen h1 {
+        font-size: 3em;
+        margin-bottom: 20px;
+    }
+    input[type="text"] {
+        font-size: 1.5em;
+        padding: 10px;
+        margin-bottom: 20px;
+        width: 80%;
+        max-width: 300px;
+    }
+    input[type="button"] {
+        font-size: 1.5em;
+        padding: 10px 20px;
+        background-color: #008CBA; /* Blue */
+        border: none;
+        color: white;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        transition-duration: 0.4s;
+        cursor: pointer;
+    }
+    input[type="button"]:hover {
+        background-color: #4CAF50; /* Green */
+        color: white;
+    }
+    @media (max-width: 600px) {
+        input[type="text"], input[type="button"] {
+            font-size: 1em;
         }
-        #titleScreen h1 {
-            font-size: 3em;
-            margin-bottom: 20px;
-        }
-        input[type="text"] {
-            font-size: 1.5em;
-            padding: 10px;
-            margin-bottom: 20px;
-            width: 80%;
-            max-width: 300px;
-        }
-        input[type="button"] {
-            font-size: 1.5em;
-            padding: 10px 20px;
-            background-color: #008CBA; /* Blue */
-            border: none;
-            color: white;
-            text-align: center;
-            text-decoration: none;
-            display: inline-block;
-            transition-duration: 0.4s;
-            cursor: pointer;
-        }
-        input[type="button"]:hover {
-            background-color: #4CAF50; /* Green */
-            color: white;
-        }
-        @media (max-width: 600px) {
-            input[type="text"], input[type="button"] {
-                font-size: 1em;
-            }
-        }
+    }
     </style>
     <div id="titleScreen">
         <h1>Multiplayer Game</h1>

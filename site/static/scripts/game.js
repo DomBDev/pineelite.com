@@ -99,6 +99,7 @@ class Inventory {
     }
 
 }
+var player_size = 50;
 
 var GameState = new Phaser.Class({
     Extends: Phaser.Scene,
@@ -120,8 +121,8 @@ var GameState = new Phaser.Class({
         this.username.setFontStyle('bold');
         this.username.setStroke('#000000', 6);
         this.username.setOrigin(0.5, 0.5);
-        this.player.displayHeight = 100;
-        this.player.displayWidth = 100;
+        this.player.displayHeight = player_size;
+        this.player.displayWidth = player_size;
         this.cameras.main.startFollow(this.player); // Enable camera follow
         this.inventory = new Inventory();
 
@@ -453,8 +454,8 @@ function add_player(other_player_id, game_state) {
             players[other_player_id]['sprite_text'] = game_state.add.text(0, -50, other_player_id, { fontFamily: 'Georgia, "Goudy Bookletter 1911", Times, serif' });
             players[other_player_id]['sprite_text'].setFontStyle('bold');
             players[other_player_id]['sprite_text'].setStroke('#000000', 6);
-            players[other_player_id]['sprite'].displayHeight = 100;
-            players[other_player_id]['sprite'].displayWidth = 100;
+            players[other_player_id]['sprite'].displayHeight = player_size;
+            players[other_player_id]['sprite'].displayWidth = player_size;
             players[other_player_id]['sprite'].setOrigin(0.5, 0.5);
             players[other_player_id]['sprite_text'].setOrigin(0.5, 0.5);
             players[other_player_id]['sprite'].tint = 0xffa1a1;

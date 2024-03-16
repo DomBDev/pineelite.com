@@ -1,2 +1,58 @@
-<input type="text" name="nameField" placeholder="Enter your name" style="font-size: 32px">
-<input type="button" name="playButton" value="Let's Play" style="font-size: 32px"><br />
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #000;
+            color: #fff;
+            font-family: Arial, sans-serif;
+        }
+        h1 {
+            font-size: 2em;
+            margin-bottom: 20px;
+        }
+        input[type="text"] {
+            font-size: 1.5em;
+            padding: 10px;
+            margin-bottom: 20px;
+            width: 80%;
+            max-width: 300px;
+        }
+        input[type="button"] {
+            font-size: 1.5em;
+            padding: 10px 20px;
+            background-color: #008CBA; /* Blue */
+            border: none;
+            color: white;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            transition-duration: 0.4s;
+            cursor: pointer;
+        }
+        input[type="button"]:hover {
+            background-color: #4CAF50; /* Green */
+            color: white;
+        }
+        @media (max-width: 600px) {
+            h1 {
+                font-size: 1.5em;
+            }
+            input[type="text"], input[type="button"] {
+                font-size: 1em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <h1>Multiplayer Game</h1>
+    <input type="text" name="nameField" autocomplete="off" placeholder="Enter your name">
+    <input type="button" name="playButton" value="Let's Play"><br />
+</body>
+</html>

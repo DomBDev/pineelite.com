@@ -450,7 +450,7 @@ function add_player(other_player_id, game_state) {
         if (players[other_player_id]['sprite'] === undefined) {
 
             console.log("Adding player: ", other_player_id)
-            players[other_player_id]['sprite'] = game_state.physics.add.sprite(0, 0, 'player');
+            players[other_player_id]['sprite'] = game_state.physics.add.sprite(0, 0, 'enemy_sprite');
             players[other_player_id]['sprite_text'] = game_state.add.text(0, -50, other_player_id, { fontFamily: 'Georgia, "Goudy Bookletter 1911", Times, serif' });
             players[other_player_id]['sprite_text'].setFontStyle('bold');
             players[other_player_id]['sprite_text'].setStroke('#000000', 6);

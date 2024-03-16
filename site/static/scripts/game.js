@@ -41,7 +41,7 @@ class Inventory {
 
     selectItem(slot) {
         this.activated = {
-            0: false,
+            0: true,
             1: false,
             2: false
         };

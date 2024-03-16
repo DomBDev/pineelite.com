@@ -118,11 +118,13 @@ var GameState = new Phaser.Class({
         var tilesetNature = this.background.addTilesetImage('TilesetNature');
         var tilesetVillageAbandoned = this.background.addTilesetImage('TilesetVillageAbandoned');
 
+        console.log(this.background)
+
         this.background.createStaticLayer('BG', [tilesetField, tilesetFloor, tilesetFloorDetail, tilesetNature, tilesetVillageAbandoned], 0, 0);
         this.background.createStaticLayer('Paths', [tilesetField, tilesetFloor, tilesetFloorDetail, tilesetNature, tilesetVillageAbandoned], 0, 0);
         this.background.createStaticLayer('Vegetation', [tilesetField, tilesetFloor, tilesetFloorDetail, tilesetNature, tilesetVillageAbandoned], 0, 0);
         this.background.createStaticLayer('Nature', [tilesetField, tilesetFloor, tilesetFloorDetail, tilesetNature, tilesetVillageAbandoned], 0, 0);
-        
+
         // Create the player sprite
         this.player = this.physics.add.sprite(0, 0, 'player');
         this.username = this.add.text(0, ((player_size/2)+5)*-1, player_id, { fontFamily: 'Georgia, "Goudy Bookletter 1911", Times, serif' });

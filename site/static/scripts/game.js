@@ -227,7 +227,6 @@ var GameState = new Phaser.Class({
         }
         
         players = {};
-        if (true) {
         socket = io('/game');
         peer = new Peer();
 
@@ -291,8 +290,10 @@ var GameState = new Phaser.Class({
             }
             console.log("Removing player due to leaving: ", data)
             if (players[data] !== undefined) {
-                players[data]['sprite'].destroy();
-                players[data]['sprite_text'].destroy();
+                if (Object.keys(players[data]).includes('sprite') === true) {
+                    players[data]['sprite'].destroy();
+                    players[data]['sprite_text'].destroy();
+                }
                 delete players[data];
             }
             if (Object.keys(connections).includes(data) === true){
@@ -320,7 +321,6 @@ var GameState = new Phaser.Class({
                 }
             }
         });
-    }
         $(window).on('focus', function() {
             if (player_id !== undefined) {
                 socket.emit('join', player_id);

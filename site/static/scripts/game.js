@@ -111,11 +111,11 @@ var GameState = new Phaser.Class({
     
         // Create the background sprites
         this.background = this.make.tilemap({ key: 'map' });
-        this.background.addTilesetImage('TilesetField', TilesetField);
-        this.background.addTilesetImage('TilesetFloor', TilesetFloor);
-        this.background.addTilesetImage('TilesetFloorDetail', TilesetFloorDetail);
+        this.background.addTilesetImage('TilesetField', tilesetField);
+        this.background.addTilesetImage('TilesetFloor', tilesetFloor);
+        this.background.addTilesetImage('TilesetFloorDetail', tilesetFloorDetail);
         this.background.addTilesetImage('TilesetNature', TilesetNature);
-        this.background.addTilesetImage('TilesetVillageAbandoned', TilesetVillageAbandoned);
+        this.background.addTilesetImage('TilesetVillageAbandoned', tilesetVillageAbandoned);
 
         this.background.createStaticLayer('BG', ['TilesetField', 'TilesetFloor', 'TilesetFloorDetail', 'TilesetNature', 'TilesetVillageAbandoned'], 0, 0);
         this.background.createStaticLayer('Paths', ['TilesetField', 'TilesetFloor', 'TilesetFloorDetail', 'TilesetNature', 'TilesetVillageAbandoned'], 0, 0);

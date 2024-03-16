@@ -37,6 +37,7 @@ class Inventory {
             1: 0,
             2: 0
         };
+        this.selected = null;
     }
 
     selectItem(slot) {
@@ -45,6 +46,7 @@ class Inventory {
             1: false,
             2: false
         };
+        this.selected = slot;
         this.activated[slot] = true;
     }
 
@@ -91,11 +93,7 @@ class Inventory {
     }
 
     getActiveSlot() {
-        for (let i = 0; i < this.activated.length; i++) {
-            if (this.activated[i] === true) {
-                return i;
-            }
-        }
+        return this.selected;
     }
 
 }

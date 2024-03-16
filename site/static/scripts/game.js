@@ -40,8 +40,8 @@ var GameState = new Phaser.Class({
     
         // Create the player sprite
         this.player = this.physics.add.sprite(0, 0, 'player');
-        this.user_id = this.add.text(0, -50, player_id, { fontFamily: 'Georgia, "Goudy Bookletter 1911", Times, serif' });
-        this.user_id.setOrigin(0.5, 0.5);
+        this.username = this.add.text(0, -50, player_id, { fontFamily: 'Georgia, "Goudy Bookletter 1911", Times, serif' });
+        this.username.setOrigin(0.5, 0.5);
         this.player.setScale(0.1);
         this.cameras.main.startFollow(this.player); // Enable camera follow
     
@@ -183,9 +183,9 @@ var GameState = new Phaser.Class({
             this.player.setVelocityY(0);
         }
 
-        this.user_id.setX(this.player.x);
-        this.user_id.setY(this.player.y - 50);
-        this.user_id.text = player_id;
+        this.username.setX(this.player.x);
+        this.username.setY(this.player.y - 50);
+        this.username.text = player_id;
         for (var player in players) {
             if (Object.keys(players[player]).includes('sprite') === false && player != player_id) {
                 add_player(player, this);
@@ -197,6 +197,7 @@ var GameState = new Phaser.Class({
                     players[player]['sprite_text'].setX(players[player]['location']['x']);
                     players[player]['sprite_text'].setY(players[player]['location']['y'] - 50);
                     if (players[player]['sprite'].visible === false) {
+                        players[player]['sprite_text'] = players[player]['username']
                         players[player]['sprite'].visible = true;
                         players[player]['sprite_text'].visible = true;
                     }

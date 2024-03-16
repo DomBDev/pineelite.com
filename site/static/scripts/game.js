@@ -46,6 +46,7 @@ var GameState = new Phaser.Class({
         this.username.setOrigin(0.5, 0.5);
         this.player.setScale(0.1);
         this.cameras.main.startFollow(this.player); // Enable camera follow
+        this.inventory = new Inventory();
     
         // Create the player controls
         this.cursors = this.input.keyboard.createCursorKeys();
@@ -59,6 +60,69 @@ var GameState = new Phaser.Class({
             x: this.player.x,
             y: this.player.y
         };
+
+        // Create the inventory slots
+        this.inventorySlots = [
+            this.add.sprite(50, 50, 'slot'), // Change the coordinates as needed
+            this.add.sprite(100, 50, 'slot'), // Change the coordinates as needed
+            this.add.sprite(150, 50, 'slot') // Change the coordinates as needed
+        ];
+
+        // Create the item sprites
+        this.inventoryItems = [
+            this.add.sprite(50, 50, 'fist'), // Change the coordinates as needed
+            this.add.sprite(100, 50, null), // Change the coordinates as needed
+            this.add.sprite(150, 50, null) // Change the coordinates as needed
+        ];
+
+        // Create the slot numbers
+        this.slotNumbers = [
+            this.add.text(50, 50, '1', { fontFamily: 'Arial', fontSize: 24, color: '#ffffff' }), // Change the coordinates as needed
+            this.add.text(100, 50, '2', { fontFamily: 'Arial', fontSize: 24, color: '#ffffff' }), // Change the coordinates as needed
+            this.add.text(150, 50, '3', { fontFamily: 'Arial', fontSize: 24, color: '#ffffff' }) // Change the coordinates as needed
+        ];
+
+        class Inventory {
+            constructor() {
+                this.slots = ['fist', null, null]; // Fist in the first slot, two empty slots
+                this.activated = {
+                    0: false,
+                    1: false,
+                    2: false
+                };
+            }
+
+            selectItem(slot) {
+                this.activated = {
+                    0: false,
+                    1: false,
+                    2: false
+                };
+                activated[slot] = true;
+                return activated;
+            }
+        
+            // Method to add an item to the inventory
+            addItem(item) {
+                for (let i = 0; i < this.slots.length; i++) {
+                    if (this.slots[i] === null) {
+                        this.slots[i] = item;
+                        return true; // Item was added
+                    }
+                }
+                return false; // Inventory is full
+            }
+        
+            // Method to remove an item from the inventory
+            removeItem(item) {
+                const index = this.slots.indexOf(item);
+                if (index !== -1) {
+                    this.slots[index] = null;
+                    return true; // Item was removed
+                }
+                return false; // Item was not found
+            }
+        }
         
         players = {};
         socket = io('/game');
@@ -164,6 +228,8 @@ var GameState = new Phaser.Class({
         this.load.image('background', background_sprite);
         this.load.image('player', player_sprite);
         this.load.image('other_player', enemy_sprite);
+        this.load.image('slot', inventory_slot);
+        this.load.image('fist', fist_sprite);
     },
 
     update: function() {
@@ -188,6 +254,41 @@ var GameState = new Phaser.Class({
         } else {
             this.player.setVelocityY(0);
         }
+        // Inventory controls
+
+        if (this.cursors.one.isDown) {
+            //create a border around
+            this.inventory.selectItem(0);
+        }
+        if (this.cursors.two.isDown) {
+            this.inventory.selectItem(1);
+        }
+        if (this.cursors.three.isDown) {
+            this.inventory.selectItem(2);
+        }
+
+        // set border to active item
+        for (let i = 0; i < this.inventory.slots.length; i++) {
+            if (this.inventory.activated[i] === true) {
+                this.inventorySlots[i].setStrokeStyle(10, 0x00ff00);
+            } else {
+                this.inventorySlots[i].setStrokeStyle(0, 0xffffff);
+            }
+        }
+
+        // Rotate player to face the mouse
+        this.player.rotation = Phaser.Math.Angle.Between(this.player.x, this.player.y, this.input.x + this.cameras.main.scrollX, this.input.y + this.cameras.main.scrollY);
+
+        // Click to activate inventory item
+        if (this.input.activePointer.isDown) {
+            // shoot item direction player is facing
+            if (this.inventory.slots[0] !== null) {
+                // shoot item
+                console.log("Shooting item: ", this.inventory.slots[0]);
+            }
+        }
+            
+
 
         this.username.text = this.registry.get('username');
         for (var player in players) {
@@ -234,6 +335,13 @@ var GameState = new Phaser.Class({
             x: this.player.x,
             y: this.player.y
         };
+        for (let i = 0; i < this.inventory.slots.length; i++) {
+            if (this.inventory.slots[i] !== null) {
+                this.inventoryItems[i].setTexture(this.inventory.slots[i]);
+            } else {
+                this.inventoryItems[i].setTexture(null);
+            }
+        }
     }
 });
 

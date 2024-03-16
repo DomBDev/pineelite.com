@@ -110,7 +110,17 @@ var GameState = new Phaser.Class({
         this.physics.world.setBounds(0, 0, 800, 600);
     
         // Create the background sprites
-        this.background = this.add.image(0, 0, 'background');
+        this.background = this.make.tilemap({ key: 'map' });
+        this.background.addTilesetImage('TilesetField', 'TilesetField');
+        this.background.addTilesetImage('TilesetFloor', 'TilesetFloor');
+        this.background.addTilesetImage('TilesetFloorDetail', 'TilesetFloorDetail');
+        this.background.addTilesetImage('TilesetNature', 'TilesetNature');
+        this.background.addTilesetImage('TilesetVillageAbandoned', 'TilesetVillageAbandoned');
+
+        this.background.createStaticLayer('BG', ['TilesetField', 'TilesetFloor', 'TilesetFloorDetail', 'TilesetNature', 'TilesetVillageAbandoned'], 0, 0);
+        this.background.createStaticLayer('Paths', ['TilesetField', 'TilesetFloor', 'TilesetFloorDetail', 'TilesetNature', 'TilesetVillageAbandoned'], 0, 0);
+        this.background.createStaticLayer('Vegetation', ['TilesetField', 'TilesetFloor', 'TilesetFloorDetail', 'TilesetNature', 'TilesetVillageAbandoned'], 0, 0);
+        this.background.createStaticLayer('Nature', ['TilesetField', 'TilesetFloor', 'TilesetFloorDetail', 'TilesetNature', 'TilesetVillageAbandoned'], 0, 0);
     
         // Create the player sprite
         this.player = this.physics.add.sprite(0, 0, 'player');
@@ -290,7 +300,12 @@ var GameState = new Phaser.Class({
     },
 
     preload: function() {
-        this.load.image('background', background_sprite);
+        this.load.image('TilesetField', tilesetField);
+        this.load.image('TilesetFloor', tilesetFloor);
+        this.load.image('TilesetFloorDetail', tilesetFloorDetail);
+        this.load.image('TilsetNature', tilesetNature);
+        this.load.image('TilesetVillageAbandoned', tilesetVillageAbandoned);
+        this.load.tilemapTiledJSON('map', map);
         this.load.image('player', player_sprite);
         this.load.image('other_player', enemy_sprite);
         this.load.image('slot', inventory_slot);

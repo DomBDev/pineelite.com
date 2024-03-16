@@ -339,8 +339,8 @@ var GameState = new Phaser.Class({
         for (var item in this.inventoryItems) {
             c_count += 1;
             // Calculate the position
-            var x = this.player.x + (c_count * 55) + 200;
-            var y = this.player.y + 325;
+            var x = this.player.x + (c_count * 55) + 150;
+            var y = this.player.y + 200;
         
             // Set the position
             this.inventoryItems[item].setX(x);

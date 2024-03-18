@@ -352,7 +352,7 @@ var GameState = new Phaser.Class({
             this.username.setY(this.player.y - (player_size/2)+5);
             this.username.text = this.registry.get('username');
             this.username_set = true;
-            console.log(this.username.text.getX(), this.username.text.getY());
+            console.log(this.username.text.x, this.username.text.y);
         }
     
         // Player movement arrow keys + wasd

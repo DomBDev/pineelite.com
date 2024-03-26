@@ -111,7 +111,7 @@ def chat():
         session['chat_history'] = [{'role': 'system', 'content': 'You are PineBot, a helpful chat ai used for anything.'}]
     if 'chat_mode' not in session:
         session['chat_mode'] = 'simple'
-    return render_template('chat.html', chat_history=session['chat_history'], mode=session['chat_mode'])
+    return render_template('chat.html', chat_history=session['chat_history'], chat_mode=session['chat_mode'])
 
 @app.route('/simple_response', methods=['POST'])
 def simple_response():
